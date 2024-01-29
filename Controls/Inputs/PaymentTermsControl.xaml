@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="MedicamentStore.PaymentTermsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MedicamentStore"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="145"/>
+            <ColumnDefinition Width="*"/>
+           
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+           
+        </Grid.RowDefinitions>
+        <!-- Label -->
+        <TextBlock Margin="0"
+     Text="{Binding Label,FallbackValue=Conditions de Paiement}" FontSize="13" 
+      Name="Label"
+     Foreground="#97A5B4" TextAlignment="Right"
+      
+      VerticalAlignment="Center"
+      FontFamily="{StaticResource OakSans-SemiBold}"
+      />
+      
+        <ComboBox Width="240"  Margin="13 0"  Style="{DynamicResource ComboBoxStyle2}" Grid.Column="1"
+                  ItemsSource="{Binding PaymentTerms}" SelectedIndex="0"
+                  SelectedItem="{Binding SelectedPaymentTerm}"/>
+    </Grid>
+</UserControl>

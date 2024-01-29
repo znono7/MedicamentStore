@@ -1,0 +1,19 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <FontFamily x:Key="FontAwesome">/Fonts/#Font Awesome 6 Free Solid</FontFamily>
+    <FontFamily x:Key="FontAwesome2">/Fonts/#FontAwesome</FontFamily>
+
+    <FontFamily x:Key="GeneralGothic-Regular">/Fonts/#General Gothic</FontFamily>
+    <FontFamily x:Key="NeverMindRoundedMono-Regular">/Fonts/#NeverMind Rounded Mono</FontFamily>
+    <FontFamily x:Key="QTSchoolCentury">/Fonts/#QTSchoolCentury</FontFamily>
+    <FontFamily x:Key="SofiaSansCond-Regular">/Fonts/#Sofia Sans Cond</FontFamily>
+    <FontFamily x:Key="OakSans-Regular">/Fonts/#Oak Sans</FontFamily>
+    <FontFamily x:Key="OakSans-SemiBold">/Fonts/#Oak Sans SemiBold</FontFamily>
+    <FontFamily x:Key="Baloo-Regular">/Fonts/#Baloo 2 Regular</FontFamily>
+    <FontFamily x:Key="Baloo-SemiBold">/Fonts/#Baloo 2 SemiBold</FontFamily>
+    <FontFamily x:Key="Handil">/Fonts/#Handil Pro Med</FontFamily>
+
+
+   
+</ResourceDictionary>

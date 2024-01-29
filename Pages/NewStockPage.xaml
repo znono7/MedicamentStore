@@ -1,0 +1,159 @@
+﻿<local:BasePage x:TypeArguments="local:NewStockViewModel" x:Class="MedicamentStore.NewStockPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MedicamentStore"
+      mc:Ignorable="d" x:Name="InNewStockPage"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="NewStockPage">
+
+    <Grid  Background="{StaticResource PrimaryBackgroundColor}">
+        <Grid.InputBindings>
+            <MouseBinding MouseAction="LeftClick"
+                Command="{Binding PopupClickawayCommand}" 
+                          />
+
+        </Grid.InputBindings>
+        <!-- Popup Overlay 
+         Command="{Binding ElementName=cmbCustomer, Path=DataContext.PopupClickawayCommand}"
+                  Visibility="{Binding ElementName=cmbCustomer,Path=DataContext.AnyPopupVisible, Converter={local:BooleanToVisiblityConverter}, ConverterParameter=True}"
+-->
+        <!--<Border Background="Transparent" 
+          Panel.ZIndex="1"
+          Visibility="{Binding AnyPopupVisible, Converter={local:BooleanToVisiblityConverter}, ConverterParameter=True}">
+            <Border.InputBindings>
+                <MouseBinding MouseAction="LeftClick" Command="{Binding PopupClickawayCommand}" />
+            </Border.InputBindings>
+        </Border>-->
+        <Grid Margin="10 30 10 30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+
+            </Grid.RowDefinitions>
+            <StackPanel  Height="48" Orientation="Horizontal" HorizontalAlignment="Left">
+                <Button  Command="{Binding ReturnCommand}" Style="{StaticResource IconGrowButton}" Content="&#xf060;"/>
+                <TextBlock Grid.Column="1" Text="Nouveau Stock" Margin="20 10"
+                            FontFamily="{StaticResource Baloo-Regular}" Foreground="{StaticResource TertiaryTextColor}" 
+                            FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+                <Button Style="{StaticResource secondaryButton}" Height="32"
+                        FontFamily="{StaticResource Baloo-Regular}" FontSize="14" Content="Annuler" Width="90"/>
+                <Button Style="{StaticResource addButton}" 
+                     Command="{Binding SaveCommand}"  Width="90" Height="32"
+                >
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Sauvgarder" FontFamily="{StaticResource Baloo-Regular}"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            <Grid Grid.Row="1" >
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Border  CornerRadius="7"  Grid.RowSpan="4"
+                         Background="{StaticResource TertiaryBackgroundColor}">
+                    <Border.Effect>
+                        <DropShadowEffect Direction="-130" BlurRadius="30" ShadowDepth="5" Opacity="0.1"/>
+                    </Border.Effect>
+                </Border>
+                <Grid Margin="10">
+                    <local:CustomerCmbSuppControl HorizontalAlignment="Left" x:Name="cmbCustomer" DataContext="{Binding SuppCmb}"/>
+                    <local:TextEntryDateInvControl HorizontalAlignment="Right" DataContext="{Binding dateViewModel}"/>
+                </Grid>
+                <Grid Margin="10" Grid.Row="1">
+                    <StackPanel>
+                        <ScrollViewer  VerticalScrollBarVisibility="Auto">
+                            <DataGrid Style="{DynamicResource DataGridStyle2}"
+                                  RowStyle="{DynamicResource DataGridRowStyle2}"
+                                  CellStyle="{DynamicResource DataGridCellStyle2}"
+                                  ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle2}"
+                                  ItemsSource="{Binding StockProducts}">
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn  Header="Produit Pharmaceutique" Width="*"   IsReadOnly="True"  CanUserResize="False">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10 0 0 0">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock x:Name="tbPercent" Text="{Binding Nom_Commercial}" FontSize="16"
+                                               Foreground="{StaticResource TertiaryTextColor}"
+                                               FontFamily="{StaticResource OakSans-Regular}"
+                                               ToolTip="{Binding Nom_Commercial}"/>
+                                                        <TextBlock Text="  "/>
+                                                        <TextBlock x:Name="tbPercent2" VerticalAlignment="Bottom" Text="{Binding Dosage}" FontSize="12"
+                                               Foreground="{StaticResource TertiaryTextColor}"
+                                               FontFamily="{StaticResource OakSans-Regular}"/>
+                                                        <TextBlock Text="  "/>
+                                                        <TextBlock x:Name="tbPercent3" VerticalAlignment="Bottom" Text="{Binding Forme}" FontSize="12"
+                                               Foreground="{StaticResource TertiaryTextColor}"
+                                               FontFamily="{StaticResource OakSans-Regular}"/>
+                                                    </StackPanel>
+                                                    <!--<TextBlock x:Name="tbPercent4" VerticalAlignment="Bottom" Text="{Binding Conditionnement}" FontSize="12"
+                                               Foreground="{StaticResource TertiaryTextColor}"
+                                               FontFamily="{StaticResource OakSans-Regular}"/>-->
+
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+
+                                    <DataGridTemplateColumn Header="Quantité" Width="130">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBox Text="{Binding Quantite,UpdateSourceTrigger=PropertyChanged,Converter={local:IntegerConverter}}" Style="{StaticResource TextEntryQua}" Margin="0"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="Unité" Width="94">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <ComboBox Width="90"  ItemsSource="{Binding Items}" DisplayMemberPath="Name" SelectedValuePath="Id" SelectedIndex="0"
+                                                       SelectedItem="{Binding SelectedUnite, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ComboBoxStyle4}">
+                                                </ComboBox>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="Prix" Width="130">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBox Text="{Binding Prix,UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{StaticResource TextEntryQua}" Margin="0"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn  IsReadOnly="True" Width="40" CanUserResize="False">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                    <Button Cursor="Hand" Background="Transparent" Command="{Binding DataContext.DeleteCommand ,  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" 
+                                                 CommandParameter="{Binding }"
+                                                 Style="{StaticResource gridRemoveButton}">
+                                                        <Path Data="{StaticResource Delete}" Fill="#BE2623" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Center" Width="11" Height="11"/>
+                                                    </Button>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
+                        <Button Foreground="#D64646"  Margin="0"  HorizontalAlignment="Right" VerticalAlignment="Bottom" Style="{StaticResource TextButton}" 
+                            Content="Nettoyer" Command="{Binding ClearCommand}" />
+                    </StackPanel>
+                </Grid>
+                <Button Grid.Row="2" HorizontalAlignment="Left" Style="{StaticResource TextButton}" Tag="{StaticResource plus}"
+                        Content="Ajouter Produit Pharmaceutique" Command="{Binding OpenWindowCommand}" />
+            </Grid>
+
+        </Grid>
+    </Grid>
+
+</local:BasePage>

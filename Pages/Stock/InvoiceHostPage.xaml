@@ -1,0 +1,270 @@
+﻿<local:BasePage x:TypeArguments="local:InvoiceHostViewModel" x:Class="MedicamentStore.InvoiceHostPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MedicamentStore"
+      mc:Ignorable="d"  x:Name="StocksTypeHost"
+      d:DesignHeight="800" d:DesignWidth="1200"
+      Title="StockHostPage">
+
+    <Grid Background="{StaticResource PrimaryBackgroundColor}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+              
+        <Grid Margin="0 5 5 0" Grid.Column="1">
+            <StackPanel>
+                <Grid>
+
+                    <TextBlock  Text="Exportations" Margin="60 10" HorizontalAlignment="Left"
+                 FontFamily="{StaticResource Baloo-Regular}" Foreground="{StaticResource TertiaryTextColor}" 
+                 FontSize="20"  VerticalAlignment="Center"/>
+                    <Button Style="{StaticResource addButton}" Command="{Binding NewItemCommand}"
+                                HorizontalAlignment="Right" >
+                        <StackPanel Orientation="Horizontal">
+                            <Path  Data="{StaticResource plus}" Fill="{StaticResource TertiaryBackgroundColor}" Stretch="UniformToFill" VerticalAlignment="Center" Margin="0 1 8 0" Width="11" Height="11"/>
+                            <TextBlock Text="Nouvelle Exportation" FontFamily="{StaticResource Baloo-Regular}"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+                <Grid  Margin="20 3">
+                    <Border  CornerRadius="2" Background="{StaticResource TertiaryBackgroundColor}">
+                        <Border.Effect>
+                            <DropShadowEffect Direction="-130" BlurRadius="30" ShadowDepth="5" Opacity="0.1"/>
+                        </Border.Effect>
+                    </Border>
+                    <StackPanel Orientation="Horizontal">
+                        <!--<Grid  Margin="13 5">
+                            <StackPanel>
+                                <Grid>
+                                    <Border  BorderThickness="1.5" Width="280" 
+                                     CornerRadius="7" d:BorderBrush="AliceBlue" Height="32"
+                                              >
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding AttachmentMenuVisible}" Value="True">
+                                                        <Setter Property="Background" Value="{StaticResource PrimeBlueBrush}" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding AttachmentMenuVisible}" Value="False">
+                                                        <Setter Property="Background" Value="#F1F5FD" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                    </Border>
+                                    -->
+                        <!-- Content -->
+                        <!--
+                                    <TextBlock Text="{Binding SelectedName, UpdateSourceTrigger=PropertyChanged}" 
+                                        FontSize="13" FontFamily="{StaticResource Baloo-Regular}" Foreground="{StaticResource FourthTextColor}"
+                                        Margin="15 8"
+                                        VerticalAlignment="Center"
+                                        ToolTip="{Binding SelectedName}"
+                                            />
+                                    <Button Style="{StaticResource gridEditButton}"
+                                    Command="{Binding AttachmentButtonCommand}"
+                                    Content="▼"    Height="20" Width="20" Background="#5D7881"
+                                         Margin="10 10 5 8" FontSize="11" 
+                                          HorizontalAlignment="Right"/>
+                                    <Path HorizontalAlignment="Left" Data="{StaticResource date}" Margin="10" Width="16" Height="16" Stretch="Uniform" Fill="#5D7881"/>
+                                </Grid>
+                                <Grid x:Name="PopupGrid"></Grid>
+                            </StackPanel>
+                            <Popup IsOpen="{Binding AttachmentMenuVisible}" PlacementTarget="{Binding ElementName=PopupGrid}">
+                                <Border  BorderThickness="1.5" Width="280" 
+                                     CornerRadius="7" BorderBrush="AliceBlue">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                    </Grid>
+                                </Border>
+                            </Popup>
+                        </Grid>-->
+
+                        <TextBox Margin="10 5" Text="{Binding SearchText ,UpdateSourceTrigger=PropertyChanged}"
+                           Tag="Rechercher ..." Style="{StaticResource SearchTextBox2}"/>
+                        <Button  IsDefault="True" Margin="0 0 40 0" Height="24" Width="24" Cursor="Hand" Background="#5D7881"
+                                Style="{StaticResource gridEditButton}" Command="{Binding SearchCommand}">
+                            <TextBlock FontFamily="{StaticResource FontAwesome2}" Text="&#xf002;" HorizontalAlignment="Right" VerticalAlignment="Center"
+                                    FontSize="13" Foreground="{StaticResource TertiaryBackgroundColor}" Margin="0"/>
+                        </Button>
+                    </StackPanel>
+
+                </Grid>
+            </StackPanel>
+        </Grid>
+        <!--Content-->
+        <Grid Margin="20 10" Grid.Row="1" Grid.Column="1">
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Border   Grid.RowSpan="3" CornerRadius="2" Background="{StaticResource TertiaryBackgroundColor}">
+                <Border.Effect>
+                    <DropShadowEffect Direction="-130" BlurRadius="30" ShadowDepth="5" Opacity="0.1"/>
+                </Border.Effect>
+
+            </Border>
+
+            <!--<Grid  Visibility="Collapsed" Grid.Row="1" HorizontalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Border BorderThickness="1" BorderBrush="#8AA5ED" CornerRadius="10" Margin="20 5">
+                    <StackPanel Margin="5">
+                        <TextBlock  Text="Montant Total" HorizontalAlignment="Center"
+                         FontFamily="{StaticResource SofiaSansCond-Regular}" Foreground="{StaticResource TertiaryTextColor}" 
+                         FontSize="20"  VerticalAlignment="Top"/>
+                          <TextBox TextAlignment="Center" IsReadOnly="True" VerticalAlignment="Bottom" Text="{Binding MontantTotal,UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{StaticResource TextEntryQua}" Margin="0"/>
+
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="1" BorderThickness="1" BorderBrush="#8AA5ED" CornerRadius="10"  Margin="20 5">
+                    <StackPanel Margin="5">
+                        <TextBlock  Text="Produit Total" HorizontalAlignment="Center"
+                                  FontFamily="{StaticResource SofiaSansCond-Regular}" Foreground="{StaticResource TertiaryTextColor}" 
+                                  FontSize="20"  VerticalAlignment="Top"/>
+                        <TextBlock  Text="{Binding produitTotal}" Margin="0 10 0 0" HorizontalAlignment="Center"
+                                   FontFamily="{StaticResource SofiaSansCond-Regular}" Foreground="{StaticResource PrimeBlueBrush}" 
+                                   FontSize="20"  VerticalAlignment="Bottom" ToolTip="{Binding produitTotal}"/>
+                    </StackPanel>
+                </Border>
+            </Grid>-->
+            <!--<Path Panel.ZIndex="1" Grid.Row="2" Visibility="{Binding IsLoading,Converter={local:BooleanToVisiblityConverter}, ConverterParameter=True}" 
+                Data="{StaticResource spinner}" Width="64" Height="64" Style="{StaticResource SpinningPath}" Fill="{StaticResource PrimeBlueBrush}" />-->
+            <ScrollViewer Grid.Row="2"  VerticalScrollBarVisibility="Auto"  >
+                <DataGrid  RowStyle="{DynamicResource DataGridRowStyle1}"
+                ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 
+                CellStyle="{DynamicResource DataGridCellStyle1}"
+                x:Name="usersDataGrid" 
+                Style="{DynamicResource DataGridStyle1}"
+                Margin="20" Grid.Row="2" 
+                ItemsSource="{Binding FilteredInvoices}" 
+                AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn  Header="Numéro" Width="*"   IsReadOnly="True"  CanUserResize="False">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock x:Name="tbPercent" Text="{Binding Number}" FontSize="16"
+                                           Foreground="{StaticResource TertiaryTextColor}"
+                                           FontFamily="{StaticResource OakSans-Regular}"
+                                           ToolTip="{Binding Number}"/>
+                                    <DataTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                            <Setter Property="Foreground" TargetName="tbPercent" Value="#ffffff" />
+                                            </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                            <Setter Property="Foreground" TargetName="tbPercent" Value="#ffffff" />
+                                         </DataTrigger>
+                                    </DataTemplate.Triggers>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Date" Width="*" IsReadOnly="True" CanUserResize="False">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Grid >
+                                        <Border Padding="6 2" Height="28" Width="Auto" CornerRadius="6" HorizontalAlignment="Left" Background="#14174C">
+                                            <TextBlock x:Name="tbPercent5" VerticalAlignment="Center" Text="{Binding Date}" FontSize="14"
+                                              Foreground="#ffffff" HorizontalAlignment="Center"
+                                              FontFamily="{StaticResource OakSans-Regular}"
+                                               ToolTip="{Binding Date}"/>
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn CanUserResize="False" Header="Produit Total" Width="*" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock x:Name="tbPercent5" VerticalAlignment="Center" Text="{Binding ProduitTotal}" FontSize="14"
+                                            Foreground="#14174C" HorizontalAlignment="Left"
+                                            FontFamily="{StaticResource OakSans-Regular}"
+                                             ToolTip="{Binding ProduitTotal}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn CanUserResize="False" Header="Montant Total" Width="*" IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox TextAlignment="Center" IsReadOnly="True" Foreground="#606467" Text="{Binding MontantTotal,UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{StaticResource TextEntryQua2}" Margin="0"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn  IsReadOnly="True" Width="100" CanUserResize="False">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                       
+                                        <Button Margin="0" Cursor="Hand" Background="Transparent" Command="{Binding DataContext.DeleteCommand ,  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" 
+                                                  CommandParameter="{Binding }"
+                                                  Style="{StaticResource gridRemoveButton}">
+                                            <Path Data="{StaticResource Delete}" Fill="#BE2623" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Center" Width="11" Height="11"/>
+                                        </Button>
+                                    </StackPanel>
+                                   
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </ScrollViewer>
+            <Border  Grid.Row="3" HorizontalAlignment="Right"  
+                    BorderBrush="#DEE4EC" BorderThickness="1" CornerRadius="16"
+                    Padding="0" Background="#ffffff" Margin="0 10 20 10" >
+
+                <StackPanel Orientation="Horizontal" >
+                    <Button Command="{Binding PreviousPageCommand}" Style="{StaticResource pagingButton2}" >
+                        <StackPanel Orientation="Horizontal" >
+                            <Path Data="{StaticResource Prev}"
+                                   Fill="{StaticResource PrimeBlueBrush}"
+                                   Stretch="Uniform" VerticalAlignment="Center" Margin="8 1 0 0"
+                                   Width="11" Height="11"/>
+
+                        </StackPanel>
+                    </Button>
+                    <Rectangle Width="1" Fill="#DEE4EC" Margin="0"/>
+
+                    <Button Command="{Binding NextPageCommand}" Style="{StaticResource pagingButton}" >
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Suivant"/>
+                            <Path Data="{StaticResource Next}"
+                              Fill="{StaticResource PrimeBlueBrush}"
+                              Stretch="Uniform" VerticalAlignment="Center" Margin="8 1 0 0"
+                              Width="11" Height="11"/>
+
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Border>
+
+        </Grid>
+        <!--<local:StockTypesPagesHost Grid.Row="1" Grid.Column="1" 
+                CurrentPage="{Binding StockHostViewModel.CurrentPage,
+          Source={x:Static local:ViewModelLocator.Instance}}"
+          CurrentPageViewModel="{Binding StockHostViewModel.CurrentPageViewModel,
+          Source={x:Static local:ViewModelLocator.Instance}}"     />-->
+
+    </Grid>
+</local:BasePage>

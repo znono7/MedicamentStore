@@ -1,0 +1,139 @@
+﻿<UserControl x:Class="MedicamentStore.PassEntryEdited"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MedicamentStore"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Border BorderThickness="0 0 0 0.5" BorderBrush="#C2CACB">
+        <Grid>
+            <!-- Double click to edit -->
+            <Grid.InputBindings>
+                <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding EditCommand}" />
+            </Grid.InputBindings>
+            <!-- Hover over to show edit button -->
+            <Grid.Triggers>
+                <EventTrigger RoutedEvent="MouseEnter">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation To="1" 
+                                    Duration="0:0:0.4" 
+                                    Storyboard.TargetName="EditButton"
+                                    Storyboard.TargetProperty="Opacity" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="MouseLeave">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation To="0" 
+                                    Duration="0:0:0.4" 
+                                    Storyboard.TargetName="EditButton"
+                                    Storyboard.TargetProperty="Opacity" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Grid.Triggers>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Name="LabelColumnDefinition" Width="auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="{Binding Label}"
+                       Name="Label"
+                       Margin="15 12"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"
+                       FontFamily="{StaticResource OakSans-Regular}"
+                       Foreground="{StaticResource PrimaryTextColor}"/>
+            <PasswordBox Name="CurrentPassword" Grid.Column="1" 
+                     Tag="{Binding CurrentPasswordHintText}"
+                      PasswordChanged="CurrentPassword_PasswordChanged"
+                     Margin="10 10 15 5"
+                     Opacity="0" 
+                     FontSize="15"
+                     local:FocusAndSelectProperty.Value="{Binding Editing}"
+                     local:AnimateFadeInProperty.Value="{Binding Editing}"
+                     />
+            <PasswordBox Name="NewPassword"
+                         Tag="{Binding NewPasswordHintText}" Grid.Column="1" 
+                         Grid.Row="1" 
+                          PasswordChanged="NewPassword_PasswordChanged"
+                         Margin="10 10 15 5"
+                         Opacity="0"
+                         FontSize="15"
+                         local:AnimateFadeInProperty.Value="{Binding Editing}"
+         />
+            <PasswordBox Name="ConfirmPassword"
+                         Tag="{Binding ConfirmPasswordHintText}"
+                 Grid.Column="1" 
+                Grid.Row="2" 
+                  PasswordChanged="ConfirmPassword_PasswordChanged"
+                Margin="10 10 15 5"
+                Opacity="0"
+                FontSize="15"
+                local:AnimateFadeInProperty.Value="{Binding Editing}"
+/>
+            <TextBlock Text="{Binding FakePassword}" 
+                       Foreground="{StaticResource PrimaryTextColor}"
+                       Grid.Column="1"
+                       Margin="15 8"
+                       VerticalAlignment="Center"
+                      
+                       local:AnimateFadeInProperty.Value="{Binding Editing, Converter={local:BooleanInvertConverter}}"
+                       />
+            <Grid Grid.Column="2"
+                  local:AnimateFadeInProperty.Value="{Binding Editing, Converter={local:BooleanInvertConverter}}">
+                <Button  x:Name="EditButton"
+                         Opacity="0" 
+                         Padding="0" VerticalAlignment="Center"
+                         Margin="0 0 5 0" FontFamily="{StaticResource FontAwesome2}"
+                         Cursor="Hand" FontSize="16"
+                         Command="{Binding EditCommand}"
+                         Content="&#xf044;" Background="#FFD43B"
+                      
+                         Style="{StaticResource SmallBtn}"/>
+            </Grid>
+            <Grid Grid.Column="2" 
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    local:AnimateFadeInProperty.Value="{Binding Working}">
+
+                <Border Padding="0 0 5 0">
+                    <Path Style="{StaticResource SpinningPath}" />
+                </Border>
+
+            </Grid>
+            <StackPanel Grid.Column="2"
+            Orientation="Horizontal">
+                <Button   IsDefault="True"
+                          Style="{StaticResource SmallBtn}"
+                          Padding="0" VerticalAlignment="Center"
+                          Margin="0 0 5 0" FontFamily="{StaticResource FontAwesome2}"
+                          Cursor="Hand" FontSize="16"
+                          Command="{Binding SaveCommand}"
+                          Content="&#xf00c;" Background="#82C785"
+                         
+                          local:AnimateFadeInProperty.Value="{Binding Editing}"
+                          />
+                <Button    IsCancel="True"   Style="{StaticResource SmallBtn}"                       
+                           Padding="0" VerticalAlignment="Center"
+                           Margin="0 0 5 0" FontFamily="{StaticResource FontAwesome2}"
+                           Cursor="Hand" FontSize="16"
+                           Command="{Binding CancelCommand}"
+                           Content="&#xf00d;" Background="#991B1B"
+                           
+                           local:AnimateFadeInProperty.Value="{Binding Editing}"
+           />
+            </StackPanel>
+        </Grid>
+    </Border>
+
+</UserControl>

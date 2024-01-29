@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="MedicamentStore.SideStockMenu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MedicamentStore"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="260">
+    <Grid Background="#ffffff">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Column="1" Text="Produits Pharmaceutiques" Margin="5 2"
+             FontFamily="{StaticResource Baloo-Regular}" Foreground="{StaticResource TertiaryTextColor}" 
+             FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <TextBox Grid.Row="1" Width="220"  Text="{Binding SearchDCIText,UpdateSourceTrigger=PropertyChanged}" Tag="" Style="{StaticResource SearchMedText}" HorizontalAlignment="Left" />
+        <StackPanel Grid.Row="2">
+            <RadioButton  Command="{Binding MedicamentPage}" Content="Médicaments" Margin="2" Tag="{StaticResource drugs}" Style="{StaticResource StockMenuRadioButtonStyle}" Width="252" />
+
+        </StackPanel>
+    </Grid>
+</UserControl>

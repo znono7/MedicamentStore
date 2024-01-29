@@ -1,0 +1,113 @@
+﻿<Window x:Class="MedicamentStore.AddStockWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MedicamentStore"
+        WindowStyle="None" WindowState="Normal"
+        WindowStartupLocation="CenterScreen"
+        AllowsTransparency="True" SizeToContent="Height" Width="820"
+        mc:Ignorable="d" Background="Transparent"
+        Title="AddStockWindow">
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="45"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Border Grid.RowSpan="3"  CornerRadius="8"  Background="{StaticResource TertiaryBackgroundColor}" >
+            <Border.Effect>
+                <DropShadowEffect Direction="-130" BlurRadius="30" ShadowDepth="5" Opacity="0.1"/>
+            </Border.Effect>
+        </Border>
+        <Grid>
+            <Border Background="#0C3542" CornerRadius="8 8 0 0" />
+
+            <Button Click="Button_Click" HorizontalAlignment="Right" Margin="5 0 10 0" Style="{StaticResource IconButtonsStyle}"
+            Content="{DynamicResource close}" Background="Red" Tag="IsCloseButton"/>
+
+        </Grid>
+        <Grid Grid.Row="1" Margin="15" >
+            <local:CustomerCmbSuppControl HorizontalAlignment="Left"  DataContext="{Binding SuppCmb}"/>
+            <local:TextEntryDateInvControl HorizontalAlignment="Right" DataContext="{Binding dateViewModel}"/>
+        </Grid>
+        <Grid  Panel.ZIndex="1" Grid.Row="2"
+        local:AnimateSlideInFromTopProperty.Value="{Binding AttachmentNotifVisible}">
+            <local:NotificationControl Height="90" Margin="0 10 10 25" DataContext="{Binding NotificationBoxViewModel}"/>
+        </Grid>
+        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Top" Grid.Row="2" Orientation="Horizontal">
+            <Grid Height="200" Width="700" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+
+                </Grid.ColumnDefinitions>
+
+
+                <Image Margin="10" Source="{Binding Img}" Stretch="UniformToFill" Width="100" Height="100"/>
+                <StackPanel VerticalAlignment="Center" Grid.Column="1" Orientation="Vertical">
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock x:Name="tbPercent" Text="{Binding Nom_Commercial}" FontSize="16"
+                                     Foreground="{StaticResource TertiaryTextColor}"
+                                     FontFamily="{StaticResource OakSans-Regular}"
+                                     ToolTip="{Binding Nom_Commercial}"/>
+
+                        <TextBlock x:Name="tbPercent2" VerticalAlignment="Bottom" Text="{Binding Dosage}" FontSize="12"
+                                 Foreground="{StaticResource TertiaryTextColor}"
+                                 FontFamily="{StaticResource OakSans-Regular}"
+                                      ToolTip="{Binding Dosage}"/>
+
+                        <TextBlock x:Name="tbPercent3" VerticalAlignment="Bottom" Text="{Binding Forme}" FontSize="12"
+                                 Foreground="{StaticResource TertiaryTextColor}"
+                                 FontFamily="{StaticResource OakSans-Regular}"
+                                      ToolTip="{Binding Forme}"/>
+                    </StackPanel>
+                    <TextBlock x:Name="tbPercent4" VerticalAlignment="Bottom" Text="{Binding Conditionnement}" FontSize="12"
+                                 Foreground="{StaticResource TertiaryTextColor}"
+                                 FontFamily="{StaticResource OakSans-Regular}"
+                                  ToolTip="{Binding Conditionnement}"/>
+
+                </StackPanel>
+                <StackPanel Grid.Column="2" Margin="10 0 0 0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock  VerticalAlignment="Top" Text="Quantité Ajoutée" FontSize="12"
+                          Foreground="#CDD2DD"
+                          FontFamily="{StaticResource OakSans-Regular}"
+                           />
+
+
+                    <TextBox PreviewTextInput="TextBox_PreviewTextInput"  Text="{Binding Quantite,UpdateSourceTrigger=PropertyChanged,Converter={local:IntegerConverter}}" Style="{StaticResource TextEntry}"  Width="95"/>
+                </StackPanel>
+                <StackPanel Margin="10 0 20 0" Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Left">
+                    <Button Command="{Binding PlusCommand}" Style="{StaticResource buttonCounter}">
+                        <Path Data="{StaticResource plus}" Stretch="UniformToFill" Fill="#ECEFF2" Height="11" Width="11" />
+                    </Button>
+
+                    <Button Command="{Binding MinusCommand}" Style="{StaticResource buttonCounter}" Margin="0 5 0 0">
+                        <Path Data="{StaticResource minus}" Stretch="Uniform" Fill="#ECEFF2"  Height="2" Width="11"/>
+
+                    </Button>
+                </StackPanel>
+                <Button Click="Button_Click_1" IsDefault="True" Grid.Column="4" Height="32" Width="32"
+                       Style="{StaticResource addButton}" Margin="20"
+                       Padding="2" VerticalAlignment="Center" HorizontalAlignment="Center"
+                       FontFamily="{StaticResource FontAwesome2}"
+                       Cursor="Hand" FontSize="16"
+                       
+                       Content="&#xf00c;" Background="#82C785">
+
+                </Button>
+                <!--<Button   IsDefault="True" Grid.Column="4" Height="32" Width="32"
+                       Style="{StaticResource SmallBtn}" Margin="20"
+                       Padding="2" VerticalAlignment="Center" HorizontalAlignment="Center"
+                       FontFamily="{StaticResource FontAwesome2}"
+                       Cursor="Hand" FontSize="16"
+                       Command="{Binding SaveCommand}"
+                       Content="&#xf00c;" Background="#82C785" />-->
+            </Grid>
+
+        </StackPanel>
+    </Grid>
+</Window>

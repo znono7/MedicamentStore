@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="MedicamentStore.TextEntryControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MedicamentStore"
+             mc:Ignorable="d" 
+            >
+    <StackPanel Margin="20 10">
+       
+        <!-- Label -->
+        <TextBlock Margin="0 0 0 8"
+            Text="{Binding Label}" FontSize="13" d:Text="Nom"
+             Name="Label"
+            Foreground="#97A5B4"
+             HorizontalAlignment="Left"
+             VerticalAlignment="Center"
+             FontFamily="{StaticResource OakSans-SemiBold}"
+             />
+        <TextBox x:Name="EntryData" Text="{Binding EnteredText, UpdateSourceTrigger=PropertyChanged}"
+                 Style="{StaticResource TextEntry}" Margin="13 0"
+                 Height="{Binding height,Mode=TwoWay}"
+                 PreviewTextInput="EntryData_PreviewTextInput"/>
+    </StackPanel>
+</UserControl>
