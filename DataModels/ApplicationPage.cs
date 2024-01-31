@@ -27,6 +27,7 @@ namespace MedicamentStore
         NewStockPage = 8,
         StockHostPage = 9,
         InvoiceHostPage = 10,
+        MouvementPage = 11,
 
     }
 }

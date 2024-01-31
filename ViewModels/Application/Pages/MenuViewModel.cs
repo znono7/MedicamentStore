@@ -31,9 +31,10 @@ namespace MedicamentStore
             MouvementPage = new RelayCommand(async () => await ToMouvementPagePageAsync());
         }
 
-        private Task ToMouvementPagePageAsync()
+        private async Task ToMouvementPagePageAsync()
         {
-            throw new NotImplementedException();
+            IoC.Application.GoToPage(ApplicationPage.MouvementPage);
+            await Task.Delay(1);
         }
 
         private async Task InvoicePageAsync()

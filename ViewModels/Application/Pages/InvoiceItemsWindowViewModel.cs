@@ -97,7 +97,7 @@ namespace MedicamentStore
         #endregion
         public InvoiceItemsWindowViewModel() 
         {
-             
+              
             _ = GetTypes();
             _ = GetProducts(1);
             SelectedType = TypeItems[0];

@@ -371,7 +371,7 @@
 
     <!--#Add Button -->
     <Style x:Key="addButton" TargetType="Button">
-        <Setter Property="Background" Value="{StaticResource PrimeBlueBrush}" />
+        <Setter Property="Background" Value="{StaticResource PrimeBlueBrush}" /> 
         <Setter Property="Foreground" Value="#ffffff" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="BorderThickness" Value="0" />

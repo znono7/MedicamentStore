@@ -84,7 +84,7 @@ namespace MedicamentStore
             SelectedDate = DateTime.Today;
             AttachmentButtonCommand = new RelayCommand(AttachmentButton);
             SetFNumberCommand = new RelayCommand(SetFactNumButton);
-            _ = GetFactNumber();
+            _ = GetFactNumber(); 
             SetFactNum(LastFactNum);
       //  AttachmentDButtonCommand = new RelayCommand(AttachmentDButton);
 

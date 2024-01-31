@@ -47,6 +47,8 @@ namespace MedicamentStore
                     return new StockHostPage(viewModel as StockHostViewModel);
                 case ApplicationPage.InvoiceHostPage:
                     return new InvoiceHostPage(viewModel as InvoiceHostViewModel);
+                case ApplicationPage.MouvementPage://
+                    return new MouvementPage(viewModel as MouvementViewModel);
 
                 default:
                     Debugger.Break();
@@ -91,6 +93,8 @@ namespace MedicamentStore
                 return ApplicationPage.StockHostPage;
             if (page is InvoiceHostPage)
                 return ApplicationPage.InvoiceHostPage;
+            if (page is MouvementPage)//
+                return ApplicationPage.MouvementPage;
             // Alert developer of issue
             Debugger.Break();
             return default(ApplicationPage);
