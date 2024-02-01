@@ -3,10 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+
              xmlns:local="clr-namespace:MedicamentStore"
              mc:Ignorable="d" Width="240"
              d:DesignHeight="400" d:DesignWidth="240">
-    <Grid d:Background="White">
+    <Grid d:Background="White" x:Name="MainGrid">
 
         <Grid Margin="5">
             <Grid.RowDefinitions>
@@ -28,18 +30,7 @@
                     <TextBlock FontSize="13"   Text="Depuis" Style="{StaticResource TextH4}" Margin="0 0 0 3"/>
                     <Grid  HorizontalAlignment="Center">
                         <Border x:Name="BrdFromDate" BorderBrush="#7A7CFF"   BorderThickness="1" CornerRadius="4"  Height="32">
-                            <Border.Style>
-                                <Style TargetType="Border">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding AttachmentMenuVisible}" Value="True">
-                                            <Setter Property="BorderBrush" Value="{StaticResource PrimeBlueBrush}" />
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding AttachmentMenuVisible}" Value="False">
-                                            <Setter Property="BorderBrush" Value="#F1F5FD" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Border.Style>
+                            
                         </Border>
                         <StackPanel Width="90" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" >
                             <Button x:Name="ButtonDateMenu"  Cursor="Hand"  Command="{Binding FromDateButtonCommand}" HorizontalAlignment="Left"
@@ -47,10 +38,14 @@
                                 <Path Fill="#7A7CFF"  Data="{StaticResource date}" Stretch="Uniform" Height="11" Width="11"/>
                             </Button>
                             <TextBox Width="60" Height="16" FontSize="13" Margin="0 0 5 5" Padding="0 5 0 0" Foreground="Black" Text="{Binding SelectedFromDate, StringFormat=dd-MM-yyyy}" Style="{StaticResource TextEntryDate}"/>
-                            <Popup AllowsTransparency="True" IsOpen="{Binding AttachmentDateVisible}" Name="popupDateFrom" PlacementTarget="{Binding ElementName=BrdFromDate}" Placement="Left" StaysOpen="True">
+                            <Popup AllowsTransparency="True" IsOpen="{Binding AttachmentDateVisible}" Name="popupDateFrom" PlacementTarget="{Binding ElementName=MainGrid}" Placement="Left" StaysOpen="True">
                                 <Grid Background="Transparent">
+                                  
                                     <Calendar  CalendarButtonStyle="{DynamicResource CalendarCalendarButtonStyle1}" CalendarDayButtonStyle="{DynamicResource CalendarCalendarDayButtonStyle1}" CalendarItemStyle="{DynamicResource CalendarCalendarItemStyle1}" Style="{DynamicResource CalendarStyle1}"
-                                    SelectedDate="{Binding SelectedFromDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    SelectedDate="{Binding SelectedFromDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                DisplayDate="{x:Static sys:DateTime.Now}"
+                                               DisplayDateStart="01-01-2024"
+                                               DisplayDateEnd="{Binding Mode=OneWay, Source={x:Static sys:DateTime.Today}}"/>
                                 </Grid>
                             </Popup>
                         </StackPanel>
@@ -62,18 +57,7 @@
                     <TextBlock FontSize="13"   Text="à" Style="{StaticResource TextH4}" Margin="0 0 0 3"/>
                     <Grid HorizontalAlignment="Center">
                         <Border x:Name="BrdToDate" BorderBrush="#7A7CFF"   BorderThickness="1" CornerRadius="4"  Height="32" >
-                            <Border.Style>
-                                <Style TargetType="Border">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding AttachmentMenuVisible}" Value="True">
-                                            <Setter Property="BorderBrush" Value="{StaticResource PrimeBlueBrush}" />
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding AttachmentMenuVisible}" Value="False">
-                                            <Setter Property="BorderBrush" Value="#F1F5FD" />
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Border.Style>
+                           
                         </Border>
                         <StackPanel Width="90" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="7,0,0,0" >
                             <Button x:Name="ButtonToDateMenu"  Cursor="Hand"  Command="{Binding ToDateButtonCommand}" HorizontalAlignment="Left"
@@ -81,10 +65,14 @@
                                 <Path Fill="#7A7CFF"  Data="{StaticResource date}" Stretch="Uniform" Height="11" Width="11"/>
                             </Button>
                             <TextBox HorizontalAlignment="Center" Width="60" Height="16" FontSize="13" d:Text="14-10-1994" Margin="0 0 5 5" Padding="0 5 0 0" Foreground="Black" Text="{Binding SelectedToDate, StringFormat=dd-MM-yyyy}" Style="{StaticResource TextEntryDate}"/>
-                            <Popup AllowsTransparency="True" IsOpen="{Binding AttachmentToDateVisible}" Name="popupToDate" PlacementTarget="{Binding ElementName=BrdToDate}" Placement="Right" StaysOpen="True">
+                            <Popup AllowsTransparency="True" IsOpen="{Binding AttachmentToDateVisible}" Name="popupToDate" PlacementTarget="{Binding ElementName=MainGrid}" Placement="Right" StaysOpen="True">
                                 <Grid Background="Transparent">
+                                  
                                     <Calendar  CalendarButtonStyle="{DynamicResource CalendarCalendarButtonStyle1}" CalendarDayButtonStyle="{DynamicResource CalendarCalendarDayButtonStyle1}" CalendarItemStyle="{DynamicResource CalendarCalendarItemStyle1}" Style="{DynamicResource CalendarStyle1}"
-                                            SelectedDate="{Binding SelectedToDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                            SelectedDate="{Binding SelectedToDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                               DisplayDate="{x:Static sys:DateTime.Now}"
+                                               DisplayDateStart="01-01-2024"
+                                               DisplayDateEnd="{Binding Mode=OneWay, Source={x:Static sys:DateTime.Today}}"/>
                                 </Grid>
                             </Popup>
                         </StackPanel>

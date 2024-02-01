@@ -20,7 +20,7 @@
                      Panel.ZIndex="10"
                      Opacity="0.3">
 
-                <Border Background="{StaticResource PrimaryBlackColor}"
+                <Border Background="{StaticResource PrimaryBlackColor}" CornerRadius="8"
                         local:AnimateFadeInProperty.Value="{Binding isExpanded}"/>
                 <Border.InputBindings>
                     <MouseBinding MouseAction="LeftClick" Command="{Binding PopupClickawayCommand}" />
@@ -67,15 +67,20 @@
                     </ComboBox>-->
 
                     <Button Command="{Binding ExpandCommand}" Click="expandButton_Click" Name="expandButton" Width="240" Style="{StaticResource addButton}" Background="Transparent">
-                        <StackPanel Orientation="Horizontal">
+                        <Grid Width="240">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
                             <Path x:Name="dateIcon" Margin="10 0 0 0"  Fill="#343434"  Data="{StaticResource date}" Stretch="Uniform" Height="11" Width="11"/>
-                            <TextBlock x:Name="txtDate" Foreground="#343434" Style="{StaticResource TextH4}" Text="N'importe Quelle Date"/>
-                            <Path x:Name="arrowIcon" Margin="0 0 10 0"  Fill="#343434"  Data="{StaticResource angel-up}" Stretch="Uniform" Height="11" Width="11">
+                            <TextBlock Grid.Column="1"  x:Name="txtDate" Foreground="#343434" Style="{StaticResource TextH4}" Text="{Binding DateFilterViewModel.DateStat}"/>
+                            <Path Grid.Column="2" x:Name="arrowIcon" Margin="0 0 10 0"  Fill="#343434"  Data="{StaticResource angel-up}" Stretch="Uniform" Height="11" Width="11">
                                 <Path.RenderTransform>
                                     <RotateTransform x:Name="rotateTransform" Angle="0" CenterX="5.5" CenterY="4.5"/>
                                 </Path.RenderTransform>
                             </Path>
-                        </StackPanel>
+                        </Grid>
                        
                     </Button>
                     <Popup IsOpen="{Binding isExpanded}" AllowsTransparency="True" Name="popup" PlacementTarget="{Binding ElementName=expandButton}" Placement="Bottom" StaysOpen="True">
@@ -92,7 +97,7 @@
                                 </Border.Effect>
                             </Border>
                             <local:DateFilterControl DataContext="{Binding DateFilterViewModel}"/>
-                            <Button Grid.Row="1" Style="{StaticResource addButton}" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+                            <Button Command="{Binding FilterDataCommand}" Grid.Row="1" Style="{StaticResource addButton}" HorizontalAlignment="Center" VerticalAlignment="Bottom">
                                 <StackPanel Orientation="Horizontal">
                                     <Path  Data="{StaticResource done}" Fill="{StaticResource TertiaryBackgroundColor}" Stretch="UniformToFill" VerticalAlignment="Center" Margin="5" HorizontalAlignment="Center" Width="11" Height="11"/>
                                 </StackPanel>

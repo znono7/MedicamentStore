@@ -12,10 +12,12 @@ namespace MedicamentStore
     {
         public DateFilterViewModel DateFilterViewModel { get; set; }
         public ObservableCollection<TypeProduct> TypeItems { get; set; }
+        public string DateStat => DateFilterViewModel.DateStat;
 
         public bool isExpanded {  get; set; }
 
         public ICommand ExpandCommand { get; set; }
+        public ICommand FilterDataCommand { get; set; }
         public ICommand PopupClickawayCommand { get; set; }
         public bool DimmableOverlayVisible { get; set; }
         private TypeProduct _selectedType { get; set; }
@@ -36,6 +38,12 @@ namespace MedicamentStore
             GetTypes();
             ExpandCommand = new RelayCommand(AttachmentMenuButton);
             PopupClickawayCommand = new RelayCommand(ClickawayMenuButton);
+            FilterDataCommand = new RelayCommand(async () => await FilterData());
+        }
+
+        private Task FilterData()
+        {
+            throw new NotImplementedException();
         }
 
         private void ClickawayMenuButton()
