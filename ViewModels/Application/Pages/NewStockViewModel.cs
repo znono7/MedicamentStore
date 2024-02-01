@@ -14,7 +14,7 @@ namespace MedicamentStore
         public bool AnyPopupVisible => SuppCmb.AttachmentMenuVisible ||
                                        dateViewModel.AttachmentMenuVisible;
                                         
-        public ICommand ReturnCommand { get; set; } 
+        public ICommand ReturnCommand { get; set; }  
         public ICommand SaveCommand { get; set; }
         public ICommand DeleteCommand { get; set; }
         public ICommand OpenWindowCommand { get; set; }

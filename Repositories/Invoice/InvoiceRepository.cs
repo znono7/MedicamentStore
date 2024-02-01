@@ -154,7 +154,7 @@ namespace MedicamentStore
 
         public async Task<DbResponse> InsertInvoice(Invoice invoice, ObservableCollection<InvoiceProduct> invoiceDetails)
         {
-            using (var transaction = _connection.Connection().BeginTransaction())
+            using (var transaction = _connection.Connection().BeginTransaction()) 
             {
                 try
                 {
@@ -175,9 +175,13 @@ namespace MedicamentStore
                                                                             VALUES (@InvoiceNumber,@ProductId,@Quantite,@QuantiteRest,@PrixTotal);
                                                                                    ",
                                             transaction: transaction, item);
+
+                            string QeuryTrans = @"INSERT INTO Transaction (IdStock,TypeTransaction) VALUES (@LastIdStock,2)";
+                            await _connection.ExecuteAsync(transaction.Connection, QeuryTrans, transaction: transaction, new { LastIdStock = ProductStock.Id });
+
                         }
 
-                        
+
                     }
                     transaction.Commit();
                     return new DbResponse();

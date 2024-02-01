@@ -28,7 +28,7 @@ namespace MedicamentStore
         } 
 
         private int _currentPage = 1;
-        private int _pageSize = 10; // Number of rows per page  
+        private int _pageSize = 10; // Number of rows per page   
             
         public int CurrentPage   
         {

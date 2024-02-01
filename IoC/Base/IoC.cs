@@ -57,6 +57,7 @@ namespace MedicamentStore
         public static ISuppliesRepository SuppliesManager => IoC.Get<ISuppliesRepository>();
         public static IProduitRepository ProduitManager => IoC.Get<IProduitRepository>();
         public static IInvoiceRepository InvoiceManager => IoC.Get<IInvoiceRepository>();
+        public static ITransactionRepository TransactionManager  => IoC.Get<ITransactionRepository>();
 
 
 
@@ -112,6 +113,7 @@ namespace MedicamentStore
             BindRepository<IProduitRepository, ProduitRepository>("context");
 
             BindRepository<IInvoiceRepository, InvoiceRepository>("context");
+            BindRepository<ITransactionRepository, TransactionRepository>("context");
 
 
 

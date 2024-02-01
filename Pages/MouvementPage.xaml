@@ -10,6 +10,7 @@
 
     <Grid Background="{StaticResource PrimaryBackgroundColor}">
         <Grid Margin="10">
+            
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
@@ -18,7 +19,7 @@
             <!-- Dimmed overlay -->
             <Border Grid.RowSpan="3"
                      Panel.ZIndex="10"
-                     Opacity="0.3">
+                     Opacity="0.3" Grid.ColumnSpan="2">
 
                 <Border Background="{StaticResource PrimaryBlackColor}" CornerRadius="8"
                         local:AnimateFadeInProperty.Value="{Binding isExpanded}"/>
@@ -26,10 +27,10 @@
                     <MouseBinding MouseAction="LeftClick" Command="{Binding PopupClickawayCommand}" />
                 </Border.InputBindings>
             </Border>
-            <TextBlock  Text="Mouvement du Stock" Margin="20 10" HorizontalAlignment="Left"
+            <TextBlock  Text="Mouvement du Stock" Margin="20,0,0,0" HorizontalAlignment="Left"
                           FontFamily="{StaticResource Baloo-Regular}" Foreground="{StaticResource TertiaryTextColor}" 
                           FontSize="20"  VerticalAlignment="Center"/>
-            <Grid Grid.Row="1" Margin="20 3">
+            <Grid Grid.Row="1" Margin="20,3,20,3" Grid.ColumnSpan="2">
                 <Border  CornerRadius="2" Background="{StaticResource TertiaryBackgroundColor}">
                     <Border.Effect>
                         <DropShadowEffect Direction="-130" BlurRadius="30" ShadowDepth="5" Opacity="0.1"/>
@@ -40,7 +41,9 @@
                               DisplayMemberPath="type" SelectedValuePath="Id" SelectedItem="{Binding SelectedType, UpdateSourceTrigger=PropertyChanged}"
                               Style="{DynamicResource ComboBoxStyle3}" HorizontalAlignment="Left" Width="200"/>
                     <!--<ComboBox.Resources>
-                            --><!-- Define your resources here --><!--
+                            -->
+                    <!-- Define your resources here -->
+                    <!--
                             <Style TargetType="ComboBoxItem">
                                 <Setter Property="SnapsToDevicePixels" Value="true"/>
                                 <Setter Property="Margin" Value="15 0 0 0"/>
@@ -81,7 +84,7 @@
                                 </Path.RenderTransform>
                             </Path>
                         </Grid>
-                       
+
                     </Button>
                     <Popup IsOpen="{Binding isExpanded}" AllowsTransparency="True" Name="popup" PlacementTarget="{Binding ElementName=expandButton}" Placement="Bottom" StaysOpen="True">
                         <Grid Background="Transparent">
@@ -107,7 +110,149 @@
                 </StackPanel>
 
             </Grid>
+            <Grid Grid.Row="2" Margin="20 10">
+                <Border   Grid.RowSpan="3" CornerRadius="2" Background="{StaticResource TertiaryBackgroundColor}">
+                    <Border.Effect>
+                        <DropShadowEffect Direction="-130" BlurRadius="30" ShadowDepth="5" Opacity="0.1"/>
+                    </Border.Effect>
+                </Border>
+                <!--#region Stock Initial -->
+                <ScrollViewer   VerticalScrollBarVisibility="Auto"  >
+                    <DataGrid  RowStyle="{DynamicResource DataGridRowStyle1}"
+                              ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 
+                              CellStyle="{DynamicResource DataGridCellStyle1}"
+                              x:Name="usersDataGrid" 
+                              Style="{DynamicResource DataGridStyle1}"
+                              Margin="0 10" Grid.Row="2" 
+                              ItemsSource="{Binding FilteredStocks}" 
+                              AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Width="100" >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid x:Name="GridImage">
+                                            <Border  CornerRadius="7"  Background="{StaticResource TertiaryBackgroundColor}">
+                                                <Border.Effect>
+                                                    <DropShadowEffect Direction="-130" BlurRadius="30" ShadowDepth="5" Opacity="0.1"/>
+                                                </Border.Effect>
+                                            </Border>
 
+                                            <Image Source="{Binding Img, Converter={local:FallbackImageConverter}}"  Style="{StaticResource medImg}" />
+                                            <Popup Width="200" Height="140" x:Name="PopupImage" >
+
+                                                <Border    Background="{StaticResource TertiaryBackgroundColor}">
+                                                    <Border.Effect>
+                                                        <DropShadowEffect Direction="-130" BlurRadius="30" ShadowDepth="5" Opacity="0.1"/>
+                                                    </Border.Effect>
+                                                    <Image Width="160" Height="120"  Style="{StaticResource medImg}" Source="{Binding Img,Converter={local:FallbackImageConverter}}"/>
+
+                                                </Border>
+
+
+                                            </Popup>
+                                        </Grid>
+                                        <DataTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="PopupImage" Property="IsOpen" Value="True"/>
+                                            </Trigger>
+                                        </DataTemplate.Triggers>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn  Header="Produits Pharmaceutique" Width="*"   IsReadOnly="True"  CanUserResize="False">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Vertical">
+                                            <TextBlock x:Name="tbPercent" Text="{Binding Nom_Commercial}" FontSize="16"
+                                                         Foreground="{StaticResource TertiaryTextColor}"
+                                                         FontFamily="{StaticResource OakSans-Regular}"
+                                                         ToolTip="{Binding Nom_Commercial}"/>
+                                            <StackPanel Orientation="Horizontal">
+
+                                                <TextBlock x:Name="tbPercent2" VerticalAlignment="Bottom" Text="{Binding Dosage}" FontSize="12"
+                                                            Foreground="{StaticResource TertiaryTextColor}"
+                                                            FontFamily="{StaticResource OakSans-Regular}"
+                                                                 ToolTip="{Binding Dosage}"/>
+                                                <TextBlock Text="  "/>
+                                                <TextBlock x:Name="tbPercent3" VerticalAlignment="Bottom" Text="{Binding Forme}" FontSize="12"
+                                                            Foreground="{StaticResource TertiaryTextColor}"
+                                                            FontFamily="{StaticResource OakSans-Regular}"
+                                                                 ToolTip="{Binding Forme}"/>
+                                                <TextBlock Text="  "/>
+                                                <TextBlock x:Name="tbPercent4" VerticalAlignment="Bottom" Text="{Binding Conditionnement}" FontSize="12"
+                                                            Foreground="{StaticResource TertiaryTextColor}"
+                                                            FontFamily="{StaticResource OakSans-Regular}"
+                                                             ToolTip="{Binding Conditionnement}"/>
+                                            </StackPanel>
+
+                                        </StackPanel>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="tbPercent" Value="#ffffff" />
+                                                <Setter Property="Foreground" TargetName="tbPercent2" Value="#ffffff" />
+                                                <Setter Property="Foreground" TargetName="tbPercent3" Value="#ffffff" />
+                                                <Setter Property="Foreground" TargetName="tbPercent4" Value="#ffffff" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="tbPercent" Value="#ffffff" />
+                                                <Setter Property="Foreground" TargetName="tbPercent2" Value="#ffffff" />
+                                                <Setter Property="Foreground" TargetName="tbPercent3" Value="#ffffff" />
+                                                <Setter Property="Foreground" TargetName="tbPercent4" Value="#ffffff" />
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Quantite" Width="Auto" IsReadOnly="True" CanUserResize="False">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Border Padding="6 2" Height="28" Width="Auto" CornerRadius="16" HorizontalAlignment="Left" Background="{Binding PrimaryBackground,Converter={local:StringRGBToBrushConverter}}">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock x:Name="tbPercents" VerticalAlignment="Center" Text="{Binding SymbleType}" FontSize="11"
+                                                                Foreground="#ffffff" HorizontalAlignment="Center"
+                                                                FontFamily="{StaticResource OakSans-Regular}" />
+                                                    <TextBlock x:Name="tbPercent5" VerticalAlignment="Center" Text="{Binding Quantite}" FontSize="11"
+                                                        Foreground="#ffffff" HorizontalAlignment="Center"
+                                                        FontFamily="{StaticResource OakSans-Regular}" />
+                                                </StackPanel>
+
+                                            </Border>
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn CanUserResize="False" Header="Prix" Width="Auto" IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox TextAlignment="Center" IsReadOnly="True" Foreground="#113110" Text="{Binding Prix,UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{StaticResource TextEntryQua2}" Margin="0"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn CanUserResize="False" Header="Prix Total" Width="Auto" IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox TextAlignment="Center" IsReadOnly="True" Foreground="#606467" Text="{Binding PrixTotal,UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{StaticResource TextEntryQua2}" Margin="0"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Ajouté dans" Width="100" IsReadOnly="True" CanUserResize="False">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock x:Name="tbPercent5" VerticalAlignment="Center" Text="{Binding Date}" FontSize="11"
+                                                    Foreground="#202122" HorizontalAlignment="Center"
+                                                    FontFamily="{StaticResource OakSans-Regular}"
+                                                     ToolTip="{Binding Date}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn Header="Fournisseur" Width="Auto" IsReadOnly="True" Binding="{Binding Nom}" CanUserResize="False"/>
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </ScrollViewer>
+                <!--#endregion-->
+            </Grid>
         </Grid>
     </Grid>
 </local:BasePage>

@@ -15,7 +15,7 @@ namespace MedicamentStore
         public ObservableCollection<InvoiceProduct> InvoiceProductsSets { get; set; }
 
 
-        public InvoiceInfoViewModel invoice {  get; set; } 
+        public InvoiceInfoViewModel invoice {  get; set; }  
          
         public NotificationBoxViewModel notificationBoxViewModel { get; set; }
         public bool AttachmentNotifVisible { get; set; }

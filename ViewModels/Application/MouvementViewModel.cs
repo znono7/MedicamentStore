@@ -4,12 +4,28 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace MedicamentStore
 {
     public class MouvementViewModel : BaseViewModel
     {
+        protected ObservableCollection<TransactionDto> stocks;
+        public ObservableCollection<TransactionDto> Stocks
+        {
+            get => stocks;
+            set
+            {
+                if (stocks == value)
+                    return;
+                stocks = value;
+
+                FilteredStocks = new ObservableCollection<TransactionDto>(stocks);
+            }
+        }
+
+        public ObservableCollection<TransactionDto> FilteredStocks { get; set; }
         public DateFilterViewModel DateFilterViewModel { get; set; }
         public ObservableCollection<TypeProduct> TypeItems { get; set; }
         public string DateStat => DateFilterViewModel.DateStat;
@@ -39,8 +55,28 @@ namespace MedicamentStore
             ExpandCommand = new RelayCommand(AttachmentMenuButton);
             PopupClickawayCommand = new RelayCommand(ClickawayMenuButton);
             FilterDataCommand = new RelayCommand(async () => await FilterData());
+            _ = LoadData();
         }
 
+        public async Task LoadData()
+        {
+            var Result = await IoC.TransactionManager.GetAll();
+            Stocks = new ObservableCollection<TransactionDto>(Result);
+            foreach (var item in Stocks)
+            {
+                if(item.TypeTransaction == 1)
+                {
+                    item.SymbleType = "+";
+                    item.PrimaryBackground = "349432";
+                }else if (item.TypeTransaction == 2)
+                {
+                    item.SymbleType = "-";
+                    item.PrimaryBackground = "EF4444";
+                }
+                item.PrixTotal = double.Parse(string.Format("{0:0.00}", item.Prix * item.Quantite));
+
+            }
+        }
         private Task FilterData()
         {
             throw new NotImplementedException();

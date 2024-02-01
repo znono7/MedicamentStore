@@ -16,7 +16,7 @@ namespace MedicamentStore
         public int Ids { get; set; }
         //  public string Link { get; set; }
 
-         
+          
         public string? Img 
         {
             get => source;

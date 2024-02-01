@@ -25,7 +25,7 @@ namespace MedicamentStore
             {
                 try
                 {
-                    foreach (var item in newProducts)
+                    foreach (var item in newProducts) 
                     {
                         var parameters = new
                         {
@@ -41,9 +41,10 @@ namespace MedicamentStore
                                                                             VALUES (@Id,@Quantite,@IdSupplie,@Prix,@Type,@Date,@Unit)", 
                                              transaction: transaction, parameters) ;
 
-                        //int LastId = await _connection.ExecuteScalarTransaction<int>(transaction.Connection, "SELECT last_insert_rowid()", transaction: transaction);
-                        
-                        //await _connection.ExecuteAsync(transaction.Connection, @"INSERT INTO StockEnter ()", transaction: transaction);
+                        int LastId = await _connection.ExecuteScalarTransaction<int>(transaction.Connection, "SELECT last_insert_rowid()", transaction: transaction);
+
+                        string QeuryTrans = @"INSERT INTO Transaction (IdStock,TypeTransaction) VALUES (@LastIdStock,1)"; 
+                        await _connection.ExecuteAsync(transaction.Connection, QeuryTrans, transaction: transaction, new { LastIdStock = LastId});
                     }
 
                     transaction.Commit();
@@ -120,7 +121,7 @@ namespace MedicamentStore
 
         public async Task<IEnumerable<MedicamentStock>> GetPagedStocksAsync(int pageNumber, int pageSize, ProduitsPharmaceutiquesType type)
         {
-            int intValue = (int)type; 
+            int intValue = (int)type;  
             int offset = (pageNumber - 1) * pageSize;
 
             var parameters = new { PageSize = pageSize, Offset = offset, Val = intValue };
