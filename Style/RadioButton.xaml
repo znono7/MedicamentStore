@@ -296,4 +296,53 @@
         </Setter>
     </Style>
     <!-- End: VerticalMenuStyle -->
+
+    <!-- Start: VerticalMenuStyle -->
+    <Style x:Key="DateRadioButtonStyle" TargetType="{x:Type RadioButton}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryTextColor}"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="Width" Value="210"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RadioButton}">
+                    <Border x:Name="menuButton"
+                           Background="{TemplateBinding Background}"
+                           >
+                        <Grid>
+                           
+                            <!-- Selected  -->
+                            <Border x:Name="btnSelected"
+                                   
+                                   CornerRadius="6" BorderThickness="1" BorderBrush="#7A7CFF"
+                                   Width="{TemplateBinding Width}" HorizontalAlignment="Center">
+                            </Border>
+
+                          
+                            <!-- Text -->
+                            <TextBlock x:Name="txtName" HorizontalAlignment="Center"
+                                      VerticalAlignment="Center" 
+                                      Text="{TemplateBinding Content}" Margin="0"
+                                      Foreground="{TemplateBinding Foreground}"
+                                      FontWeight="{TemplateBinding FontWeight}"
+                                      FontSize="{TemplateBinding FontSize}"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="txtName" Property="Foreground" Value="#ffffff"/>
+                            <Setter TargetName="btnSelected" Property="Background" Value="#7A7CFF"/>
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="btnSelected" Property="Background" Value="#7A7CFF"/>
+                            <Setter TargetName="txtName" Property="Foreground" Value="#ffffff"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!-- End: VerticalMenuStyle -->
 </ResourceDictionary>

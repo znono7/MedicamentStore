@@ -11,6 +11,9 @@ namespace MedicamentStore
     {
         public ICommand FromDateButtonCommand { get; set; }
         public ICommand ToDateButtonCommand { get; set; }
+        public ICommand FilerTypeCommand { get; set; }
+
+        public DateFilterType CurrentDateFilterType = DateFilterType.None;
         public bool AttachmentDateVisible { get;  set; }
         public bool AttachmentToDateVisible { get;  set; }
 
@@ -23,6 +26,16 @@ namespace MedicamentStore
             SelectedFromDate = SelectedToDate = DateTime.Now;
             FromDateButtonCommand = new RelayCommand(AttachmentButton);
             ToDateButtonCommand = new RelayCommand(AttachmentToDateButton);
+            FilerTypeCommand = new RelayParameterizedCommand(async (p) => await SetFilterType(p));
+        }
+
+        private async Task SetFilterType(object p)
+        {
+            if (p is DateFilterType type)
+            {
+                CurrentDateFilterType = type;
+            }
+            await Task.Delay(1);
         }
 
         private void AttachmentToDateButton()
@@ -53,5 +66,16 @@ namespace MedicamentStore
         //    return new DateTime(ToYear, ToMonth, ToDay);
         //}
 
+    }
+
+    public enum DateFilterType
+    {
+        None = 0,
+        Today = 1,
+        Yesterday = 2,
+        ThisMonth = 3,
+        PastMonth = 4,
+        Past3Month = 5,
+        WithDate = 6,
     }
 }

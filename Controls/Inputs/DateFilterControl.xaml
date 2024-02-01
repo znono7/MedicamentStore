@@ -5,11 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MedicamentStore"
              mc:Ignorable="d" Width="240"
-             d:DesignHeight="230" d:DesignWidth="240">
+             d:DesignHeight="400" d:DesignWidth="240">
     <Grid d:Background="White">
-       
+
         <Grid Margin="5">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -25,7 +27,7 @@
                 <StackPanel >
                     <TextBlock FontSize="13"   Text="Depuis" Style="{StaticResource TextH4}" Margin="0 0 0 3"/>
                     <Grid  HorizontalAlignment="Center">
-                        <Border Width="100" x:Name="BrdFromDate" BorderBrush="#7A7CFF"   BorderThickness="1" CornerRadius="4"  Height="24">
+                        <Border x:Name="BrdFromDate" BorderBrush="#7A7CFF"   BorderThickness="1" CornerRadius="4"  Height="32">
                             <Border.Style>
                                 <Style TargetType="Border">
                                     <Style.Triggers>
@@ -59,7 +61,7 @@
                 <StackPanel  Grid.Column="2">
                     <TextBlock FontSize="13"   Text="à" Style="{StaticResource TextH4}" Margin="0 0 0 3"/>
                     <Grid HorizontalAlignment="Center">
-                        <Border Width="100" x:Name="BrdToDate" BorderBrush="#7A7CFF"   BorderThickness="1" CornerRadius="4"  Height="24">
+                        <Border x:Name="BrdToDate" BorderBrush="#7A7CFF"   BorderThickness="1" CornerRadius="4"  Height="32" >
                             <Border.Style>
                                 <Style TargetType="Border">
                                     <Style.Triggers>
@@ -89,8 +91,12 @@
                     </Grid>
                 </StackPanel>
             </Grid>
-            
-           
+            <RadioButton Command="{Binding FilerTypeCommand}" CommandParameter="{x:Static local:DateFilterType.Today}" Margin="10 10 10 5" Grid.Row="1" Style="{StaticResource DateRadioButtonStyle}" HorizontalAlignment="Center" Content="Aujourd'hui"/>
+            <RadioButton Command="{Binding FilerTypeCommand}" CommandParameter="{x:Static local:DateFilterType.Yesterday}" Margin="10 5 10 5" Grid.Row="2" Style="{StaticResource DateRadioButtonStyle}" HorizontalAlignment="Center" Content="Hier"/>
+            <RadioButton Command="{Binding FilerTypeCommand}" CommandParameter="{x:Static local:DateFilterType.ThisMonth}" Margin="10 5 10 5" Grid.Row="3" Style="{StaticResource DateRadioButtonStyle}" HorizontalAlignment="Center" Content="Ce Mois-ci"/>
+            <RadioButton Command="{Binding FilerTypeCommand}" CommandParameter="{x:Static local:DateFilterType.PastMonth}" Margin="10 5 10 5" Grid.Row="4" Style="{StaticResource DateRadioButtonStyle}" HorizontalAlignment="Center" Content="Mois Passé"/>
+            <RadioButton Command="{Binding FilerTypeCommand}" CommandParameter="{x:Static local:DateFilterType.Past3Month}" Margin="10 5 10 5" Grid.Row="5" Style="{StaticResource DateRadioButtonStyle}" HorizontalAlignment="Center" Content="les 3 Derniers Mois"/>
+
         </Grid>
     </Grid>
 </UserControl>

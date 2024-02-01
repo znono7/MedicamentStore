@@ -28,9 +28,9 @@ namespace MedicamentStore
         } 
 
         private int _currentPage = 1;
-        private int _pageSize = 10; // Number of rows per page 
+        private int _pageSize = 10; // Number of rows per page  
             
-        public int CurrentPage  
+        public int CurrentPage   
         {
             get { return _currentPage; }
             set
@@ -342,7 +342,7 @@ namespace MedicamentStore
         public async Task MedicamentButton(object param) 
         {
             if (param is ProduitsPharmaceutiquesType selectedType)
-            {
+            { 
                 CurrentTypePage = selectedType;
                 TextType = selectedType.ToProduitsPharmaceutiques(); 
                 // _ = LoadStocksAsync(selectedType);
