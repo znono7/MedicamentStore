@@ -203,16 +203,16 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Quantite" Width="Auto" IsReadOnly="True" CanUserResize="False">
+                            <DataGridTemplateColumn Header="Quantite" Width="140" IsReadOnly="True" CanUserResize="False">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Grid>
-                                            <Border Padding="6 2" Height="28" Width="Auto" CornerRadius="16" HorizontalAlignment="Left" Background="{Binding PrimaryBackground,Converter={local:StringRGBToBrushConverter}}">
+                                            <Border Padding="6 2" Height="28" Width="Auto" CornerRadius="8" HorizontalAlignment="Left" Background="{Binding PrimaryBackground,Converter={local:StringRGBToBrushConverter}}">
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock x:Name="tbPercents" VerticalAlignment="Center" Text="{Binding SymbleType}" FontSize="11"
                                                                 Foreground="#ffffff" HorizontalAlignment="Center"
                                                                 FontFamily="{StaticResource OakSans-Regular}" />
-                                                    <TextBlock x:Name="tbPercent5" VerticalAlignment="Center" Text="{Binding Quantite}" FontSize="11"
+                                                    <TextBlock x:Name="tbPercent5" VerticalAlignment="Center" Text="{Binding QuantiteTransaction}" FontSize="11"
                                                         Foreground="#ffffff" HorizontalAlignment="Center"
                                                         FontFamily="{StaticResource OakSans-Regular}" />
                                                 </StackPanel>
@@ -225,28 +225,27 @@
                             <DataGridTemplateColumn CanUserResize="False" Header="Prix" Width="Auto" IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBox TextAlignment="Center" IsReadOnly="True" Foreground="#113110" Text="{Binding Prix,UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{StaticResource TextEntryQua2}" Margin="0"/>
+                                        <TextBlock TextAlignment="Center"  Foreground="#113110" ToolTip="{Binding Prix}" Text="{Binding Prix,UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{StaticResource TextH4}" Margin="0"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn CanUserResize="False" Header="Prix Total" Width="Auto" IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBox TextAlignment="Center" IsReadOnly="True" Foreground="#606467" Text="{Binding PrixTotal,UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{StaticResource TextEntryQua2}" Margin="0"/>
+                                        <TextBlock TextAlignment="Center"  Foreground="#606467" ToolTip="{Binding PrixTotal}" Text="{Binding PrixTotal,UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{StaticResource TextH4}" Margin="0"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Ajouté dans" Width="100" IsReadOnly="True" CanUserResize="False">
+                            <DataGridTemplateColumn Header="Ajouté dans" Width="120" IsReadOnly="True" CanUserResize="False">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock x:Name="tbPercent5" VerticalAlignment="Center" Text="{Binding Date}" FontSize="11"
-                                                    Foreground="#202122" HorizontalAlignment="Center"
-                                                    FontFamily="{StaticResource OakSans-Regular}"
+                                        <TextBlock x:Name="tbPercent5"  Text="{Binding Date}" TextAlignment="Center"  Foreground="#606467" Margin="0"
+                                                   Style="{StaticResource TextH4}"
                                                      ToolTip="{Binding Date}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="Fournisseur" Width="Auto" IsReadOnly="True" Binding="{Binding Nom}" CanUserResize="False"/>
+                            <DataGridTextColumn Header="Fournisseur" Width="*" IsReadOnly="True" Binding="{Binding Nom}" CanUserResize="False" />
 
                         </DataGrid.Columns>
                     </DataGrid>

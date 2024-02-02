@@ -115,7 +115,7 @@
                                     <DataGridTemplateColumn Header="Unité" Width="94">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
-                                                <ComboBox Width="90"  ItemsSource="{Binding Items}" DisplayMemberPath="Name" SelectedValuePath="Id" SelectedIndex="0"
+                                                <ComboBox Width="90"  ItemsSource="{Binding Items}" DisplayMemberPath="Name" SelectedValuePath="Id"
                                                        SelectedItem="{Binding SelectedUnite, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ComboBoxStyle4}">
                                                 </ComboBox>
                                             </DataTemplate>

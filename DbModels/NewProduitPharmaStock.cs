@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MedicamentStore
 {
-   public class NewProduitPharmaStock
+   public class NewProduitPharmaStock : BaseViewModel
     {
         public int Id { get; set; }
         public string? Nom_Commercial { get; set; } 
@@ -15,7 +15,7 @@ namespace MedicamentStore
         public int Type { get; set; } = 0;
 
         public double Prix { get; set; } = 0;  
-        public int Quantite { get; set; } = 0;
+        public int Quantite { get; set; } = 0; 
         public int Unit { get; set; } 
         public int IdSupplie { get; set; } = 0;
         public string? Date { get; set; }
@@ -31,23 +31,28 @@ namespace MedicamentStore
                 
             }
         }
-        private Unite _selectedUnite {  get; set; }
+        public Unite SelectedUnite { get; set; }
+        //private Unite _selectedUnite {  get; set; }
 
-        public Unite SelectedUnite
-        {
-            get { return _selectedUnite; }
-            set
-            {
-                _selectedUnite = value;
-               
-               
-                Unit = _selectedUnite?.Id ?? 0;
+        //public Unite SelectedUnite
+        //{
+        //    get { return _selectedUnite; }
+        //    set
+        //    {
+        //        OnPropertyChanged(nameof(SelectedUnite));
 
+        //        // Your additional logic when the selection changes
+        //        if (_selectedUnite == null)
+        //        {
+        //            Unit = 1;
+        //        }
+        //        else
+        //        {
+        //            Unit = _selectedUnite.Id;
+        //        }
 
-
-
-            }
-        }
+        //    }
+        //}
         public NewProduitPharmaStock()
         {
              Initialize();

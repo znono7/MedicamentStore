@@ -47,7 +47,7 @@ namespace MedicamentStore
                             FROM PharmaceuticalProducts p INNER JOIN Stock s ON s.IdMedicament = p.Id
                             INNER JOIN Units u ON u.Id = s.Unit
                             INNER JOIN Type t ON t.Id = s.Type 
-                            WHERE s.Type = @type";
+                            WHERE s.Type = @type"; 
             var ResultFinal = await _connection.QueryAsync<InvoiceProduct>(Qeury, new { type });
 
             if (ResultFinal.Count() > 0)
@@ -158,7 +158,7 @@ namespace MedicamentStore
             {
                 try
                 {
-                    string sql = @"INSERT INTO Invoice (Date,Number,MontantTotal,ProduitTotal)
+                    string sql = @"INSERT INTO Invoice (Date,Number,MontantTotal,ProduitTotal) 
                             VALUES (@Date,@Number,@MontantTotal,@ProduitTotal)";
                     await _connection.ExecuteAsync(transaction.Connection,sql,transaction, invoice);
                     foreach (var item in invoiceDetails)
@@ -176,8 +176,8 @@ namespace MedicamentStore
                                                                                    ",
                                             transaction: transaction, item);
 
-                            string QeuryTrans = @"INSERT INTO Transaction (IdStock,TypeTransaction) VALUES (@LastIdStock,2)";
-                            await _connection.ExecuteAsync(transaction.Connection, QeuryTrans, transaction: transaction, new { LastIdStock = ProductStock.Id });
+                            string QeuryTrans = @"INSERT INTO [Transaction] (IdStock,TypeTransaction,QuantiteTransaction) VALUES (@LastIdStock,2,@q)";
+                            await _connection.ExecuteAsync(transaction.Connection, QeuryTrans, transaction: transaction, new { LastIdStock = ProductStock.Id , q = item.Quantite });
 
                         }
 

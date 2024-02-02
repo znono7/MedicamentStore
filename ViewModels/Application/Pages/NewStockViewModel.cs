@@ -62,7 +62,7 @@ namespace MedicamentStore
 
         private async Task Save()
         { 
-            if (SuppCmb.SelectedId == 0 ) 
+            if (SuppCmb.SelectedId == 0 )  
             {
                 await IoC.NotificationBox.ShowMessage(new NotificationBoxViewModel(NotificationType.Warning, $"Voulez Choisez le Fournisseur ..."));
                 return;

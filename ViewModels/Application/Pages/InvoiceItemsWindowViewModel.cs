@@ -39,7 +39,7 @@ namespace MedicamentStore
             } }
         protected ObservableCollection<InvoiceProduct> minvoiceItems { get; set; }
 
-        public ObservableCollection<TypeProduct> TypeItems { get; set; }
+        public ObservableCollection<TypeProduct> TypeItems { get; set; } 
         public event EventHandler<SelectedItemEventArgs> ItemSelected;
 
         public bool IsLoading { get; set; }

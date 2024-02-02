@@ -24,7 +24,7 @@ namespace MedicamentStore
             using (var transaction = _connection.Connection().BeginTransaction()) 
             {
                 try
-                {
+                {  
                     foreach (var item in newProducts) 
                     {
                         var parameters = new
@@ -35,7 +35,7 @@ namespace MedicamentStore
                             Prix = item.Prix,
                             Type = item.Type,
                             Date = item.Date,
-                            Unit = item.Unit
+                            Unit = item.SelectedUnite.Name == null ? 1 : item.SelectedUnite.Id
                         };
                         await _connection.ExecuteAsync(transaction.Connection,@"INSERT INTO Stock (IdMedicament,Quantite,IdSupplie,Prix,Type,Date,Unit)
                                                                             VALUES (@Id,@Quantite,@IdSupplie,@Prix,@Type,@Date,@Unit)", 
@@ -43,8 +43,8 @@ namespace MedicamentStore
 
                         int LastId = await _connection.ExecuteScalarTransaction<int>(transaction.Connection, "SELECT last_insert_rowid()", transaction: transaction);
 
-                        string QeuryTrans = @"INSERT INTO Transaction (IdStock,TypeTransaction) VALUES (@LastIdStock,1)"; 
-                        await _connection.ExecuteAsync(transaction.Connection, QeuryTrans, transaction: transaction, new { LastIdStock = LastId});
+                        string QeuryTrans = @"INSERT INTO [Transaction] (IdStock,TypeTransaction,QuantiteTransaction) VALUES (@LastIdStock,1,@q)"; 
+                        await _connection.ExecuteAsync(transaction.Connection, QeuryTrans, transaction: transaction, new { LastIdStock = LastId , q = item.Quantite });
                     }
 
                     transaction.Commit();

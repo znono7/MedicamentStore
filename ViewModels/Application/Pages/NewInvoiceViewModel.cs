@@ -18,7 +18,7 @@ namespace MedicamentStore
         public InvoiceInfoViewModel invoice {  get; set; }  
          
         public NotificationBoxViewModel notificationBoxViewModel { get; set; }
-        public bool AttachmentNotifVisible { get; set; }
+        public bool AttachmentNotifVisible { get; set; } 
 
         /// <summary>
         /// True if any popup menus are visible
