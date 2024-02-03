@@ -319,7 +319,7 @@ namespace MedicamentStore
             if (string.IsNullOrEmpty(SearchText) || Stocks == null || Stocks.Count <= 0)
             {
                 // Make filtered list the same
-                FilteredStocks = new ObservableCollection<MedicamentStock>(Stocks ?? Enumerable.Empty<MedicamentStock>());
+                FilteredStocks = new ObservableCollection<MedicamentStock>(Stocks ?? Enumerable.Empty<MedicamentStock>()); 
 
                 // Set last search text
                 mLastSearchText = SearchText;

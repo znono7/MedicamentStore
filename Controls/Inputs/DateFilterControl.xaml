@@ -18,6 +18,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid HorizontalAlignment="Center">
                 <Grid.ColumnDefinitions>
@@ -84,6 +85,7 @@
             <RadioButton Command="{Binding FilerTypeCommand}" CommandParameter="{x:Static local:DateFilterType.ThisMonth}" Margin="10 5 10 5" Grid.Row="3" Style="{StaticResource DateRadioButtonStyle}" HorizontalAlignment="Center" Content="Ce Mois-ci"/>
             <RadioButton Command="{Binding FilerTypeCommand}" CommandParameter="{x:Static local:DateFilterType.PastMonth}" Margin="10 5 10 5" Grid.Row="4" Style="{StaticResource DateRadioButtonStyle}" HorizontalAlignment="Center" Content="Mois Passé"/>
             <RadioButton Command="{Binding FilerTypeCommand}" CommandParameter="{x:Static local:DateFilterType.Past3Month}" Margin="10 5 10 5" Grid.Row="5" Style="{StaticResource DateRadioButtonStyle}" HorizontalAlignment="Center" Content="les 3 Derniers Mois"/>
+            <RadioButton IsChecked="True" Command="{Binding FilerTypeCommand}" CommandParameter="{x:Static local:DateFilterType.None}" Margin="10 5 10 5" Grid.Row="6" Style="{StaticResource DateRadioButtonStyle}" HorizontalAlignment="Center" Content="Toutes les Dates"/>
 
         </Grid>
     </Grid>

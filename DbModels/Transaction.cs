@@ -46,7 +46,7 @@ namespace MedicamentStore
         public double PrixTotal { get; set; }
         public int IdSupplie { get; set; }
         public string? Nom { get; set; }
-        public string? Date { get; set; }
+        public DateTime Date { get; set; }
         public string SymbleType { get; set; }
     }
 }

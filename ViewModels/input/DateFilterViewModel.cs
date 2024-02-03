@@ -15,7 +15,7 @@ namespace MedicamentStore
         public ICommand FilerTypeCommand { get; set; }
 
         public DateFilterType CurrentDateFilterType = DateFilterType.None;
-        public bool AttachmentDateVisible { get;  set; }
+        public bool AttachmentDateVisible { get;  set; } 
         public bool AttachmentToDateVisible { get;  set; }
 
         public string DateStat { get; set; } = "N'importe Quelle Date";
@@ -96,6 +96,7 @@ namespace MedicamentStore
         PastMonth = 4,
         Past3Month = 5,
         WithDate = 6,
+        
     }
     public static class DateFilterTypeExtensions
     {

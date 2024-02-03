@@ -77,9 +77,49 @@ namespace MedicamentStore
 
             }
         }
-        private Task FilterData()
+        private async Task FilterData()
         {
-            throw new NotImplementedException();
+            DateTime startDate = new DateTime();
+            DateTime endDate = new DateTime();
+            switch (DateFilterViewModel.CurrentDateFilterType)
+            {
+                case DateFilterType.None:
+                    FilteredStocks = new ObservableCollection<TransactionDto>(Stocks);
+                    return;
+                case DateFilterType.Today:
+                    startDate = DateTime.Today;
+                    endDate = DateTime.Today.AddDays(1).AddTicks(-1);
+                    break;
+                case DateFilterType.Yesterday:
+                    startDate = DateTime.Today.AddDays(-1);
+                    endDate = DateTime.Today.AddTicks(-1);
+                    break;
+                case DateFilterType.ThisMonth:
+                    startDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+                    endDate = startDate.AddMonths(1).AddTicks(-1);
+                    break;
+                case DateFilterType.PastMonth:
+                    startDate = new DateTime(DateTime.Today.AddMonths(-1).Year, DateTime.Today.AddMonths(-1).Month, 1);
+                    endDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddTicks(-1);
+                    break;
+                case DateFilterType.Past3Month:
+                    startDate = new DateTime(DateTime.Today.AddMonths(-3).Year, DateTime.Today.AddMonths(-3).Month, 1);
+                    endDate = DateTime.Today.AddTicks(-1);
+                    break;
+                case DateFilterType.WithDate:
+                    startDate = DateFilterViewModel.SelectedFromDate;
+                    endDate = DateFilterViewModel.SelectedToDate;
+                    break;
+                
+                default:
+                    startDate = DateTime.Today;
+                    endDate = DateTime.Today.AddDays(1).AddTicks(-1);
+                    break;
+            }
+             
+            FilteredStocks = new ObservableCollection<TransactionDto>( Stocks.Where(item => item.Date >= startDate.Date &&
+                                                                                            item.Date <= endDate.Date));
+            
         }
 
         private void ClickawayMenuButton()
