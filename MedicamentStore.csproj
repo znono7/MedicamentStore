@@ -9289,6 +9289,9 @@
     <Compile Update="Controls\Dialogs\ConfirmBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Controls\DocumentPaged\MovmentStockDocPages.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Controls\DocumentPaged\ProduitStockDoc.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

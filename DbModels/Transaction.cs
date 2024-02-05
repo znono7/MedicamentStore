@@ -13,9 +13,9 @@ namespace MedicamentStore
         public int TypeTransaction { get; set; }
         public int QuantiteTransaction { get; set; }
 
-    }
+    } 
 
-    public class TransactionDto : Transaction
+    public class TransactionDto : Transaction 
     {
         private string? source;
 
@@ -48,5 +48,7 @@ namespace MedicamentStore
         public string? Nom { get; set; }
         public DateTime Date { get; set; }
         public string SymbleType { get; set; }
+        public int Type { get; set; }
+
     }
 }

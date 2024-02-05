@@ -10,7 +10,7 @@ namespace MedicamentStore
    public class MedicamentStock 
     { 
         private string? source;   
-        public int Type { get; set; }   
+        public int Type { get; set; }    
          
         public int Id { get; set; }
         public int Ids { get; set; }

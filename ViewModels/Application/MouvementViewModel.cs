@@ -24,7 +24,7 @@ namespace MedicamentStore
                 FilteredStocks = new ObservableCollection<TransactionDto>(stocks);
             }
         }
-
+         
         public ObservableCollection<TransactionDto> FilteredStocks { get; set; }
         public DateFilterViewModel DateFilterViewModel { get; set; }
         public ObservableCollection<TypeProduct> TypeItems { get; set; }
@@ -35,6 +35,9 @@ namespace MedicamentStore
         public ICommand ExpandCommand { get; set; }
         public ICommand FilterDataCommand { get; set; }
         public ICommand PopupClickawayCommand { get; set; }
+        public ICommand PrintCommand { get;  set; }
+        public ICommand PrintPdfCommand { get;  set; }
+
         public bool DimmableOverlayVisible { get; set; }
         private TypeProduct _selectedType { get; set; }
 
@@ -48,6 +51,32 @@ namespace MedicamentStore
                 //Unit = _selectedUnite?.Id ?? 0;
             }
         }
+
+        private int _selectedIndex;
+        public int SelectedIndex
+        {
+            get { return _selectedIndex; }
+            set
+            {
+                if (_selectedIndex != value)
+                {
+                    _selectedIndex = value;
+                    OnPropertyChanged(nameof(SelectedIndex));
+  
+                    if(_selectedIndex == 0)
+                    {
+                        FilteredStocks = new ObservableCollection<TransactionDto>(Stocks);
+
+                    }
+                    else
+                    {
+                        FilteredStocks = new ObservableCollection<TransactionDto>(Stocks.Where(item => item.Type == _selectedIndex));
+
+                    }
+
+                }
+            }
+        }
         public MouvementViewModel()
         {
             DateFilterViewModel = new DateFilterViewModel();
@@ -55,9 +84,23 @@ namespace MedicamentStore
             ExpandCommand = new RelayCommand(AttachmentMenuButton);
             PopupClickawayCommand = new RelayCommand(ClickawayMenuButton);
             FilterDataCommand = new RelayCommand(async () => await FilterData());
+            PrintCommand = new RelayCommand(async () => await ShowDocument());
+            PrintPdfCommand = new RelayCommand(ShowPdfDocument);
+
             _ = LoadData();
         }
 
+        private void ShowPdfDocument()
+        {
+            throw new NotImplementedException();
+        }
+
+        private async Task ShowDocument()
+        {
+
+            IoC.Application.GoToPage(ApplicationPage.PrintMovmentStockPage, new PrintMovmentStockViewModel(FilteredStocks));
+            await Task.Delay(1);
+        }
         public async Task LoadData()
         {
             var Result = await IoC.TransactionManager.GetAll();
@@ -79,8 +122,8 @@ namespace MedicamentStore
         }
         private async Task FilterData()
         {
-            DateTime startDate = new DateTime();
-            DateTime endDate = new DateTime();
+            DateTime startDate = new();
+            DateTime endDate = new();
             switch (DateFilterViewModel.CurrentDateFilterType)
             {
                 case DateFilterType.None:
@@ -116,7 +159,8 @@ namespace MedicamentStore
                     endDate = DateTime.Today.AddDays(1).AddTicks(-1);
                     break;
             }
-             
+            if (startDate > endDate)
+                return;
             FilteredStocks = new ObservableCollection<TransactionDto>( Stocks.Where(item => item.Date >= startDate.Date &&
                                                                                             item.Date <= endDate.Date));
             
@@ -134,7 +178,14 @@ namespace MedicamentStore
 
         public void GetTypes()
         {
-            TypeItems = new ObservableCollection<TypeProduct>();
+            TypeItems = new ObservableCollection<TypeProduct>
+            {
+                new TypeProduct
+                {
+                    Id = 0,
+                    type = "Produits Pharmaceutiques"
+                }
+            };
             foreach (ProduitsPharmaceutiquesType type in Enum.GetValues(typeof(ProduitsPharmaceutiquesType)))
             {
                 if (type == ProduitsPharmaceutiquesType.None)
