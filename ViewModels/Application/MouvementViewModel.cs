@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using Microsoft.Win32;
+using QuestPDF.Fluent;
+
 
 namespace MedicamentStore
 {
@@ -92,7 +98,34 @@ namespace MedicamentStore
 
         private void ShowPdfDocument()
         {
-            throw new NotImplementedException();
+           
+            // Create a SaveFileDialog
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "PDF files (*.pdf)|*.pdf|All files (*.*)|*.*";
+            saveFileDialog.FilterIndex = 1;
+            saveFileDialog.RestoreDirectory = true;
+
+            // Show the dialog and get the selected file path
+            bool? result = saveFileDialog.ShowDialog();
+
+            if (result == true)
+            {
+                string filePath = saveFileDialog.FileName;
+
+                var document = new MovmentListeDocument(FilteredStocks);
+                document.GeneratePdf(filePath);
+
+                Process.Start("explorer.exe", filePath);
+
+                MessageBox.Show("PDF saved successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show("File saving canceled.", "Canceled", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+
+
+            
         }
 
         private async Task ShowDocument()

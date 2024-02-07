@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QuestPDF.Infrastructure;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -36,8 +37,10 @@ namespace MedicamentStore
             // Setup IoC
             IoC.Setup();
 
+            QuestPDF.Settings.License = LicenseType.Community;
+
             // Bind a UI Manager
-           // IoC.Kernel.Bind<IUIManager>().ToConstant(new UIManager());
+            // IoC.Kernel.Bind<IUIManager>().ToConstant(new UIManager());
         }
     }
 }
