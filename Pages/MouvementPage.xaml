@@ -110,10 +110,10 @@
                    
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Margin="5"  Command="{Binding PrintPdfCommand}" Padding="0"  Height="16" Width="16" Style="{StaticResource PathGrowButton}" Background="Transparent" Cursor="Hand">
+                    <Button Margin="10"  Command="{Binding PrintPdfCommand}" Padding="0"  Height="16" Width="16" Style="{StaticResource PathGrowButton}" Background="Transparent" Cursor="Hand">
                         <Path Margin="0" Data="{StaticResource pdf}" Fill="#1E3050" Stretch="Uniform" Height="16" Width="16"/>
                     </Button>
-                    <Button Margin="5"  Command="{Binding PrintCommand}" Padding="0"  Height="16" Width="16" Style="{StaticResource PathGrowButton}" Background="Transparent" Cursor="Hand">
+                    <Button Margin="5 0 10 0"  Command="{Binding PrintCommand}" Padding="0"  Height="16" Width="16" Style="{StaticResource PathGrowButton}" Background="Transparent" Cursor="Hand">
                         <Path Margin="0" Data="{StaticResource print}" Fill="#1E3050" Stretch="Uniform" Height="16" Width="16"/>
                     </Button>
                 </StackPanel>
@@ -171,41 +171,33 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Vertical">
-                                            <TextBlock x:Name="tbPercent" Text="{Binding Nom_Commercial}" FontSize="16"
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock x:Name="tbPercent" Text="{Binding Nom_Commercial}" FontSize="13"
                                                          Foreground="{StaticResource TertiaryTextColor}"
                                                          FontFamily="{StaticResource OakSans-Regular}"
                                                          ToolTip="{Binding Nom_Commercial}"/>
-                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text=" "/>
+                                                <TextBlock TextWrapping="Wrap" Height="Auto" x:Name="tbPercent3" VerticalAlignment="Bottom" Text="{Binding Forme}" FontSize="11"
+                                                             Foreground="{StaticResource TertiaryTextColor}"
+                                                             FontFamily="{StaticResource OakSans-Regular}"
+                                                                  ToolTip="{Binding Forme}"/>
 
-                                                <TextBlock x:Name="tbPercent2" VerticalAlignment="Bottom" Text="{Binding Dosage}" FontSize="12"
-                                                            Foreground="{StaticResource TertiaryTextColor}"
-                                                            FontFamily="{StaticResource OakSans-Regular}"
-                                                                 ToolTip="{Binding Dosage}"/>
-                                                <TextBlock Text="  "/>
-                                                <TextBlock x:Name="tbPercent3" VerticalAlignment="Bottom" Text="{Binding Forme}" FontSize="12"
-                                                            Foreground="{StaticResource TertiaryTextColor}"
-                                                            FontFamily="{StaticResource OakSans-Regular}"
-                                                                 ToolTip="{Binding Forme}"/>
-                                                <TextBlock Text="  "/>
-                                                <TextBlock x:Name="tbPercent4" VerticalAlignment="Bottom" Text="{Binding Conditionnement}" FontSize="12"
-                                                            Foreground="{StaticResource TertiaryTextColor}"
-                                                            FontFamily="{StaticResource OakSans-Regular}"
-                                                             ToolTip="{Binding Conditionnement}"/>
                                             </StackPanel>
-
-                                        </StackPanel>
+                                            <TextBlock TextWrapping="Wrap" Height="Auto" x:Name="tbPercent2" VerticalAlignment="Bottom" Text="{Binding Dosage}" FontSize="11"
+                                                        Foreground="{StaticResource TertiaryTextColor}"
+                                                        FontFamily="{StaticResource OakSans-Regular}"
+                                                             ToolTip="{Binding Dosage}"/>
+                                            </StackPanel>
                                         <DataTemplate.Triggers>
                                             <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
                                                 <Setter Property="Foreground" TargetName="tbPercent" Value="#ffffff" />
                                                 <Setter Property="Foreground" TargetName="tbPercent2" Value="#ffffff" />
                                                 <Setter Property="Foreground" TargetName="tbPercent3" Value="#ffffff" />
-                                                <Setter Property="Foreground" TargetName="tbPercent4" Value="#ffffff" />
                                             </DataTrigger>
                                             <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
                                                 <Setter Property="Foreground" TargetName="tbPercent" Value="#ffffff" />
                                                 <Setter Property="Foreground" TargetName="tbPercent2" Value="#ffffff" />
                                                 <Setter Property="Foreground" TargetName="tbPercent3" Value="#ffffff" />
-                                                <Setter Property="Foreground" TargetName="tbPercent4" Value="#ffffff" />
                                             </DataTrigger>
                                         </DataTemplate.Triggers>
                                     </DataTemplate>
@@ -233,28 +225,34 @@
                             <DataGridTemplateColumn CanUserResize="False" Header="Prix" Width="Auto" IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock TextAlignment="Center"  Foreground="#113110" ToolTip="{Binding Prix}" Text="{Binding Prix,UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{StaticResource TextH4}" Margin="0"/>
+                                        <TextBlock TextWrapping="Wrap" Height="Auto" TextAlignment="Center"  Foreground="#113110" ToolTip="{Binding Prix}" Text="{Binding Prix,UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{StaticResource TextH4}" Margin="0"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn CanUserResize="False" Header="Prix Total" Width="Auto" IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock TextAlignment="Center"  Foreground="#606467" ToolTip="{Binding PrixTotal}" Text="{Binding PrixTotal,UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{StaticResource TextH4}" Margin="0"/>
+                                        <TextBlock TextWrapping="Wrap" Height="Auto" TextAlignment="Center"  Foreground="#606467" ToolTip="{Binding PrixTotal}" Text="{Binding PrixTotal,UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{StaticResource TextH4}" Margin="0"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Ajouté dans" Width="120" IsReadOnly="True" CanUserResize="False">
+                            <DataGridTemplateColumn Header="à la Date" Width="120" IsReadOnly="True" CanUserResize="False">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock x:Name="tbPercent5"  Text="{Binding Date}" TextAlignment="Center"  Foreground="#606467" Margin="0"
+                                        <TextBlock x:Name="tbPercent5"  Text="{Binding Date,StringFormat=dd/MM/yyyy}" TextAlignment="Center"  Foreground="#606467" Margin="0"
                                                    Style="{StaticResource TextH4}"
                                                      ToolTip="{Binding Date}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="Fournisseur" Width="*" IsReadOnly="True" Binding="{Binding Nom}" CanUserResize="False" />
+                            <DataGridTemplateColumn Header="Fournisseur" IsReadOnly="True" Width="140" CanUserSort="False" CanUserReorder="False" CanUserResize="False">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock TextWrapping="Wrap" Height="Auto" VerticalAlignment="Center" FontSize="12" Text="{Binding Nom}" Style="{StaticResource TextH2}" Margin="0"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
 
+                            </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </ScrollViewer>

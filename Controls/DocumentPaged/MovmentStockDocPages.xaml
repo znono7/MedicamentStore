@@ -47,21 +47,22 @@
                         <DataTemplate>
                             <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10 0 0 0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock x:Name="tbPercent" Text="{Binding Nom_Commercial}" FontSize="11"
+                                    <TextBlock TextWrapping="Wrap" Height="Auto" x:Name="tbPercent" Text="{Binding Nom_Commercial}" FontSize="12"
                                                Foreground="{StaticResource TertiaryTextColor}"
                                                FontFamily="{StaticResource OakSans-Regular}"
                                                ToolTip="{Binding Nom_Commercial}"/>
                                     <TextBlock Text="  "/>
-                                    <TextBlock x:Name="tbPercent2" VerticalAlignment="Bottom" Text="{Binding Dosage}" FontSize="11"
-                                               Foreground="{StaticResource TertiaryTextColor}"
-                                               FontFamily="{StaticResource OakSans-Regular}"/>
-                                    <TextBlock Text="  "/>
-                                    
-                                </StackPanel>
-                                <TextBlock x:Name="tbPercent4" VerticalAlignment="Bottom" Text="{Binding Forme}" FontSize="12"
+                                    <TextBlock TextWrapping="Wrap" Height="Auto" x:Name="tbPercent4" VerticalAlignment="Bottom" Text="{Binding Forme}" FontSize="11"
                                                Foreground="{StaticResource TertiaryTextColor}"
                                                FontFamily="{StaticResource OakSans-Regular}"/>
 
+
+
+                                </StackPanel>
+                                <TextBlock TextTrimming="WordEllipsis"   x:Name="tbPercent2" VerticalAlignment="Bottom" Text="{Binding Dosage}" FontSize="11"
+                                               Foreground="{StaticResource TertiaryTextColor}"
+                                               FontFamily="{StaticResource OakSans-Regular}"/>
+                                
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -72,10 +73,10 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
-                                <TextBlock x:Name="tbPercents" VerticalAlignment="Center" Text="{Binding SymbleType}" FontSize="11"
+                                <TextBlock TextWrapping="Wrap" Height="Auto" x:Name="tbPercents" VerticalAlignment="Center" Text="{Binding SymbleType}" FontSize="11"
                                              Foreground="#000000" HorizontalAlignment="Center"
                                              FontFamily="{StaticResource OakSans-Regular}" />
-                                <TextBlock x:Name="tbPercent5" VerticalAlignment="Center" Text="{Binding QuantiteTransaction}" FontSize="11"
+                                <TextBlock TextWrapping="Wrap" Height="Auto" x:Name="tbPercent5" VerticalAlignment="Center" Text="{Binding QuantiteTransaction}" FontSize="11"
                                              Foreground="#000000" HorizontalAlignment="Center"
                                              FontFamily="{StaticResource OakSans-Regular}" />
                             </StackPanel>
@@ -85,21 +86,21 @@
                 <DataGridTemplateColumn IsReadOnly="True" Header="Unité" Width="Auto"  CanUserSort="False" CanUserReorder="False" CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock VerticalAlignment="Center" FontSize="12" Text="{Binding Unite}" Style="{StaticResource TextH2}" Margin="0"/>
+                            <TextBlock TextWrapping="Wrap" Height="Auto" VerticalAlignment="Center" FontSize="12" Text="{Binding Unite}" Style="{StaticResource TextH2}" Margin="0"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="Prix" IsReadOnly="True" Width="Auto"  CanUserSort="False" CanUserReorder="False" CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock VerticalAlignment="Center" FontSize="12" Text="{Binding Prix,Converter={local:CurrencyConverter}}" Style="{StaticResource TextH2}" Margin="0"/>
+                            <TextBlock TextWrapping="Wrap" Height="Auto" VerticalAlignment="Center" FontSize="12" Text="{Binding Prix,Converter={local:CurrencyConverter}}" Style="{StaticResource TextH2}" Margin="0"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="Prix Total" IsReadOnly="True" Width="Auto" CanUserSort="False" CanUserReorder="False" CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock VerticalAlignment="Center" FontSize="12" Text="{Binding PrixTotal,Converter={local:CurrencyConverter}}" Style="{StaticResource TextH2}" Margin="0"/>
+                            <TextBlock TextWrapping="Wrap" Height="Auto" VerticalAlignment="Center" FontSize="12" Text="{Binding PrixTotal,Converter={local:CurrencyConverter}}" Style="{StaticResource TextH2}" Margin="0"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                    
@@ -107,7 +108,7 @@
                 <DataGridTemplateColumn Header="à la Date" Width="Auto" IsReadOnly="True" CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock FontSize="12" x:Name="tbPercent5"  Text="{Binding Date,StringFormat=dd/MM/yyyy}" TextAlignment="Center"  Foreground="#000000" Margin="0"
+                            <TextBlock TextWrapping="Wrap" Height="Auto" FontSize="12" x:Name="tbPercent5"  Text="{Binding Date,StringFormat=dd/MM/yyyy}" TextAlignment="Center"  Foreground="#000000" Margin="0"
                                         Style="{StaticResource TextH4}"
                                           ToolTip="{Binding Date}" HorizontalAlignment="Center"/>
                         </DataTemplate>
@@ -116,7 +117,7 @@
                 <DataGridTemplateColumn Header="Fournisseur" IsReadOnly="True" Width="140" CanUserSort="False" CanUserReorder="False" CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock VerticalAlignment="Center" FontSize="12" Text="{Binding Nom}" Style="{StaticResource TextH2}" Margin="0"/>
+                            <TextBlock TextWrapping="Wrap" Height="Auto" VerticalAlignment="Center" FontSize="12" Text="{Binding Nom}" Style="{StaticResource TextH2}" Margin="0"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
 
