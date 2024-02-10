@@ -11,6 +11,7 @@ namespace MedicamentStore
     { 
       
         Task<IEnumerable<MedicamentStock>> GetPagedStocksAsync(int pageNumber, int pageSize, ProduitsPharmaceutiquesType type);
+        Task<IEnumerable<TransactionDto>> GetPagedEntreeStocksAsync(int pageNumber, int pageSize, ProduitsPharmaceutiquesType type);
         Task<DbResponse> DeleteStockAsync(Stock stock); 
         Task<DbResponse> UpdateStockAsync(MedicamentStock stock);
         Task<DbResponse<NewProduitPharmaStock>> AddNewStockAsync(ObservableCollection<NewProduitPharmaStock> newProducts);

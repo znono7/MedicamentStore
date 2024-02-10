@@ -20,7 +20,7 @@ namespace MedicamentStore
         protected ObservableCollection<TransactionDto> stocks;
         public ObservableCollection<TransactionDto> Stocks
         {
-            get => stocks;
+            get => stocks; 
             set
             {
                 if (stocks == value)
@@ -140,7 +140,7 @@ namespace MedicamentStore
             Stocks = new ObservableCollection<TransactionDto>(Result);
             foreach (var item in Stocks)
             {
-                if(item.TypeTransaction == 1)
+                if(item.TypeTransaction == 1) 
                 {
                     item.SymbleType = "+";
                     item.PrimaryBackground = "349432";

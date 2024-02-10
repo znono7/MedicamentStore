@@ -135,7 +135,7 @@ namespace MedicamentStore
 
         private async Task BackPage()
         {
-            IoC.Application.GoToPage(ApplicationPage.StockHostPage);
+            IoC.Application.GoToPage(ApplicationPage.EntreeStockPage);
             await Task.Delay(1);
         }
          

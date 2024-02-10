@@ -1,22 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MedicamentStore
 {
-    public class StockHostViewModel : BaseViewModel 
+    //public class EntreeStockViewModel : BaseViewModel
+    //{
+    //}
+
+    public class EntreeStockViewModel : BaseViewModel
     {
         private ProduitsPharmaceutiquesType _CurrentTypePage { get; set; } = ProduitsPharmaceutiquesType.None;
-        public ProduitsPharmaceutiquesType CurrentTypePage { get => _CurrentTypePage;
-             set 
+        public ProduitsPharmaceutiquesType CurrentTypePage
+        {
+            get => _CurrentTypePage;
+            set
             {
                 if (_CurrentTypePage != value)
                 {
@@ -25,12 +27,12 @@ namespace MedicamentStore
                 }
 
             }
-        } 
+        }
 
-        private int _currentPage = 1;   
+        private int _currentPage = 1;
         private int _pageSize = 10; // Number of rows per page     
-            
-        public int CurrentPage   
+
+        public int CurrentPage
         {
             get { return _currentPage; }
             set
@@ -48,10 +50,10 @@ namespace MedicamentStore
         public ICommand PreviousPageCommand { get; private set; }
         public ICommand PrintCommand { get; private set; }
         public ICommand UpdateQuantiteCommand { get; private set; }
-        public BaseViewModel CurrentPageViewModel { get; set; } 
-         
-        protected ObservableCollection<MedicamentStock> stocks;   
-        public ObservableCollection<MedicamentStock> Stocks
+        public BaseViewModel CurrentPageViewModel { get; set; }
+
+        protected ObservableCollection<TransactionDto> stocks;
+        public ObservableCollection<TransactionDto> Stocks
         {
             get => stocks;
             set
@@ -60,11 +62,11 @@ namespace MedicamentStore
                     return;
                 stocks = value;
 
-                FilteredStocks = new ObservableCollection<MedicamentStock>(stocks);
+                FilteredStocks = new ObservableCollection<TransactionDto>(stocks);
             }
         }
 
-        public ObservableCollection<MedicamentStock> FilteredStocks { get; set; }
+        public ObservableCollection<TransactionDto> FilteredStocks { get; set; }
         public ICommand MenuVisibleCommand { get; set; }
         public ICommand NewItemCommand { get; set; }
         public ICommand SearchCommand { get; set; }
@@ -129,21 +131,21 @@ namespace MedicamentStore
                     // Sort the YourItems collection based on the selected index
                     if (_selectedIndex == 1)
                     {
-                        FilteredStocks = new ObservableCollection<MedicamentStock>(Stocks.OrderBy(item => item.Nom_Commercial));
+                        FilteredStocks = new ObservableCollection<TransactionDto>(Stocks.OrderBy(item => item.Nom_Commercial));
                     }
                     else if (_selectedIndex == 2)
                     {
-                        FilteredStocks = new ObservableCollection<MedicamentStock>(Stocks.OrderBy(item => item.Quantite));
+                        FilteredStocks = new ObservableCollection<TransactionDto>(Stocks.OrderBy(item => item.Quantite));
                     }
                     else if (_selectedIndex == 3)
                     {
-                        FilteredStocks = new ObservableCollection<MedicamentStock>(Stocks.OrderBy(item => item.Prix));
+                        FilteredStocks = new ObservableCollection<TransactionDto>(Stocks.OrderBy(item => item.Prix));
                     }
                 }
             }
         }
         #endregion
-        public StockHostViewModel()
+        public EntreeStockViewModel()
         {
             StockInitialCommand = new RelayCommand(SetStockInitial);
             StockEnterCommand = new RelayCommand(SetStockEnter);
@@ -157,10 +159,10 @@ namespace MedicamentStore
                 "Trier par Quantité",
                 "Trier par Prix"
             };
-            
+
             MenuVisibleCommand = new RelayCommand(MenuButton);
             SearchCommand = new RelayCommand(Search);
-            MedicamentCommand = new  RelayParameterizedCommand(async (param)=> await MedicamentButton(param));
+            MedicamentCommand = new RelayParameterizedCommand(async (param) => await MedicamentButton(param));
             NewItemCommand = new RelayCommand(async () => await ToNewItemStockWindow());
             DeleteCommand = new RelayParameterizedCommand((p) => DeleteProduit(p));
             NextPageCommand = new RelayCommand(NextPage);
@@ -190,22 +192,22 @@ namespace MedicamentStore
         {
             if (p is MedicamentStock medicament)
             {
-                
+
                 AddStockWindowViewModel viewModel = new AddStockWindowViewModel(medicament);
 
                 var itemToUpdate = Stocks.FirstOrDefault(item => item.Id == medicament.Id);
 
                 viewModel.UpdateQuantiteProduit += (sender, e) =>
+                {
+                    if (itemToUpdate != null)
                     {
-                        if(itemToUpdate != null)
-                        {
-                            itemToUpdate.Quantite =  e.UpdateQuantiteStock.Quantite;
+                        itemToUpdate.Quantite = e.UpdateQuantiteStock.Quantite;
 
-                            int index = Stocks.IndexOf(itemToUpdate);
-                            Stocks[index] = itemToUpdate;
-                            FilteredStocks = new ObservableCollection<MedicamentStock>(Stocks);
-                        }
-                    };
+                        int index = Stocks.IndexOf(itemToUpdate);
+                        Stocks[index] = itemToUpdate;
+                        FilteredStocks = new ObservableCollection<TransactionDto>(Stocks);
+                    }
+                };
                 AddStockWindow window = new AddStockWindow(viewModel);
                 window.Show();
             }
@@ -218,7 +220,7 @@ namespace MedicamentStore
             documentsReport.Show();
             //IoC.StockDocuments.ShowDocument(new PrintStockListViewModel(CurrentTypePage)
             //{
-             
+
             //    Title = "Aperçu Avant Impression",
             //    TypeString = CurrentTypePage.ToProduitsPharmaceutiques()
             //});
@@ -237,18 +239,19 @@ namespace MedicamentStore
         }
         private void DeleteProduit(object p)
         {
-            if (p is MedicamentStock newProduit)
+            if (p is TransactionDto newProduit)
             {
                 ConfirmBoxDialogViewModel viewModel = new ConfirmBoxDialogViewModel
                 {
-                    Message = "êtes-vous sûr du Processus de Suppression ?", Title= "Confirmer la suppression"
+                    Message = "êtes-vous sûr du Processus de Suppression ?",
+                    Title = "Confirmer la suppression"
                 };
                 IoC.ConfirmBox.ShowMessage(viewModel);
                 if (viewModel.IsConfirmed)
                 {
-                   var res = IoC.StockManager.DeleteStockAsync(new Stock
+                    var res = IoC.StockManager.DeleteStockAsync(new Stock
                     {
-                        Id = newProduit.Ids
+                        Id = newProduit.IdStock
                     });
                     if (res.Result.Successful)
                     {
@@ -266,41 +269,43 @@ namespace MedicamentStore
                     }
 
                 }
-               
+
             }
         }
-        public double MontantTotal {  get; set; }
+        public double MontantTotal { get; set; }
         public string produitTotal { get; set; }
-        private async Task LoadStocksAsync(ProduitsPharmaceutiquesType type)
-        {
-            IsLoading = true; 
-            await Task.Delay(2000);
-            var Result = await IoC.StockManager.GetMedicamentStocksAsync(type);
-           
-            produitTotal = Result.Count().ToString();
-            foreach (var Stock in Result)
-            {
-                UpdateStatus(Stock);
-            }
-            MontantTotal = Result.Sum(d => d.PrixTotal);
-            Stocks = new ObservableCollection<MedicamentStock>(Result);
-            IsLoading = false;
-        }
+        //private async Task LoadStocksAsync(ProduitsPharmaceutiquesType type)
+        //{
+        //    IsLoading = true;
+        //    await Task.Delay(2000);
+        //    var Result = await IoC.StockManager.GetMedicamentStocksAsync(type);
+
+        //    produitTotal = Result.Count().ToString();
+        //    foreach (var Stock in Result)
+        //    {
+        //        UpdateStatus(Stock);
+        //    }
+        //    MontantTotal = Result.Sum(d => d.PrixTotal);
+        //    Stocks = new ObservableCollection<TransactionDto>(Result);
+        //    IsLoading = false;
+        //}
 
         private async Task LoadStockPagedsAsync(ProduitsPharmaceutiquesType type)
         {
-           // Stocks = new ObservableCollection<MedicamentStock>();
+            
             CurrentTypePage = type; 
             IsLoading = true;
             await Task.Delay(1000);
-            var Result = await IoC.StockManager.GetPagedStocksAsync(CurrentPage, _pageSize, CurrentTypePage);
-            
+            var Result = await IoC.StockManager.GetPagedEntreeStocksAsync(CurrentPage, _pageSize, CurrentTypePage);
+
             foreach (var Stock in Result)
             {
-                UpdateStatus(Stock);
+                Stock.SymbleType = "+";
+                Stock.PrimaryBackground = "349432";
+                Stock.PrixTotal = double.Parse(string.Format("{0:0.00}", Stock.Prix * Stock.Quantite));  
             }
-            Stocks = new ObservableCollection<MedicamentStock>(Result);
-            _ = GetStockNumbers(CurrentTypePage);
+            Stocks = new ObservableCollection<TransactionDto>(Result);
+            //_ = GetStockNumbers(CurrentTypePage);
             IsLoading = false;
         }
         private async Task GetStockNumbers(ProduitsPharmaceutiquesType type)
@@ -319,7 +324,7 @@ namespace MedicamentStore
             if (string.IsNullOrEmpty(SearchText) || Stocks == null || Stocks.Count <= 0)
             {
                 // Make filtered list the same
-                FilteredStocks = new ObservableCollection<MedicamentStock>(Stocks ?? Enumerable.Empty<MedicamentStock>()); 
+                FilteredStocks = new ObservableCollection<TransactionDto>(Stocks ?? Enumerable.Empty<TransactionDto>());
 
                 // Set last search text
                 mLastSearchText = SearchText;
@@ -327,7 +332,7 @@ namespace MedicamentStore
                 return;
             }
 
-            FilteredStocks = new ObservableCollection<MedicamentStock>(
+            FilteredStocks = new ObservableCollection<TransactionDto>(
                 Stocks.Where(item => item.Nom_Commercial.Contains(SearchText, StringComparison.OrdinalIgnoreCase)));
 
             // Set last search text
@@ -339,12 +344,12 @@ namespace MedicamentStore
             IoC.Application.GoToPage(ApplicationPage.NewStockPage);
             await Task.Delay(1);
         }
-        public async Task MedicamentButton(object param) 
+        public async Task MedicamentButton(object param)
         {
             if (param is ProduitsPharmaceutiquesType selectedType)
-            { 
+            {
                 CurrentTypePage = selectedType;
-                TextType = selectedType.ToProduitsPharmaceutiques(); 
+                TextType = selectedType.ToProduitsPharmaceutiques();
                 // _ = LoadStocksAsync(selectedType);
                 _ = LoadStockPagedsAsync(CurrentTypePage);
                 MenuVisible = false;
@@ -358,41 +363,32 @@ namespace MedicamentStore
 
         }
 
-       
-        private void UpdateStatus(MedicamentStock stock)
+
+        private void UpdateStatus(TransactionDto stock)
         {
-            //if(stock.Img == "0")
+           
+            //if (stock.Quantite == 0)
             //{
-            //    stock.Img = $"../Pictures/24.png";
+            //    stock.Status = "En Rupture";
+            //    stock.PrimaryBackground = "FF423C";
 
             //}
             //else
+            //if (stock.Quantite > 0 && stock.Quantite < 5)
             //{
-            //    stock.Img = $"../Pictures/{stock.Img}";
+            //    stock.Status = "Faible";
+            //    stock.PrimaryBackground = "F09E43";
             //}
-
-            if (stock.Quantite == 0)
-            {
-                stock.Status = "En Rupture";
-                stock.PrimaryBackground = "FF423C";
-
-            }
-            else
-            if (stock.Quantite > 0 && stock.Quantite < 5)
-            {
-                stock.Status = "Faible";
-                stock.PrimaryBackground = "F09E43";
-            }
-            else
-            {
-                stock.Status = "Disponible";
-                stock.PrimaryBackground = "349432";
-            }
-            //double x = stock.Prix * stock.Quantite;
-            //stock.PrixTotal = string.Format("{0:0.00}", x);
+            //else
+            //{
+            //    stock.Status = "Disponible";
+            //    stock.PrimaryBackground = "349432";
+            //}
+            
             stock.PrixTotal = double.Parse(string.Format("{0:0.00}", stock.Prix * stock.Quantite));
 
         }
 
     }
+
 }

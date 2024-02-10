@@ -9326,6 +9326,9 @@
     <Compile Update="Pages\Stock\InitialStockPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Pages\Stock\EntreeStockPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Pages\UsersPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

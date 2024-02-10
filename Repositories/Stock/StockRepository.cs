@@ -25,7 +25,7 @@ namespace MedicamentStore
             {
                 try
                 {  
-                    foreach (var item in newProducts) 
+                    foreach (var item in newProducts)  
                     {
                         var parameters = new
                         {
@@ -43,8 +43,8 @@ namespace MedicamentStore
 
                         int LastId = await _connection.ExecuteScalarTransaction<int>(transaction.Connection, "SELECT last_insert_rowid()", transaction: transaction);
 
-                        string QeuryTrans = @"INSERT INTO [Transaction] (IdStock,TypeTransaction,QuantiteTransaction) VALUES (@LastIdStock,1,@q)"; 
-                        await _connection.ExecuteAsync(transaction.Connection, QeuryTrans, transaction: transaction, new { LastIdStock = LastId , q = item.Quantite });
+                        string QeuryTrans = @"INSERT INTO [Transaction] (IdStock,TypeTransaction,QuantiteTransaction,Date) VALUES (@LastIdStock,1,@q,@d)"; 
+                        await _connection.ExecuteAsync(transaction.Connection, QeuryTrans, transaction: transaction, new { LastIdStock = LastId , q = item.Quantite ,d=item.Date});
                     }
 
                     transaction.Commit();
@@ -122,7 +122,7 @@ namespace MedicamentStore
         public async Task<IEnumerable<MedicamentStock>> GetPagedStocksAsync(int pageNumber, int pageSize, ProduitsPharmaceutiquesType type)
         {
             int intValue = (int)type;  
-            int offset = (pageNumber - 1) * pageSize;
+            int offset = (pageNumber - 1) * pageSize; 
 
             var parameters = new { PageSize = pageSize, Offset = offset, Val = intValue };
 
@@ -206,11 +206,12 @@ namespace MedicamentStore
         {
             using (var transaction = _connection.Connection().BeginTransaction())
             {
-                try
+                try 
                 {
-                    string sql = @"INSERT INTO StockEnter (IdStock,QuantiteAdded,Quantite,IdSupplie,Date)
-                        VALUES (@IdStock,@QuantiteAdded,@Quantite,@IdSupplie,@Date)";
-                    await _connection.ExecuteAsync(transaction.Connection,sql,transaction,stockEnter);
+                    string QeuryTrans = @"INSERT INTO [Transaction] (IdStock,TypeTransaction,QuantiteTransaction,Date) VALUES (@LastIdStock,1,@q,@d)";
+                    await _connection.ExecuteAsync(transaction.Connection, QeuryTrans, transaction: transaction, new { LastIdStock = stockEnter.IdStock, q = stockEnter.QuantiteAdded , d = stockEnter.Date});
+
+                    
                     int NewQ = stockEnter.Quantite + stockEnter.QuantiteAdded;
                     string s = "UPDATE Stock SET Quantite = @newQ WHERE Id = @I";
                     await _connection.ExecuteAsync(transaction.Connection, s, transaction, new {newQ = NewQ , I = stockEnter.IdStock});
@@ -227,6 +228,32 @@ namespace MedicamentStore
                 }
             }
 
+        }
+
+        public async Task<IEnumerable<TransactionDto>> GetPagedEntreeStocksAsync(int pageNumber, int pageSize, ProduitsPharmaceutiquesType type)
+        {
+            int intValue = (int)type; 
+            int offset = (pageNumber - 1) * pageSize; 
+
+            var parameters = new { PageSize = pageSize, Offset = offset, Val = intValue };
+
+            var baseQuery = @"SELECT t.Id, m.Nom_Commercial, m.Dosage, m.Forme, m.Conditionnement, s.Quantite, m.Img, s.Prix, p.Nom, t.Date, s.Id AS IdStock , t.TypeTransaction ,t.QuantiteTransaction , s.Type , u.Name AS Unite
+                                FROM  [Transaction] t
+                                INNER JOIN Stock s ON s.Id = t.IdStock
+                                INNER JOIN PharmaceuticalProducts m ON s.IdMedicament = m.Id
+                                INNER JOIN Supplies p ON p.Id = s.IdSupplie 
+                                INNER JOIN Units u ON u.Id = s.Unit 
+                                WHERE t.TypeTransaction = 1";
+
+            var typeCondition = " AND s.Type = @Val";
+
+            var finalQuery = type != ProduitsPharmaceutiquesType.None ? $"{baseQuery}{typeCondition}" : baseQuery;
+
+            finalQuery += " ORDER BY s.Id DESC LIMIT @PageSize OFFSET @Offset;";
+
+            var resultFinal = await _connection.QueryAsync<TransactionDto>(finalQuery, parameters);
+
+            return resultFinal.Any() ? resultFinal : Enumerable.Empty<TransactionDto>();
         }
 
         #endregion

@@ -176,8 +176,8 @@ namespace MedicamentStore
                                                                                    ",
                                             transaction: transaction, item);
 
-                            string QeuryTrans = @"INSERT INTO [Transaction] (IdStock,TypeTransaction,QuantiteTransaction) VALUES (@LastIdStock,2,@q)";
-                            await _connection.ExecuteAsync(transaction.Connection, QeuryTrans, transaction: transaction, new { LastIdStock = ProductStock.Id , q = item.Quantite });
+                            string QeuryTrans = @"INSERT INTO [Transaction] (IdStock,TypeTransaction,QuantiteTransaction,Date) VALUES (@LastIdStock,2,@q,@d)";
+                            await _connection.ExecuteAsync(transaction.Connection, QeuryTrans, transaction: transaction, new { LastIdStock = ProductStock.Id , q = item.Quantite ,d =invoice.Date });
 
                         }
 

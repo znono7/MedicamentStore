@@ -17,7 +17,7 @@ namespace MedicamentStore
         }
         public async Task<IEnumerable<TransactionDto>> GetAll()
         {
-            var baseQuery = @"SELECT t.Id, m.Nom_Commercial, m.Dosage, m.Forme, m.Conditionnement, s.Quantite, m.Img, s.Prix, p.Nom, s.Date, s.Id AS IdStock , t.TypeTransaction ,t.QuantiteTransaction , s.Type , u.Name AS Unite
+            var baseQuery = @"SELECT t.Id, m.Nom_Commercial, m.Dosage, m.Forme, m.Conditionnement, s.Quantite, m.Img, s.Prix, p.Nom, t.Date, s.Id AS IdStock , t.TypeTransaction ,t.QuantiteTransaction , s.Type , u.Name AS Unite
                                 FROM  [Transaction] t
                                 INNER JOIN Stock s ON s.Id = t.IdStock
                                 INNER JOIN PharmaceuticalProducts m ON s.IdMedicament = m.Id

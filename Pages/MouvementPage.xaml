@@ -251,7 +251,6 @@
                                         <TextBlock TextWrapping="Wrap" Height="Auto" VerticalAlignment="Center" FontSize="12" Text="{Binding Nom}" Style="{StaticResource TextH2}" Margin="0"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
-
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>

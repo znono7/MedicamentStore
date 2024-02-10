@@ -17,7 +17,8 @@ namespace MedicamentStore
         public ICommand? NewInvoicePage { get; set; }
         public ICommand? StockPage { get; set; }
         public ICommand? InvoicePage { get; set; }
-        public ICommand? MouvementPage { get; set; }//
+        public ICommand? MouvementPage { get; set; }//EntreeStockPage
+        public ICommand? EntreeStockPage { get; set; }//
 
         public MenuViewModel()
         {
@@ -29,6 +30,13 @@ namespace MedicamentStore
             StockPage = new RelayCommand(async () => await StockPageAsync());
             InvoicePage = new RelayCommand(async () => await InvoicePageAsync());
             MouvementPage = new RelayCommand(async () => await ToMouvementPagePageAsync());
+            EntreeStockPage = new RelayCommand(async () => await ToEntreeStockPageAsync());
+        }
+
+        private async Task ToEntreeStockPageAsync()
+        {
+            IoC.Application.GoToPage(ApplicationPage.EntreeStockPage);
+            await Task.Delay(1);
         }
 
         private async Task ToMouvementPagePageAsync()

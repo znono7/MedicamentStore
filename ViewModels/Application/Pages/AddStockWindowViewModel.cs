@@ -17,7 +17,7 @@ namespace MedicamentStore
 
         public event EventHandler<UpdateQuantiteProduitEventArgs> UpdateQuantiteProduit;
         public ICommand UpdateQuantiteCommand { get; set; }
-        public int Id { get; set; }        
+        public int Id { get; set; }         
         public string? Img { get; set; }
         public string? Nom_Commercial { get; set; }
         public string? Forme { get; set; }
@@ -73,7 +73,7 @@ namespace MedicamentStore
                 IdSupplie = SuppCmb.SelectedId,
                 Quantite = MedicamentStock.Quantite,
                 QuantiteAdded = Quantite,
-                Date = dateViewModel.SelectedDate.ToShortDateString()
+                Date = dateViewModel.SelectedDate
             });
             if (Result.Successful)
             {
