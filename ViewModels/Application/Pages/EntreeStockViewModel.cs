@@ -1,26 +1,30 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using QuestPDF.Fluent;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace MedicamentStore
 {
-    //public class EntreeStockViewModel : BaseViewModel
-    //{
-    //}
+    
 
     public class EntreeStockViewModel : BaseViewModel
     {
+        public DateFilterViewModel DateFilterViewModel { get; set; } 
+
         private ProduitsPharmaceutiquesType _CurrentTypePage { get; set; } = ProduitsPharmaceutiquesType.None;
         public ProduitsPharmaceutiquesType CurrentTypePage
-        {
+        { 
             get => _CurrentTypePage;
             set
             {
-                if (_CurrentTypePage != value)
+                if (_CurrentTypePage != value) 
                 {
                     _CurrentTypePage = value;
                     OnPropertyChanged(nameof(CurrentTypePage));
@@ -145,13 +149,21 @@ namespace MedicamentStore
             }
         }
         #endregion
+        public ICommand ExpandCommand { get; set; }
+        public ICommand PopupClickawayCommand { get; set; }
+        public ICommand FilterDataCommand { get; set; }
+        public ICommand PrintPdfCommand { get; set; }
+
         public EntreeStockViewModel()
         {
+            DateFilterViewModel = new DateFilterViewModel();
             StockInitialCommand = new RelayCommand(SetStockInitial);
             StockEnterCommand = new RelayCommand(SetStockEnter);
+            FilterDataCommand = new RelayCommand(async () => await FilterData());
+            PrintPdfCommand = new RelayCommand(ShowPdfDocument);
 
             _ = LoadStockPagedsAsync(CurrentTypePage);
-            _ = GetStockNumbers(CurrentTypePage);
+           // _ = GetStockNumbers(CurrentTypePage);
             SortMed = new List<string>
             {
                 "Trier par",
@@ -159,6 +171,7 @@ namespace MedicamentStore
                 "Trier par Quantité",
                 "Trier par Prix"
             };
+            ExpandCommand = new RelayCommand(AttachmentMenuButton);
 
             MenuVisibleCommand = new RelayCommand(MenuButton);
             SearchCommand = new RelayCommand(Search);
@@ -169,9 +182,97 @@ namespace MedicamentStore
             PreviousPageCommand = new RelayCommand(PreviousPage);
             PrintCommand = new RelayCommand(ShowDocument);
             UpdateQuantiteCommand = new RelayParameterizedCommand((p) => UpdateQuantite(p));
+            PopupClickawayCommand = new RelayCommand(ClickawayMenuButton);
+
+        }
+        public bool isExpanded { get; set; }
+
+        private void ShowPdfDocument()
+        {
+
+            // Create a SaveFileDialog
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "PDF files (*.pdf)|*.pdf|All files (*.*)|*.*";
+            saveFileDialog.FilterIndex = 1;
+            saveFileDialog.RestoreDirectory = true;
+
+            // Show the dialog and get the selected file path
+            bool? result = saveFileDialog.ShowDialog();
+
+            if (result == true)
+            {
+                string filePath = saveFileDialog.FileName;
+
+                var document = new EntreeStockDocument(FilteredStocks);
+                document.GeneratePdf(filePath);
+
+                Process.Start("explorer.exe", filePath);
+
+                MessageBox.Show("PDF saved successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show("File saving canceled.", "Canceled", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+
+
 
         }
 
+        private async Task FilterData()
+        {
+            DateTime startDate = new(); 
+            DateTime endDate = new();
+            switch (DateFilterViewModel.CurrentDateFilterType)
+            {
+                case DateFilterType.None:
+                    FilteredStocks = new ObservableCollection<TransactionDto>(Stocks);
+                    return;
+                case DateFilterType.Today:
+                    startDate = DateTime.Today;
+                    endDate = DateTime.Today.AddDays(1).AddTicks(-1);
+                    break;
+                case DateFilterType.Yesterday:
+                    startDate = DateTime.Today.AddDays(-1);
+                    endDate = DateTime.Today.AddTicks(-1);
+                    break;
+                case DateFilterType.ThisMonth:
+                    startDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+                    endDate = startDate.AddMonths(1).AddTicks(-1);
+                    break;
+                case DateFilterType.PastMonth:
+                    startDate = new DateTime(DateTime.Today.AddMonths(-1).Year, DateTime.Today.AddMonths(-1).Month, 1);
+                    endDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1).AddTicks(-1);
+                    break;
+                case DateFilterType.Past3Month:
+                    startDate = new DateTime(DateTime.Today.AddMonths(-3).Year, DateTime.Today.AddMonths(-3).Month, 1);
+                    endDate = DateTime.Today.AddTicks(-1);
+                    break;
+                case DateFilterType.WithDate:
+                    startDate = DateFilterViewModel.SelectedFromDate;
+                    endDate = DateFilterViewModel.SelectedToDate;
+                    break;
+
+                default:
+                    startDate = DateTime.Today;
+                    endDate = DateTime.Today.AddDays(1).AddTicks(-1);
+                    break;
+            }
+            if (startDate > endDate)
+                return;
+            FilteredStocks = new ObservableCollection<TransactionDto>(Stocks.Where(item => item.Date >= startDate.Date &&
+                                                                                            item.Date <= endDate.Date));
+            await Task.Delay(1);
+        }
+        private void ClickawayMenuButton()
+        {
+            isExpanded = false;
+        }
+
+        private void AttachmentMenuButton()
+        {
+            isExpanded ^= true;
+        }
         private void SetStockEnter()
         {
             if (StockEnterPanel)
@@ -216,14 +317,7 @@ namespace MedicamentStore
         private void ShowDocument()
         {
 
-            DocumentsReportHost documentsReport = new DocumentsReportHost(CurrentTypePage);
-            documentsReport.Show();
-            //IoC.StockDocuments.ShowDocument(new PrintStockListViewModel(CurrentTypePage)
-            //{
-
-            //    Title = "Aperçu Avant Impression",
-            //    TypeString = CurrentTypePage.ToProduitsPharmaceutiques()
-            //});
+            IoC.Application.GoToPage(ApplicationPage.PrintEntreeStockPage, new PrintEntreeStockViewModel(FilteredStocks));
         }
         private void NextPage()
         {
@@ -303,6 +397,7 @@ namespace MedicamentStore
                 Stock.SymbleType = "+";
                 Stock.PrimaryBackground = "349432";
                 Stock.PrixTotal = double.Parse(string.Format("{0:0.00}", Stock.Prix * Stock.Quantite));  
+                Stock.TypeMed = ((ProduitsPharmaceutiquesType)Stock.Type).ToProduitsPharmaceutiques();
             }
             Stocks = new ObservableCollection<TransactionDto>(Result);
             //_ = GetStockNumbers(CurrentTypePage);

@@ -30,6 +30,7 @@ namespace MedicamentStore
         MouvementPage = 11,
         PrintMovmentStockPage = 12,
         EntreeStockPage = 13,
-
+        PrintEntreeStockPage = 14,
+        PrintSorteStockPage = 15,
     }
 }

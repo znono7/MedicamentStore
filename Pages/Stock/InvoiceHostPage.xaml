@@ -7,7 +7,6 @@
       mc:Ignorable="d"  x:Name="StocksTypeHost"
       d:DesignHeight="800" d:DesignWidth="1200"
       Title="StockHostPage">
-
     <Grid Background="{StaticResource PrimaryBackgroundColor}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -17,107 +16,147 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-              
-        <Grid Margin="0 5 5 0" Grid.Column="1">
+        <!-- Dimmed overlay -->
+        <Border Grid.RowSpan="3" 
+          Panel.ZIndex="10"
+          Opacity="0.3" Grid.ColumnSpan="2">
+
+            <Border Background="{StaticResource PrimaryBlackColor}" CornerRadius="8"
+             local:AnimateFadeInProperty.Value="{Binding isExpanded}"/>
+            <Border.InputBindings>
+                <MouseBinding MouseAction="LeftClick" Command="{Binding PopupClickawayCommand}" />
+            </Border.InputBindings>
+        </Border>
+        <Grid Grid.RowSpan="2" Width="270" local:AnimateSlideInFromLeftProperty.Value="{ Binding MenuVisible,FallbackValue=true}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Column="1" TextAlignment="Center" Text="Produits Pharmaceutiques&#xa; Menu" Margin="5 20 0 2"
+                      FontFamily="{StaticResource Baloo-Regular}" Foreground="{StaticResource TertiaryTextColor}" 
+                      FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBox Name="SearchTextBox" TextChanged="SearchTextBox_TextChanged" Grid.Row="1" Width="265" Margin="2 0 2 10"   Tag="Rechercher dans le menu" Style="{StaticResource SearchMedText}" HorizontalAlignment="Left" />
+            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+                <StackPanel x:Name="PanelBtns" >
+                    <RadioButton IsChecked="True" Width="260"  Command="{Binding MedicamentCommand}" CommandParameter="{x:Static local:ProduitsPharmaceutiquesType.None}" Content="Tous Produits" Margin="2"  Style="{StaticResource StockMenuRadioButtonStyle}" />
+                    <RadioButton  Width="260"  Command="{Binding MedicamentCommand}" CommandParameter="{x:Static local:ProduitsPharmaceutiquesType.Medicaments}" Content="Médicaments" Margin="2"  Style="{StaticResource StockMenuRadioButtonStyle}" />
+                    <RadioButton  Width="260"  Command="{Binding MedicamentCommand}" CommandParameter="{x:Static local:ProduitsPharmaceutiquesType.MedicamentsPourPrevention}" Content="Médicaments pour Prévention" Margin="2"  Style="{StaticResource StockMenuRadioButtonStyle}" />
+                    <RadioButton  Width="260"  Command="{Binding MedicamentCommand}" CommandParameter="{x:Static local:ProduitsPharmaceutiquesType.MedicamentsPourDAT}" Content="Médicaments pour DAT" Margin="2"  Style="{StaticResource StockMenuRadioButtonStyle}" />
+                    <RadioButton CommandParameter="{x:Static local:ProduitsPharmaceutiquesType.MedicamentsPourGenevologie}" Content="Médicaments pour Généalogie"  Width="260"  Command="{Binding MedicamentCommand}"  Margin="2"  Style="{StaticResource StockMenuRadioButtonStyle}" />
+                    <RadioButton CommandParameter="{x:Static local:ProduitsPharmaceutiquesType.VaccinsEtSerums}" Content="Vaccins et Sérums"  Width="260"  Command="{Binding MedicamentCommand}"  Margin="2"  Style="{StaticResource StockMenuRadioButtonStyle}" />
+                    <RadioButton CommandParameter="{x:Static local:ProduitsPharmaceutiquesType.Consommables}" Content="Consommables"  Width="260"  Command="{Binding MedicamentCommand}"  Margin="2"  Style="{StaticResource StockMenuRadioButtonStyle}" />
+                    <RadioButton CommandParameter="{x:Static local:ProduitsPharmaceutiquesType.ArticleDePansements}" Content="Articles de Pansements"  Width="260"  Command="{Binding MedicamentCommand}"  Margin="2"  Style="{StaticResource StockMenuRadioButtonStyle}" />
+                    <RadioButton CommandParameter="{x:Static local:ProduitsPharmaceutiquesType.AntiSeptiques}" Content="Antiseptiques"  Width="260"  Command="{Binding MedicamentCommand}"  Margin="2"  Style="{StaticResource StockMenuRadioButtonStyle}" />
+                    <RadioButton CommandParameter="{x:Static local:ProduitsPharmaceutiquesType.ProduitsDentaires}" Content="Produits Dentaires"  Width="260"  Command="{Binding MedicamentCommand}"  Margin="2"  Style="{StaticResource StockMenuRadioButtonStyle}" />
+                    <RadioButton CommandParameter="{x:Static local:ProduitsPharmaceutiquesType.FilmsRadiologiques}" Content="Films Radiologiques"  Width="260"  Command="{Binding MedicamentCommand}"  Margin="2"  Style="{StaticResource StockMenuRadioButtonStyle}" />
+                    <RadioButton CommandParameter="{x:Static local:ProduitsPharmaceutiquesType.SolutesMassifs}" Content="Solutés Massifs"  Width="260"  Command="{Binding MedicamentCommand}"  Margin="2"  Style="{StaticResource StockMenuRadioButtonStyle}" />
+                    <RadioButton CommandParameter="{x:Static local:ProduitsPharmaceutiquesType.ContaceptifsOraux}" Content="Contraceptifs Oraux"  Width="260"  Command="{Binding MedicamentCommand}"  Margin="2"  Style="{StaticResource StockMenuRadioButtonStyle}" />
+                    <RadioButton CommandParameter="{x:Static local:ProduitsPharmaceutiquesType.Reactifs}" Content="Réactifs"  Width="260"  Command="{Binding MedicamentCommand}"  Margin="2"  Style="{StaticResource StockMenuRadioButtonStyle}" />
+                    <RadioButton CommandParameter="{x:Static local:ProduitsPharmaceutiquesType.MaterielsDeLaboratoires}" Content="Matériels de Laboratoires"  Width="260"  Command="{Binding MedicamentCommand}"  Margin="2"  Style="{StaticResource StockMenuRadioButtonStyle}" />
+                    <RadioButton CommandParameter="{x:Static local:ProduitsPharmaceutiquesType.Psychotropes}" Content="Psychotropes"  Width="260"  Command="{Binding MedicamentCommand}"  Margin="2"  Style="{StaticResource StockMenuRadioButtonStyle}" />
+                    <RadioButton CommandParameter="{x:Static local:ProduitsPharmaceutiquesType.Appareils}" Content="Appareils"  Width="260"  Command="{Binding MedicamentCommand}"  Margin="2"  Style="{StaticResource StockMenuRadioButtonStyle}" />
+                    <RadioButton CommandParameter="{x:Static local:ProduitsPharmaceutiquesType.ProduitsPourDiagnostic}" Content="Produits pour Diagnostic"  Width="260"  Command="{Binding MedicamentCommand}"  Margin="2"  Style="{StaticResource StockMenuRadioButtonStyle}" />
+                    <RadioButton CommandParameter="{x:Static local:ProduitsPharmaceutiquesType.MoyensDeProtection}" Content="Moyens de Protection"  Width="260"  Command="{Binding MedicamentCommand}"  Margin="2"  Style="{StaticResource StockMenuRadioButtonStyle}" />
+                    <RadioButton CommandParameter="{x:Static local:ProduitsPharmaceutiquesType.Sondes}" Content="Sondes"  Width="260"  Command="{Binding MedicamentCommand}"  Margin="2"  Style="{StaticResource StockMenuRadioButtonStyle}" />
+                    <RadioButton CommandParameter="{x:Static local:ProduitsPharmaceutiquesType.Masques}" Content="Masques"  Width="260"  Command="{Binding MedicamentCommand}"  Margin="2"  Style="{StaticResource StockMenuRadioButtonStyle}" />
+                    <RadioButton CommandParameter="{x:Static local:ProduitsPharmaceutiquesType.Papier}" Content="Papier"  Width="260"  Command="{Binding MedicamentCommand}"  Margin="2"  Style="{StaticResource StockMenuRadioButtonStyle}" />
+                    <RadioButton CommandParameter="{x:Static local:ProduitsPharmaceutiquesType.Gel}" Content="Gel"  Width="260"  Command="{Binding MedicamentCommand}"  Margin="2"  Style="{StaticResource StockMenuRadioButtonStyle}" />
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+        <!--<local:SideStockMenu Grid.RowSpan="2" Width="260" local:AnimateSlideInFromLeftProperty.Value="{ Binding StockHostViewModel.MenuVisible,Source={x:Static local:ViewModelLocator.Instance}}" />-->
+
+        <Grid  Grid.Column="1">
             <StackPanel>
                 <Grid>
+                    <Button Cursor="Hand"  Width="24" Height="24" HorizontalAlignment="Left" Command="{Binding MenuVisibleCommand}" Margin="20 20" VerticalAlignment="Top" Style="{StaticResource PathGrowButton}" >
+                        <Path Fill="#ffffff"  Data="{StaticResource menu}" Stretch="Uniform" Height="11" Width="11"/>
 
-                    <TextBlock  Text="Exportations" Margin="60 10" HorizontalAlignment="Left"
-                 FontFamily="{StaticResource Baloo-Regular}" Foreground="{StaticResource TertiaryTextColor}" 
-                 FontSize="20"  VerticalAlignment="Center"/>
+                    </Button>
+                    <TextBlock  Text="Sortie de Stock" Margin="60 10" HorizontalAlignment="Left"
+                                 FontFamily="{StaticResource Baloo-Regular}" Foreground="{StaticResource TertiaryTextColor}" 
+                                 FontSize="20"  VerticalAlignment="Center"/>
                     <Button Style="{StaticResource addButton}" Command="{Binding NewItemCommand}"
-                                HorizontalAlignment="Right" >
+                                     HorizontalAlignment="Right" Width="180">
                         <StackPanel Orientation="Horizontal">
                             <Path  Data="{StaticResource plus}" Fill="{StaticResource TertiaryBackgroundColor}" Stretch="UniformToFill" VerticalAlignment="Center" Margin="0 1 8 0" Width="11" Height="11"/>
-                            <TextBlock Text="Nouvelle Exportation" FontFamily="{StaticResource Baloo-Regular}"/>
+                            <TextBlock Text="Nouvelle Sortie de Stock" FontFamily="{StaticResource Baloo-Regular}" Margin="5 0"/>
                         </StackPanel>
                     </Button>
                 </Grid>
-                <Grid  Margin="20 3">
+                <Grid  Margin="20 3" >
                     <Border  CornerRadius="2" Background="{StaticResource TertiaryBackgroundColor}">
                         <Border.Effect>
                             <DropShadowEffect Direction="-130" BlurRadius="30" ShadowDepth="5" Opacity="0.1"/>
                         </Border.Effect>
                     </Border>
                     <StackPanel Orientation="Horizontal">
-                        <!--<Grid  Margin="13 5">
-                            <StackPanel>
-                                <Grid>
-                                    <Border  BorderThickness="1.5" Width="280" 
-                                     CornerRadius="7" d:BorderBrush="AliceBlue" Height="32"
-                                              >
-                                        <Border.Style>
-                                            <Style TargetType="Border">
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding AttachmentMenuVisible}" Value="True">
-                                                        <Setter Property="Background" Value="{StaticResource PrimeBlueBrush}" />
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding AttachmentMenuVisible}" Value="False">
-                                                        <Setter Property="Background" Value="#F1F5FD" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Border.Style>
-                                    </Border>
-                                    -->
-                        <!-- Content -->
-                        <!--
-                                    <TextBlock Text="{Binding SelectedName, UpdateSourceTrigger=PropertyChanged}" 
-                                        FontSize="13" FontFamily="{StaticResource Baloo-Regular}" Foreground="{StaticResource FourthTextColor}"
-                                        Margin="15 8"
-                                        VerticalAlignment="Center"
-                                        ToolTip="{Binding SelectedName}"
-                                            />
-                                    <Button Style="{StaticResource gridEditButton}"
-                                    Command="{Binding AttachmentButtonCommand}"
-                                    Content="▼"    Height="20" Width="20" Background="#5D7881"
-                                         Margin="10 10 5 8" FontSize="11" 
-                                          HorizontalAlignment="Right"/>
-                                    <Path HorizontalAlignment="Left" Data="{StaticResource date}" Margin="10" Width="16" Height="16" Stretch="Uniform" Fill="#5D7881"/>
-                                </Grid>
-                                <Grid x:Name="PopupGrid"></Grid>
-                            </StackPanel>
-                            <Popup IsOpen="{Binding AttachmentMenuVisible}" PlacementTarget="{Binding ElementName=PopupGrid}">
-                                <Border  BorderThickness="1.5" Width="280" 
-                                     CornerRadius="7" BorderBrush="AliceBlue">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
-                                    </Grid>
-                                </Border>
-                            </Popup>
-                        </Grid>-->
-
-                        <TextBox Margin="10 5" Text="{Binding SearchText ,UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Margin="20 5" Text="{Binding SearchText ,UpdateSourceTrigger=PropertyChanged}"
                            Tag="Rechercher ..." Style="{StaticResource SearchTextBox2}"/>
                         <Button  IsDefault="True" Margin="0 0 40 0" Height="24" Width="24" Cursor="Hand" Background="#5D7881"
                                 Style="{StaticResource gridEditButton}" Command="{Binding SearchCommand}">
                             <TextBlock FontFamily="{StaticResource FontAwesome2}" Text="&#xf002;" HorizontalAlignment="Right" VerticalAlignment="Center"
                                     FontSize="13" Foreground="{StaticResource TertiaryBackgroundColor}" Margin="0"/>
                         </Button>
+                        <Button Command="{Binding ExpandCommand}" Click="expandButton_Click" Name="expandButton" Width="240" Style="{StaticResource addButton}" Background="Transparent">
+                            <Grid Width="240">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Path x:Name="dateIcon" Margin="10 0 0 0"  Fill="#343434"  Data="{StaticResource date}" Stretch="Uniform" Height="11" Width="11"/>
+                                <TextBlock Grid.Column="1"  x:Name="txtDate" Foreground="#343434" Style="{StaticResource TextH4}" Text="{Binding DateFilterViewModel.DateStat}"/>
+                                <Path Grid.Column="2" x:Name="arrowIcon" Margin="0 0 10 0"  Fill="#343434"  Data="{StaticResource angel-up}" Stretch="Uniform" Height="11" Width="11">
+                                    <Path.RenderTransform>
+                                        <RotateTransform x:Name="rotateTransform" Angle="0" CenterX="5.5" CenterY="4.5"/>
+                                    </Path.RenderTransform>
+                                </Path>
+                            </Grid>
+
+                        </Button>
+                        <Popup IsOpen="{Binding isExpanded}" AllowsTransparency="True" Name="popup" PlacementTarget="{Binding ElementName=expandButton}" Placement="Bottom" StaysOpen="True">
+                            <Grid Background="Transparent">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Border Grid.RowSpan="2"  CornerRadius="8" Background="{StaticResource TertiaryBackgroundColor}"
+                                        BorderThickness="1" BorderBrush="#7A7CFF">
+                                    <Border.Effect>
+                                        <DropShadowEffect BlurRadius="16" ShadowDepth="2"
+                                     Color="LightSlateGray" Opacity="0.2" />
+                                    </Border.Effect>
+                                </Border>
+                                <local:DateFilterControl DataContext="{Binding DateFilterViewModel}"/>
+                                <Button Command="{Binding FilterDataCommand}" Grid.Row="1" Style="{StaticResource addButton}" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Path  Data="{StaticResource done}" Fill="{StaticResource TertiaryBackgroundColor}" Stretch="UniformToFill" VerticalAlignment="Center" Margin="5" HorizontalAlignment="Center" Width="11" Height="11"/>
+                                    </StackPanel>
+                                </Button>
+                            </Grid>
+                        </Popup>
+
                     </StackPanel>
 
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Margin="10"  Command="{Binding PrintPdfCommand}" Padding="0"  Height="16" Width="16" Style="{StaticResource PathGrowButton}" Background="Transparent" Cursor="Hand">
+                            <Path Margin="0" Data="{StaticResource pdf}" Fill="#1E3050" Stretch="Uniform" Height="16" Width="16"/>
+                        </Button>
+                        <Button Margin="5 0 10 0"  Command="{Binding PrintCommand}" Padding="0"  Height="16" Width="16" Style="{StaticResource PathGrowButton}" Background="Transparent" Cursor="Hand">
+                            <Path Margin="0" Data="{StaticResource print}" Fill="#1E3050" Stretch="Uniform" Height="16" Width="16"/>
+                        </Button>
+                    </StackPanel>
                 </Grid>
             </StackPanel>
         </Grid>
         <!--Content-->
         <Grid Margin="20 10" Grid.Row="1" Grid.Column="1">
-            
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="auto"/>
+
             </Grid.RowDefinitions>
             <Border   Grid.RowSpan="3" CornerRadius="2" Background="{StaticResource TertiaryBackgroundColor}">
                 <Border.Effect>
@@ -125,140 +164,254 @@
                 </Border.Effect>
 
             </Border>
+            <TextBlock  Text="{Binding TextType}" Margin="10 10 0 0" HorizontalAlignment="Left"
+                        FontFamily="{StaticResource SofiaSansCond-Regular}" Foreground="{StaticResource TertiaryTextColor}" 
+                        FontSize="20"  VerticalAlignment="Center"/>
 
-            <!--<Grid  Visibility="Collapsed" Grid.Row="1" HorizontalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Border BorderThickness="1" BorderBrush="#8AA5ED" CornerRadius="10" Margin="20 5">
-                    <StackPanel Margin="5">
-                        <TextBlock  Text="Montant Total" HorizontalAlignment="Center"
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <!--<Grid Grid.Row="0" HorizontalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Border BorderThickness="1" BorderBrush="#8AA5ED" CornerRadius="8" Margin="10">
+                        <StackPanel VerticalAlignment="Center" Margin="5">
+                            <TextBlock  Text="Montant Total" HorizontalAlignment="Center"
                          FontFamily="{StaticResource SofiaSansCond-Regular}" Foreground="{StaticResource TertiaryTextColor}" 
-                         FontSize="20"  VerticalAlignment="Top"/>
-                          <TextBox TextAlignment="Center" IsReadOnly="True" VerticalAlignment="Bottom" Text="{Binding MontantTotal,UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{StaticResource TextEntryQua}" Margin="0"/>
+                         FontSize="13"  VerticalAlignment="Top"/>
+                            <TextBox FontSize="13" TextAlignment="Center" IsReadOnly="True" VerticalAlignment="Bottom" Text="{Binding MontantTotal,UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{StaticResource TextEntryQua}" Margin="0"/>
 
-                    </StackPanel>
-                </Border>
-                <Border Grid.Column="1" BorderThickness="1" BorderBrush="#8AA5ED" CornerRadius="10"  Margin="20 5">
-                    <StackPanel Margin="5">
-                        <TextBlock  Text="Produit Total" HorizontalAlignment="Center"
+                        </StackPanel>
+                    </Border>
+                    <Border Grid.Column="1" BorderThickness="1" BorderBrush="#8AA5ED" CornerRadius="8"  Margin="10">
+                        <StackPanel VerticalAlignment="Center" Margin="5">
+                            <TextBlock  Text="Produit Total" HorizontalAlignment="Center"
                                   FontFamily="{StaticResource SofiaSansCond-Regular}" Foreground="{StaticResource TertiaryTextColor}" 
-                                  FontSize="20"  VerticalAlignment="Top"/>
-                        <TextBlock  Text="{Binding produitTotal}" Margin="0 10 0 0" HorizontalAlignment="Center"
+                                  FontSize="13"  VerticalAlignment="Top"/>
+                            <TextBlock  Text="{Binding produitTotal}" Margin="0 10 0 0" HorizontalAlignment="Center"
                                    FontFamily="{StaticResource SofiaSansCond-Regular}" Foreground="{StaticResource PrimeBlueBrush}" 
-                                   FontSize="20"  VerticalAlignment="Bottom" ToolTip="{Binding produitTotal}"/>
-                    </StackPanel>
-                </Border>
-            </Grid>-->
-            <!--<Path Panel.ZIndex="1" Grid.Row="2" Visibility="{Binding IsLoading,Converter={local:BooleanToVisiblityConverter}, ConverterParameter=True}" 
-                Data="{StaticResource spinner}" Width="64" Height="64" Style="{StaticResource SpinningPath}" Fill="{StaticResource PrimeBlueBrush}" />-->
-            <ScrollViewer Grid.Row="2"  VerticalScrollBarVisibility="Auto"  >
-                <DataGrid  RowStyle="{DynamicResource DataGridRowStyle1}"
-                ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 
-                CellStyle="{DynamicResource DataGridCellStyle1}"
-                x:Name="usersDataGrid" 
-                Style="{DynamicResource DataGridStyle1}"
-                Margin="20" Grid.Row="2" 
-                ItemsSource="{Binding FilteredInvoices}" 
-                AutoGenerateColumns="False">
-                    <DataGrid.Columns>
-                        <DataGridTemplateColumn  Header="Numéro" Width="*"   IsReadOnly="True"  CanUserResize="False">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock x:Name="tbPercent" Text="{Binding Number}" FontSize="16"
+                                   FontSize="13"  VerticalAlignment="Bottom" ToolTip="{Binding produitTotal}"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>-->
+                <Path Panel.ZIndex="1" Grid.Row="1" Visibility="{Binding IsLoading,Converter={local:BooleanToVisiblityConverter}, ConverterParameter=True}" 
+                Data="{StaticResource spinner}" Width="64" Height="64" Style="{StaticResource SpinningPath}" Fill="{StaticResource PrimeBlueBrush}" />
+
+                <!--#region Stock Initial -->
+                <ScrollViewer   VerticalScrollBarVisibility="Auto"  >
+                    <DataGrid  RowStyle="{DynamicResource DataGridRowStyle1}"
+                                ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 
+                                CellStyle="{DynamicResource DataGridCellStyle1}"
+                                x:Name="usersDataGrid" 
+                                Style="{DynamicResource DataGridStyle1}"
+                                Margin="0 10" Grid.Row="2" 
+                                ItemsSource="{Binding FilteredStocks}" 
+                                AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Width="100" >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid x:Name="GridImage">
+                                            <Border  CornerRadius="7"  Background="{StaticResource TertiaryBackgroundColor}">
+                                                <Border.Effect>
+                                                    <DropShadowEffect Direction="-130" BlurRadius="30" ShadowDepth="5" Opacity="0.1"/>
+                                                </Border.Effect>
+                                            </Border>
+
+                                            <Image Source="{Binding Img, Converter={local:FallbackImageConverter}}"  Style="{StaticResource medImg}" />
+                                            <Popup Width="200" Height="140" x:Name="PopupImage" >
+
+                                                <Border    Background="{StaticResource TertiaryBackgroundColor}">
+                                                    <Border.Effect>
+                                                        <DropShadowEffect Direction="-130" BlurRadius="30" ShadowDepth="5" Opacity="0.1"/>
+                                                    </Border.Effect>
+                                                    <Image Width="160" Height="120"  Style="{StaticResource medImg}" Source="{Binding Img,Converter={local:FallbackImageConverter}}"/>
+
+                                                </Border>
+
+
+                                            </Popup>
+                                        </Grid>
+                                        <DataTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="PopupImage" Property="IsOpen" Value="True"/>
+                                            </Trigger>
+                                        </DataTemplate.Triggers>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn  Header="Produits Pharmaceutique" Width="*"   IsReadOnly="True"  CanUserResize="False">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Vertical">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock x:Name="tbPercent" Text="{Binding Nom_Commercial}" FontSize="13"
                                            Foreground="{StaticResource TertiaryTextColor}"
                                            FontFamily="{StaticResource OakSans-Regular}"
-                                           ToolTip="{Binding Number}"/>
-                                    <DataTemplate.Triggers>
-                                        <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
-                                            <Setter Property="Foreground" TargetName="tbPercent" Value="#ffffff" />
+                                           ToolTip="{Binding Nom_Commercial}"/>
+                                                <TextBlock Text=" "/>
+                                                <TextBlock TextWrapping="Wrap" Height="Auto" x:Name="tbPercent3" VerticalAlignment="Bottom" Text="{Binding Forme}" FontSize="11"
+                                               Foreground="{StaticResource TertiaryTextColor}"
+                                               FontFamily="{StaticResource OakSans-Regular}"
+                                                    ToolTip="{Binding Forme}"/>
+
+                                            </StackPanel>
+                                            <TextBlock TextWrapping="Wrap" Height="Auto" x:Name="tbPercent2" VerticalAlignment="Bottom" Text="{Binding Dosage}" FontSize="11"
+                                          Foreground="{StaticResource TertiaryTextColor}"
+                                          FontFamily="{StaticResource OakSans-Regular}"
+                                               ToolTip="{Binding Dosage}"/>
+                                        </StackPanel>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="tbPercent" Value="#ffffff" />
+                                                <Setter Property="Foreground" TargetName="tbPercent2" Value="#ffffff" />
+                                                <Setter Property="Foreground" TargetName="tbPercent3" Value="#ffffff" />
                                             </DataTrigger>
-                                        <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
-                                            <Setter Property="Foreground" TargetName="tbPercent" Value="#ffffff" />
-                                         </DataTrigger>
-                                    </DataTemplate.Triggers>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Date" Width="*" IsReadOnly="True" CanUserResize="False">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Grid >
-                                        <Border Padding="6 2" Height="28" Width="Auto" CornerRadius="6" HorizontalAlignment="Left" Background="#14174C">
-                                            <TextBlock x:Name="tbPercent5" VerticalAlignment="Center" Text="{Binding Date}" FontSize="14"
-                                              Foreground="#ffffff" HorizontalAlignment="Center"
-                                              FontFamily="{StaticResource OakSans-Regular}"
-                                               ToolTip="{Binding Date}"/>
-                                        </Border>
-                                    </Grid>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn CanUserResize="False" Header="Produit Total" Width="*" IsReadOnly="True">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock x:Name="tbPercent5" VerticalAlignment="Center" Text="{Binding ProduitTotal}" FontSize="14"
-                                            Foreground="#14174C" HorizontalAlignment="Left"
-                                            FontFamily="{StaticResource OakSans-Regular}"
-                                             ToolTip="{Binding ProduitTotal}"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn CanUserResize="False" Header="Montant Total" Width="*" IsReadOnly="True">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBox TextAlignment="Center" IsReadOnly="True" Foreground="#606467" Text="{Binding MontantTotal,UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{StaticResource TextEntryQua2}" Margin="0"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTemplateColumn  IsReadOnly="True" Width="100" CanUserResize="False">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                       
-                                        <Button Margin="0" Cursor="Hand" Background="Transparent" Command="{Binding DataContext.DeleteCommand ,  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" 
-                                                  CommandParameter="{Binding }"
-                                                  Style="{StaticResource gridRemoveButton}">
-                                            <Path Data="{StaticResource Delete}" Fill="#BE2623" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Center" Width="11" Height="11"/>
-                                        </Button>
-                                    </StackPanel>
-                                   
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-            </ScrollViewer>
-            <Border  Grid.Row="3" HorizontalAlignment="Right"  
+                                            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="tbPercent" Value="#ffffff" />
+                                                <Setter Property="Foreground" TargetName="tbPercent2" Value="#ffffff" />
+                                                <Setter Property="Foreground" TargetName="tbPercent3" Value="#ffffff" />
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn CanUserResize="False" Header="Type" Width="Auto" IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock x:Name="TypeTxt" TextWrapping="Wrap" Height="Auto" TextAlignment="Center"  Foreground="#113110" ToolTip="{Binding TypeMed}" Text="{Binding TypeMed,UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{StaticResource TextH4}" Margin="0"/>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="TypeTxt" Value="#ffffff" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="TypeTxt" Value="#ffffff" />
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Quantite" Width="140" IsReadOnly="True" CanUserResize="False">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Border Padding="6 2" Height="28" Width="Auto" CornerRadius="8" HorizontalAlignment="Left" Background="{Binding PrimaryBackground,Converter={local:StringRGBToBrushConverter}}">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock x:Name="tbPercents" VerticalAlignment="Center" Text="{Binding SymbleType}" FontSize="11"
+                                                  Foreground="#ffffff" HorizontalAlignment="Center"
+                                                  FontFamily="{StaticResource OakSans-Regular}" />
+                                                    <TextBlock x:Name="tbPercent5" VerticalAlignment="Center" Text="{Binding QuantiteTransaction}" FontSize="11"
+                                          Foreground="#ffffff" HorizontalAlignment="Center"
+                                          FontFamily="{StaticResource OakSans-Regular}" />
+                                                </StackPanel>
+
+                                            </Border>
+                                        </Grid>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn CanUserResize="False" Header="Prix" Width="Auto" IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock x:Name="prixTxt" TextWrapping="Wrap" Height="Auto" TextAlignment="Center"  Foreground="#113110" ToolTip="{Binding Prix}" Text="{Binding Prix,UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{StaticResource TextH4}" Margin="0"/>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="prixTxt" Value="#ffffff" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="prixTxt" Value="#ffffff" />
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn CanUserResize="False" Header="Prix Total" Width="Auto" IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock x:Name="prixTotaltxt" TextWrapping="Wrap" Height="Auto" TextAlignment="Center"  Foreground="#606467" ToolTip="{Binding PrixTotal}" Text="{Binding PrixTotal,UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{StaticResource TextH4}" Margin="0"/>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="prixTotaltxt" Value="#ffffff" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="prixTotaltxt" Value="#ffffff" />
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="à la Date" Width="120" IsReadOnly="True" CanUserResize="False">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock  x:Name="tbPercent5"  Text="{Binding Date,StringFormat=dd/MM/yyyy}" TextAlignment="Center"  Foreground="#606467" Margin="0"
+                                                 Style="{StaticResource TextH4}"
+                                                   ToolTip="{Binding Date}"/>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="tbPercent5" Value="#ffffff" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="tbPercent5" Value="#ffffff" />
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Fournisseur" IsReadOnly="True" Width="140" CanUserSort="False" CanUserReorder="False" CanUserResize="False">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock x:Name="fornisstxt" TextWrapping="Wrap" Height="Auto" VerticalAlignment="Center" FontSize="12" Text="{Binding Nom}" Style="{StaticResource TextH2}" Margin="0"/>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="fornisstxt" Value="#ffffff" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="fornisstxt" Value="#ffffff" />
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </ScrollViewer>
+                <!--#endregion-->
+
+                <Border  Grid.Row="3" HorizontalAlignment="Right"  
                     BorderBrush="#DEE4EC" BorderThickness="1" CornerRadius="16"
                     Padding="0" Background="#ffffff" Margin="0 10 20 10" >
 
-                <StackPanel Orientation="Horizontal" >
-                    <Button Command="{Binding PreviousPageCommand}" Style="{StaticResource pagingButton2}" >
-                        <StackPanel Orientation="Horizontal" >
-                            <Path Data="{StaticResource Prev}"
+                    <StackPanel Orientation="Horizontal" >
+                        <Button Command="{Binding PreviousPageCommand}" Style="{StaticResource pagingButton2}" >
+                            <StackPanel Orientation="Horizontal" >
+                                <Path Data="{StaticResource Prev}"
                                    Fill="{StaticResource PrimeBlueBrush}"
                                    Stretch="Uniform" VerticalAlignment="Center" Margin="8 1 0 0"
                                    Width="11" Height="11"/>
 
-                        </StackPanel>
-                    </Button>
-                    <Rectangle Width="1" Fill="#DEE4EC" Margin="0"/>
+                            </StackPanel>
+                        </Button>
+                        <Rectangle Width="1" Fill="#DEE4EC" Margin="0"/>
 
-                    <Button Command="{Binding NextPageCommand}" Style="{StaticResource pagingButton}" >
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Suivant"/>
-                            <Path Data="{StaticResource Next}"
+                        <Button Command="{Binding NextPageCommand}" Style="{StaticResource pagingButton}" >
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Suivant"/>
+                                <Path Data="{StaticResource Next}"
                               Fill="{StaticResource PrimeBlueBrush}"
                               Stretch="Uniform" VerticalAlignment="Center" Margin="8 1 0 0"
                               Width="11" Height="11"/>
 
-                        </StackPanel>
-                    </Button>
-                </StackPanel>
-            </Border>
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Border>
 
+            </Grid>
         </Grid>
         <!--<local:StockTypesPagesHost Grid.Row="1" Grid.Column="1" 
                 CurrentPage="{Binding StockHostViewModel.CurrentPage,
@@ -267,4 +420,5 @@
           Source={x:Static local:ViewModelLocator.Instance}}"     />-->
 
     </Grid>
+
 </local:BasePage>

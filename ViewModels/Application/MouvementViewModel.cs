@@ -19,8 +19,8 @@ namespace MedicamentStore
     {
         protected ObservableCollection<TransactionDto> stocks;
         public ObservableCollection<TransactionDto> Stocks
-        {
-            get => stocks; 
+        { 
+            get => stocks;   
             set
             {
                 if (stocks == value)
@@ -150,6 +150,7 @@ namespace MedicamentStore
                     item.PrimaryBackground = "EF4444";
                 }
                 item.PrixTotal = double.Parse(string.Format("{0:0.00}", item.Prix * item.Quantite));
+                item.TypeMed = ((ProduitsPharmaceutiquesType)item.Type).ToProduitsPharmaceutiques();
 
             }
         }
@@ -196,7 +197,8 @@ namespace MedicamentStore
                 return;
             FilteredStocks = new ObservableCollection<TransactionDto>( Stocks.Where(item => item.Date >= startDate.Date &&
                                                                                             item.Date <= endDate.Date));
-            
+            await Task.Delay(1);
+
         }
 
         private void ClickawayMenuButton()

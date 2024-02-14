@@ -10,6 +10,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -30,11 +31,41 @@ namespace MedicamentStore
             InitializeComponent();
         }
 
-       
-       
+        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string searchText = SearchTextBox.Text.ToLower();
+            foreach (RadioButton button in PanelBtns.Children.OfType<RadioButton>())
+            {
+                if (button.Content != null && button.Content.ToString().ToLower().Contains(searchText))
+                {
+                    button.Visibility = Visibility.Visible; // Show the button if it matches the search text
+                }
+                else
+                {
+                    button.Visibility = Visibility.Collapsed; // Hide the button if it doesn't match the search text
+                }
+            }
+        }
 
-       
+        private void Image_ImageFailed(object sender, ExceptionRoutedEventArgs e)
+        {
+            ((Image)sender).Source = new BitmapImage(new Uri("pack://application:,,,/Pictures/Lp.jpg", UriKind.RelativeOrAbsolute));
+            e.Handled = true;
+        }
 
-       
+        private bool isExpanded = false;
+
+        private void expandButton_Click(object sender, RoutedEventArgs e)
+        {
+            isExpanded = !isExpanded;
+
+            DoubleAnimation rotateAnimation = new DoubleAnimation
+            {
+                To = isExpanded ? 180 : 0,
+                Duration = TimeSpan.FromSeconds(0.3)
+            };
+
+            rotateTransform.BeginAnimation(RotateTransform.AngleProperty, rotateAnimation);
+        }
     }
 }

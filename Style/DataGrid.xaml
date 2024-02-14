@@ -486,6 +486,7 @@
         <Setter Property="Foreground" Value="{StaticResource PrimaryTextColor}" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="FontFamily" Value="{StaticResource OakSans-SemiBold}" />
+        <Setter Property="FontSize" Value="12" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="Padding" Value="10,5" />
 

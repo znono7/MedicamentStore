@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="MedicamentStore.MovmentStockDocPages"
+﻿<UserControl x:Class="MedicamentStore.SorteStockDocControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -24,20 +24,20 @@
         </StackPanel>
         <StackPanel Visibility="{Binding HeaderVisible,Converter={local:BooleanToCollapsedConverter},ConverterParameter=True}" Grid.Row="1" HorizontalAlignment="Left">
             <TextBlock Text="Etablissement Public de Santé de  Proximité à Aflou"
-              Style="{StaticResource TextH2}" Margin="0 20 0 15"/>
+                     Style="{StaticResource TextH2}" Margin="0 20 0 15"/>
             <TextBlock Text="Service de Pharmacie" HorizontalAlignment="Left"
-              Style="{StaticResource TextH2}" Margin="0 0 0 15"/>
-
+                     Style="{StaticResource TextH2}" Margin="0 0 0 15"/>
+           
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding HeaderVisible,Converter={local:BooleanToCollapsedConverter},ConverterParameter=True}" Grid.Row="1" >
             <TextBlock Text="Dans: "
-       Style="{StaticResource TextH2}" Margin="0 20 0 15"/>
+              Style="{StaticResource TextH2}" Margin="0 20 0 15"/>
             <TextBlock Text="{Binding DateTod}" HorizontalAlignment="Left"
-       Style="{StaticResource TextH2}" Margin="0 20 0 15"/>
+              Style="{StaticResource TextH2}" Margin="0 20 0 15"/>
 
         </StackPanel>
         <StackPanel Visibility="{Binding HeaderVisible,Converter={local:BooleanToCollapsedConverter},ConverterParameter=True}" Grid.Row="2" HorizontalAlignment="Center">
-            <TextBlock Text="Liste des mouvements de Produits Pharmaceutiques"
+            <TextBlock Text="Liste des Sorties de Stock de Produits Pharmaceutiques"
              Style="{StaticResource TextH2}" Margin="0 20 0 15"/>
             <TextBlock Text="{Binding TypeString}" 
              Style="{StaticResource TextH2}" Margin="0 0 0 15"/>
@@ -49,25 +49,25 @@
                                   ItemsSource="{Binding Stocks}" x:Name="MyGridData"
                    VerticalAlignment="Stretch" Height="Auto">
             <DataGrid.Columns>
-
-                <DataGridTemplateColumn  Header="Produit&#x0a;Pharmaceutique" Width="*"   IsReadOnly="True"  CanUserResize="False">
+                
+                <DataGridTemplateColumn  Header="Produit Pharmaceutique" Width="*"   IsReadOnly="True"  CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10 0 0 0">
                                 <StackPanel Orientation="Horizontal">
-                                    <TextBlock TextWrapping="Wrap" Height="Auto" x:Name="tbPercent" Text="{Binding Nom_Commercial}" FontSize="10"
+                                    <TextBlock TextWrapping="Wrap" Height="Auto" x:Name="tbPercent" Text="{Binding Nom_Commercial}" FontSize="12"
                                                Foreground="{StaticResource TertiaryTextColor}"
                                                FontFamily="{StaticResource OakSans-Regular}"
                                                ToolTip="{Binding Nom_Commercial}"/>
                                     <TextBlock Text="  "/>
-                                    <TextBlock TextWrapping="Wrap" Height="Auto" x:Name="tbPercent4"  Text="{Binding Forme}" FontSize="9"
+                                    <TextBlock TextWrapping="Wrap" Height="Auto" x:Name="tbPercent4" VerticalAlignment="Bottom" Text="{Binding Forme}" FontSize="11"
                                                Foreground="{StaticResource TertiaryTextColor}"
                                                FontFamily="{StaticResource OakSans-Regular}"/>
 
 
 
                                 </StackPanel>
-                                <TextBlock TextTrimming="WordEllipsis"   x:Name="tbPercent2" VerticalAlignment="Bottom" Text="{Binding Dosage}" FontSize="9"
+                                <TextBlock TextTrimming="WordEllipsis"   x:Name="tbPercent2" VerticalAlignment="Bottom" Text="{Binding Dosage}" FontSize="11"
                                                Foreground="{StaticResource TertiaryTextColor}"
                                                FontFamily="{StaticResource OakSans-Regular}"/>
                                 
@@ -78,8 +78,8 @@
                 <DataGridTemplateColumn CanUserResize="False" Header="Type" Width="80" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock x:Name="TypeTxt"  TextWrapping="Wrap" Height="Auto" HorizontalAlignment="Center" FontSize="9" TextAlignment="Center"  Foreground="#113110" ToolTip="{Binding TypeMed}" Text="{Binding TypeMed,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextH4}" Margin="0"/>
-
+                            <TextBlock x:Name="TypeTxt" FontSize="10" TextWrapping="Wrap" Height="Auto" HorizontalAlignment="Center" TextAlignment="Center"  Foreground="#113110" ToolTip="{Binding TypeMed}" Text="{Binding TypeMed,UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{StaticResource TextH4}" Margin="0"/>
+                           
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -98,17 +98,10 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn IsReadOnly="True" Header="Quantité&#x0a;Précédente" Width="Auto"  CanUserSort="False" CanUserReorder="False" CanUserResize="False">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock TextWrapping="Wrap" Height="Auto" VerticalAlignment="Center" FontSize="12" Text="{Binding PreviousQuantity}" Style="{StaticResource TextH2}" Margin="0"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
                 <DataGridTemplateColumn IsReadOnly="True" Header="Unité" Width="Auto"  CanUserSort="False" CanUserReorder="False" CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock TextWrapping="Wrap" Height="Auto" VerticalAlignment="Center" FontSize="9" Text="{Binding Unite}" Style="{StaticResource TextH2}" Margin="0"/>
+                            <TextBlock TextWrapping="Wrap" Height="Auto" VerticalAlignment="Center" FontSize="12" Text="{Binding Unite}" Style="{StaticResource TextH2}" Margin="0"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -136,10 +129,10 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Fournisseur" IsReadOnly="True" Width="Auto" CanUserSort="False" CanUserReorder="False" CanUserResize="False">
+                <DataGridTemplateColumn Header="Fournisseur" IsReadOnly="True" Width="140" CanUserSort="False" CanUserReorder="False" CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock TextWrapping="Wrap" Height="Auto" VerticalAlignment="Center" FontSize="9" Text="{Binding Nom}" Style="{StaticResource TextH2}" Margin="0"/>
+                            <TextBlock TextWrapping="Wrap" Height="Auto" VerticalAlignment="Center" FontSize="12" Text="{Binding Nom}" Style="{StaticResource TextH2}" Margin="0"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
 

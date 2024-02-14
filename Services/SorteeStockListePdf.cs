@@ -15,9 +15,9 @@ using QuestPDF.Infrastructure;
 
 namespace MedicamentStore
 {
-    public class MovmentListeDocument : IDocument
+    public class SoretStockDocument : IDocument
     {
-        public MovmentListeDocument(ObservableCollection<TransactionDto> transactions)
+        public SoretStockDocument(ObservableCollection<TransactionDto> transactions)
         {
             Transactions = transactions;
            
@@ -39,8 +39,7 @@ namespace MedicamentStore
                 {
                     
                     page.Size(PageSizes.A4);
-                    
-                    page.Margin(1f , Unit.Centimetre);
+                    page.Margin(1.5f , Unit.Centimetre);
                     page.PageColor(Colors.White);
 
                     page.Header().ShowOnce().Element(ComposeHeader);
@@ -76,47 +75,42 @@ namespace MedicamentStore
             {
                 table.ColumnsDefinition(columns =>
                 {
-                    columns.ConstantColumn(15);
-                    columns.ConstantColumn(150);
+                    columns.ConstantColumn(20);
+                    columns.ConstantColumn(120);
                     columns.RelativeColumn();
-                    columns.ConstantColumn(50);
-                    columns.ConstantColumn(50);
-                    columns.ConstantColumn(32);
                     columns.RelativeColumn();
-                    columns.ConstantColumn(50);
+                    columns.RelativeColumn();
+                    columns.RelativeColumn();
+                    columns.RelativeColumn();
                     columns.RelativeColumn();
                 });
 
                 table.Header(header =>
                 {
                     header.Cell().Element(CellStyle).Text("#");
-                    header.Cell().Element(CellStyle).Text($"Produit{Environment.NewLine}Pharmaceutique");
+                    header.Cell().Element(CellStyle).Text("Produit Pharmaceutique");
                     header.Cell().Element(CellStyle).Text("Type");
-
                     header.Cell().Element(CellStyle).Text("Quantité");
-                    header.Cell().Element(CellStyle).Text($"Quantité{Environment.NewLine}Précédente");
                     header.Cell().Element(CellStyle).Text("Unité");
                     header.Cell().Element(CellStyle).Text("Prix");
-                   // header.Cell().Element(CellStyle).Text("Prix Total");
+                    //header.Cell().Element(CellStyle).Text("Prix Total");
                     header.Cell().Element(CellStyle).Text("à la Date");
                     header.Cell().Element(CellStyle).Text("Fournisseur");
 
                     static IContainer CellStyle(IContainer container)
                     {
-                        var headerStyle = TextStyle.Default.FontSize(7).SemiBold().FontFamily(Fonts.Lato).FontColor(Colors.Black);
+                        var headerStyle = TextStyle.Default.FontSize(10).SemiBold().FontFamily(Fonts.Tahoma).FontColor(Colors.Black);
 
-                        return container.DefaultTextStyle(headerStyle).PaddingVertical(2).Border(0.5f).BorderColor(Colors.Black).AlignCenter().AlignMiddle();
+                        return container.DefaultTextStyle(headerStyle).PaddingVertical(5).BorderBottom(1).BorderColor(Colors.Black);
                     }
                 });
 
                 foreach (var item in Transactions)
                 {
                     table.Cell().Element(CellStyle).Text($"{Transactions.IndexOf(item) + 1}");
-                    table.Cell().Element(CellStyleNomC).Text($"{item.Nom_Commercial} {item.Dosage}{Environment.NewLine}{item.Forme}");
+                    table.Cell().Element(CellStyle).Text($"{item.Nom_Commercial} {item.Dosage}{Environment.NewLine}{item.Forme}");
                     table.Cell().Element(CellStyle).Text($"{item.TypeMed}");
-
                     table.Cell().Element(CellStyle).AlignCenter().Text($"{item.SymbleType}{item.QuantiteTransaction}");
-                    table.Cell().Element(CellStyle).AlignCenter().Text($"{item.PreviousQuantity}");
                     table.Cell().Element(CellStyle).AlignLeft().Text($"{item.Unite}");
                     table.Cell().Element(CellStyle).Text($"{item.Prix.ToString("N2", CultureInfo.CurrentCulture)} DA");
                    // table.Cell().Element(CellStyle).Text($"{(item.Prix * item.QuantiteTransaction).ToString("N2", CultureInfo.CurrentCulture)} DA");
@@ -125,16 +119,11 @@ namespace MedicamentStore
 
                     static IContainer CellStyle(IContainer container)
                     {
-                        var cellStyle = TextStyle.Default.FontSize(7).NormalWeight().FontFamily(Fonts.Calibri).FontColor(Colors.Black);
+                        var cellStyle = TextStyle.Default.FontSize(9).NormalWeight().FontFamily(Fonts.Arial).FontColor(Colors.Black);
 
-                        return container.DefaultTextStyle(cellStyle).Border(0.5f).BorderColor(Colors.Grey.Lighten2).PaddingVertical(5).AlignCenter().AlignMiddle();
+                        return container.DefaultTextStyle(cellStyle).BorderBottom(1).BorderColor(Colors.Grey.Lighten2).PaddingVertical(5);
                     }
-                    static IContainer CellStyleNomC(IContainer container)
-                    {
-                        var cellStyle = TextStyle.Default.FontSize(7).NormalWeight().FontFamily(Fonts.Calibri).FontColor(Colors.Black);
-
-                        return container.DefaultTextStyle(cellStyle).Border(0.5f).BorderColor(Colors.Grey.Lighten2).PaddingVertical(5).AlignLeft().AlignMiddle();
-                    }
+                   
                 }
 
 
@@ -145,7 +134,7 @@ namespace MedicamentStore
 
         private void ComposeHeader(IContainer container)
         {
-
+          
 
             var titleStyle = TextStyle.Default.FontSize(12).SemiBold().FontFamily(Fonts.TimesNewRoman).FontColor(Colors.Black).Medium();
             var titleStyle2 = TextStyle.Default.FontSize(14).SemiBold().FontFamily(Fonts.TimesNewRoman).FontColor(Colors.Black).Medium().LineHeight(1f);
@@ -164,8 +153,7 @@ namespace MedicamentStore
                     column.Item().AlignLeft().Text("Service de Pharmacie").Style(titleStyle);
                     column.Item().AlignRight().Text($"Dans: {DateTime.Today.ToString("dd/MM/yyyy")}").Style(titleStyle);
 
-
-                    column.Item().AlignCenter().Text("Liste des mouvements de Produits Pharmaceutiques").Style(titleStyle);
+                    column.Item().AlignCenter().Text("Liste des Sorties de Stock de Produits Pharmaceutiques").Style(titleStyle);
                     column.Item().AlignCenter().Text(SetDate()).Style(titleStyle);
 
                 });
@@ -177,6 +165,7 @@ namespace MedicamentStore
             DateTime maxDate = Transactions.Max(item => item.Date);
             DateTime minDate = Transactions.Min(item => item.Date);
             return $"[{minDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)}] - [{maxDate.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture)}]";
+
         }
     }
 }

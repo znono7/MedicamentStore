@@ -34,7 +34,7 @@
             </Grid.RowDefinitions>
             <StackPanel  Height="48" Orientation="Horizontal" HorizontalAlignment="Left">
                 <Button  Command="{Binding ReturnCommand}" Style="{StaticResource IconGrowButton}" Content="&#xf060;"/>
-                <TextBlock Grid.Column="1" Text="Nouveau Stock" Margin="20 10"
+                <TextBlock Grid.Column="1" Text="Nouvelle Entrée de Stock" Margin="20 10"
                             FontFamily="{StaticResource Baloo-Regular}" Foreground="{StaticResource TertiaryTextColor}" 
                             FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 

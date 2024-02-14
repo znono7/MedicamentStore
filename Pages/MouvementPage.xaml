@@ -125,15 +125,15 @@
                     </Border.Effect>
                 </Border>
                 <!--#region Stock Initial -->
-                <ScrollViewer   VerticalScrollBarVisibility="Auto"  >
+                <ScrollViewer   VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"  >
                     <DataGrid  RowStyle="{DynamicResource DataGridRowStyle1}"
-                              ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 
-                              CellStyle="{DynamicResource DataGridCellStyle1}"
-                              x:Name="usersDataGrid" 
-                              Style="{DynamicResource DataGridStyle1}"
-                              Margin="0 10" Grid.Row="2" 
-                              ItemsSource="{Binding FilteredStocks}" 
-                              AutoGenerateColumns="False">
+                   ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" 
+                   CellStyle="{DynamicResource DataGridCellStyle1}"
+                   x:Name="usersDataGrid" 
+                   Style="{DynamicResource DataGridStyle1}"
+                   Margin="0 10" Grid.Row="2" 
+                   ItemsSource="{Binding FilteredStocks}" 
+                   AutoGenerateColumns="False">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Width="100" >
                                 <DataGridTemplateColumn.CellTemplate>
@@ -167,27 +167,27 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn  Header="Produits Pharmaceutique" Width="*"   IsReadOnly="True"  CanUserResize="False">
+                            <DataGridTemplateColumn  Header="Produits Pharmaceutique" Width="260"   IsReadOnly="True"  CanUserResize="False">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Vertical">
                                             <StackPanel Orientation="Horizontal">
                                                 <TextBlock x:Name="tbPercent" Text="{Binding Nom_Commercial}" FontSize="13"
-                                                         Foreground="{StaticResource TertiaryTextColor}"
-                                                         FontFamily="{StaticResource OakSans-Regular}"
-                                                         ToolTip="{Binding Nom_Commercial}"/>
+                              Foreground="{StaticResource TertiaryTextColor}"
+                              FontFamily="{StaticResource OakSans-Regular}"
+                              ToolTip="{Binding Nom_Commercial}"/>
                                                 <TextBlock Text=" "/>
                                                 <TextBlock TextWrapping="Wrap" Height="Auto" x:Name="tbPercent3" VerticalAlignment="Bottom" Text="{Binding Forme}" FontSize="11"
-                                                             Foreground="{StaticResource TertiaryTextColor}"
-                                                             FontFamily="{StaticResource OakSans-Regular}"
-                                                                  ToolTip="{Binding Forme}"/>
+                                  Foreground="{StaticResource TertiaryTextColor}"
+                                  FontFamily="{StaticResource OakSans-Regular}"
+                                       ToolTip="{Binding Forme}"/>
 
                                             </StackPanel>
                                             <TextBlock TextWrapping="Wrap" Height="Auto" x:Name="tbPercent2" VerticalAlignment="Bottom" Text="{Binding Dosage}" FontSize="11"
-                                                        Foreground="{StaticResource TertiaryTextColor}"
-                                                        FontFamily="{StaticResource OakSans-Regular}"
-                                                             ToolTip="{Binding Dosage}"/>
-                                            </StackPanel>
+                             Foreground="{StaticResource TertiaryTextColor}"
+                             FontFamily="{StaticResource OakSans-Regular}"
+                                  ToolTip="{Binding Dosage}"/>
+                                        </StackPanel>
                                         <DataTemplate.Triggers>
                                             <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
                                                 <Setter Property="Foreground" TargetName="tbPercent" Value="#ffffff" />
@@ -203,6 +203,21 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
+                            <DataGridTemplateColumn CanUserResize="False" Header="Type" Width="Auto" IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock x:Name="TypeTxt" TextWrapping="Wrap" Height="Auto" TextAlignment="Center"  Foreground="#113110" ToolTip="{Binding TypeMed}" Text="{Binding TypeMed,UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{StaticResource TextH4}" Margin="0"/>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="TypeTxt" Value="#ffffff" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="TypeTxt" Value="#ffffff" />
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="Quantite" Width="140" IsReadOnly="True" CanUserResize="False">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -210,11 +225,11 @@
                                             <Border Padding="6 2" Height="28" Width="Auto" CornerRadius="8" HorizontalAlignment="Left" Background="{Binding PrimaryBackground,Converter={local:StringRGBToBrushConverter}}">
                                                 <StackPanel Orientation="Horizontal">
                                                     <TextBlock x:Name="tbPercents" VerticalAlignment="Center" Text="{Binding SymbleType}" FontSize="11"
-                                                                Foreground="#ffffff" HorizontalAlignment="Center"
-                                                                FontFamily="{StaticResource OakSans-Regular}" />
+                                     Foreground="#ffffff" HorizontalAlignment="Center"
+                                     FontFamily="{StaticResource OakSans-Regular}" />
                                                     <TextBlock x:Name="tbPercent5" VerticalAlignment="Center" Text="{Binding QuantiteTransaction}" FontSize="11"
-                                                        Foreground="#ffffff" HorizontalAlignment="Center"
-                                                        FontFamily="{StaticResource OakSans-Regular}" />
+                             Foreground="#ffffff" HorizontalAlignment="Center"
+                             FontFamily="{StaticResource OakSans-Regular}" />
                                                 </StackPanel>
 
                                             </Border>
@@ -222,33 +237,86 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
+                            <DataGridTemplateColumn CanUserResize="False" Header="Quantité Précédente" Width="Auto" IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Border Padding="6 2" Height="28" Width="Auto" CornerRadius="8" HorizontalAlignment="Left" Background="#4C44A0">
+
+                                                <TextBlock x:Name="TypeTxt" TextWrapping="Wrap" Height="Auto" TextAlignment="Center"  Foreground="#ffffff" ToolTip="{Binding PreviousQuantity}" Text="{Binding PreviousQuantity,UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{StaticResource TextH4}" Margin="0"/>
+                                            </Border>
+                                        </Grid>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="TypeTxt" Value="#ffffff" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="TypeTxt" Value="#ffffff" />
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                             <DataGridTemplateColumn CanUserResize="False" Header="Prix" Width="Auto" IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock TextWrapping="Wrap" Height="Auto" TextAlignment="Center"  Foreground="#113110" ToolTip="{Binding Prix}" Text="{Binding Prix,UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{StaticResource TextH4}" Margin="0"/>
+                                        <TextBlock x:Name="prixTxt" TextWrapping="Wrap" Height="Auto" TextAlignment="Center"  Foreground="#113110" ToolTip="{Binding Prix}" Text="{Binding Prix,UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{StaticResource TextH4}" Margin="0"/>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="prixTxt" Value="#ffffff" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="prixTxt" Value="#ffffff" />
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
                                     </DataTemplate>
+
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn CanUserResize="False" Header="Prix Total" Width="Auto" IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock TextWrapping="Wrap" Height="Auto" TextAlignment="Center"  Foreground="#606467" ToolTip="{Binding PrixTotal}" Text="{Binding PrixTotal,UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{StaticResource TextH4}" Margin="0"/>
+                                        <TextBlock x:Name="prixTotaltxt" TextWrapping="Wrap" Height="Auto" TextAlignment="Center"  Foreground="#606467" ToolTip="{Binding PrixTotal}" Text="{Binding PrixTotal,UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{StaticResource TextH4}" Margin="0"/>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="prixTotaltxt" Value="#ffffff" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="prixTotaltxt" Value="#ffffff" />
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="à la Date" Width="120" IsReadOnly="True" CanUserResize="False">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock x:Name="tbPercent5"  Text="{Binding Date,StringFormat=dd/MM/yyyy}" TextAlignment="Center"  Foreground="#606467" Margin="0"
-                                                   Style="{StaticResource TextH4}"
-                                                     ToolTip="{Binding Date}"/>
+                                        <TextBlock  x:Name="tbPercent5"  Text="{Binding Date,StringFormat=dd/MM/yyyy}" TextAlignment="Center"  Foreground="#606467" Margin="0"
+                                    Style="{StaticResource TextH4}"
+                                      ToolTip="{Binding Date}"/>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="tbPercent5" Value="#ffffff" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="tbPercent5" Value="#ffffff" />
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="Fournisseur" IsReadOnly="True" Width="140" CanUserSort="False" CanUserReorder="False" CanUserResize="False">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock TextWrapping="Wrap" Height="Auto" VerticalAlignment="Center" FontSize="12" Text="{Binding Nom}" Style="{StaticResource TextH2}" Margin="0"/>
+                                        <TextBlock x:Name="fornisstxt" TextWrapping="Wrap" Height="Auto" VerticalAlignment="Center" FontSize="12" Text="{Binding Nom}" Style="{StaticResource TextH2}" Margin="0"/>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="fornisstxt" Value="#ffffff" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="fornisstxt" Value="#ffffff" />
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
