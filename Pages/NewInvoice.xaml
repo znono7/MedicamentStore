@@ -15,17 +15,7 @@
                           />
 
         </Grid.InputBindings>
-        <!-- Popup Overlay 
-         Command="{Binding ElementName=cmbCustomer, Path=DataContext.PopupClickawayCommand}"
-                  Visibility="{Binding ElementName=cmbCustomer,Path=DataContext.AnyPopupVisible, Converter={local:BooleanToVisiblityConverter}, ConverterParameter=True}"
--->
-        <!--<Border Background="Transparent" 
-          Panel.ZIndex="1"
-          Visibility="{Binding AnyPopupVisible, Converter={local:BooleanToVisiblityConverter}, ConverterParameter=True}">
-            <Border.InputBindings>
-                <MouseBinding MouseAction="LeftClick" Command="{Binding PopupClickawayCommand}" />
-            </Border.InputBindings>
-        </Border>-->
+      
         <Grid Margin="10 30 10 30">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>

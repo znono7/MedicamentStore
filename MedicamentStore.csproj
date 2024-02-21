@@ -9290,6 +9290,9 @@
     <Compile Update="Controls\Dialogs\ConfirmBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Controls\DocumentPaged\InitialStockDocControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Controls\DocumentPaged\SorteStockDocControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -9320,6 +9323,9 @@
     <Compile Update="Controls\StockTypesPagesHost.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Pages\PrintInitialStockPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Pages\PrintSorteStockPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -9330,6 +9336,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Pages\NewUser.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Stock\MainMovmentStockPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Stock\MainEntreeStockPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Pages\Stock\InvoiceHostPage.xaml.cs">

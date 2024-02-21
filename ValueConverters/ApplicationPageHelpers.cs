@@ -57,6 +57,12 @@ namespace MedicamentStore
                     return new PrintEntreeStockPage(viewModel as PrintEntreeStockViewModel);
                 case ApplicationPage.PrintSorteStockPage://
                     return new PrintSorteStockPage(viewModel as PrintSorteStockViewModel);
+                case ApplicationPage.PrintInitialStockPage://
+                    return new PrintInitialStockPage(viewModel as PrintInitialStockViewModel);
+                case ApplicationPage.MainEntreeStockPage://
+                    return new MainEntreeStockPage(viewModel as MainEntreeStockViewModel);
+                case ApplicationPage.MainMovmentStockPage://
+                    return new MainMovmentStockPage(viewModel as MainMovmentStockViewModel);
 
                 default:
                     Debugger.Break();
@@ -111,6 +117,12 @@ namespace MedicamentStore
                 return ApplicationPage.PrintEntreeStockPage;
             if (page is PrintSorteStockPage)//
                 return ApplicationPage.PrintSorteStockPage;
+            if (page is PrintInitialStockPage)//
+                return ApplicationPage.PrintInitialStockPage;
+            if (page is MainEntreeStockPage)//
+                return ApplicationPage.MainEntreeStockPage;
+            if (page is MainMovmentStockPage)//
+                return ApplicationPage.MainMovmentStockPage;
             // Alert developer of issue
             Debugger.Break();
             return default(ApplicationPage);

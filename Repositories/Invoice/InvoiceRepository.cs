@@ -160,7 +160,7 @@ namespace MedicamentStore
                 {
                     string sql = @"INSERT INTO Invoice (Date,Number,MontantTotal,ProduitTotal) 
                             VALUES (@Date,@Number,@MontantTotal,@ProduitTotal)";
-                    await _connection.ExecuteAsync(transaction.Connection,sql,transaction, invoice);
+                    await _connection.ExecuteAsync(transaction.Connection,sql,transaction, invoice); 
                     foreach (var item in invoiceDetails)
                     {
                         var ProductStock = (await _connection.QueryAsync<Stock>("SELECT * FROM Stock WHERE Id=@idS", new { idS = item.IdS })).SingleOrDefault() ;

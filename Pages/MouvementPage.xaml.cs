@@ -19,16 +19,17 @@ namespace MedicamentStore
     /// <summary>
     /// Interaction logic for MouvementPage.xaml
     /// </summary>
-    public partial class MouvementPage : BasePage<MouvementViewModel>
+    public partial class MouvementPage : BasePage
     {
         private bool isExpanded = false;
         public MouvementPage()
         {
             InitializeComponent();
         }
-        public MouvementPage(MouvementViewModel viewModel) : base(viewModel) 
+        public MouvementPage(MouvementViewModel viewModel) 
         {
             InitializeComponent();
+            DataContext = viewModel;
         }
 
         private void expandButton_Click(object sender, RoutedEventArgs e)

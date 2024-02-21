@@ -49,7 +49,7 @@ namespace MedicamentStore
             int otherPageCount = Math.Max(0, (vModel.Stocks.Count - firstPageCount + otherPageSize - 1) / otherPageSize);
             for (int i = 0; i < firstPageCount; i++)
             {
-                var pageStocks = new ObservableCollection<TransactionDto>(vModel.Stocks.Skip(i * firstPageSize).Take(firstPageSize));
+                var pageStocks = new ObservableCollection<EnterTransaction>(vModel.Stocks.Skip(i * firstPageSize).Take(firstPageSize));
                 bool isFirstPage = true;
                 bool isLastPage = false;
 
@@ -58,7 +58,7 @@ namespace MedicamentStore
 
             for (int i = 0; i < otherPageCount; i++)
             {
-                var pageStocks = new ObservableCollection<TransactionDto>(vModel.Stocks.Skip(firstPageSize + i * otherPageSize).Take(otherPageSize));
+                var pageStocks = new ObservableCollection<EnterTransaction>(vModel.Stocks.Skip(firstPageSize + i * otherPageSize).Take(otherPageSize));
                 bool isFirstPage = false;
                 bool isLastPage = i == otherPageCount - 1;
 
@@ -66,7 +66,7 @@ namespace MedicamentStore
             }
         }
 
-        private void AddPage(ObservableCollection<TransactionDto> pageStocks, bool isFirstPage, bool isLastPage, string pageNum = "1")
+        private void AddPage(ObservableCollection<EnterTransaction> pageStocks, bool isFirstPage, bool isLastPage, string pageNum = "1")
         {
             EntreeStockDocViewModel model = new EntreeStockDocViewModel(pageStocks , isFirstPage, isLastPage, pageNum);
 

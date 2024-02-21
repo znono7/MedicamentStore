@@ -85,7 +85,7 @@ namespace MedicamentStore
             AttachmentButtonCommand = new RelayCommand(AttachmentButton);
             SetFNumberCommand = new RelayCommand(SetFactNumButton);
             _ = GetFactNumber(); 
-            SetFactNum(LastFactNum);
+            SetFactNum(LastFactNum); 
       //  AttachmentDButtonCommand = new RelayCommand(AttachmentDButton);
 
         //    PaymentTerms = new List<string>

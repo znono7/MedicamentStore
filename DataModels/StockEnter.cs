@@ -42,9 +42,36 @@ namespace MedicamentStore
 
         public double PrixTotal { get; set; }
        // public int IdSupplie { get; set; }
-        public string? Nom { get; set; }
+        public string? Nom { get; set; } 
        // public DateTime Date { get; set; }
         //public string SymbleType { get; set; }
         //public int Type { get; set; }
+    }
+    public class EnterMedicaments 
+    {
+        public int IdMedicament { get; set; }
+        public string? Nom_Commercial { get; set; }
+        public string? Forme { get; set; }
+        public string? Dosage { get; set; }
+        public string? Conditionnement { get; set; }
+        public string? TypeMed { get; set; }
+        public int Type { get; set; }
+
+        private string? source;
+
+        public string? Img
+        {
+            get => source;
+            set 
+            {
+                if (value == "0")
+                {
+                    source = $"pack://application:,,,/Pictures/Lp.jpg";
+                    return;
+                }
+                source = $"pack://application:,,,/Pictures/{value}";
+
+            }
+        }
     }
 }

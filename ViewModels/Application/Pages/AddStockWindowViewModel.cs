@@ -17,7 +17,7 @@ namespace MedicamentStore
 
         public event EventHandler<UpdateQuantiteProduitEventArgs> UpdateQuantiteProduit;
         public ICommand UpdateQuantiteCommand { get; set; }
-        public int Id { get; set; }         
+        public int Id { get; set; }           
         public string? Img { get; set; }
         public string? Nom_Commercial { get; set; }
         public string? Forme { get; set; }
@@ -60,7 +60,7 @@ namespace MedicamentStore
         public async Task UpdateQ()
         {
             if (SuppCmb.SelectedId == 0)
-            {
+            { 
                 AttachmentNotifVisible = true;
                 NotificationBoxViewModel = new NotificationBoxViewModel(NotificationType.Warning," Voulez Choisez le Fournisseur...");
                 await Task.Delay(1500);

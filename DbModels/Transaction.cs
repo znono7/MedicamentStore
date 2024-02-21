@@ -40,7 +40,7 @@ namespace MedicamentStore
         public string? Forme { get; set; }
         public string? Dosage { get; set; }
         public string? Conditionnement { get; set; }
-        public string? Unite { get; set; }
+        public string? Unite { get; set; } 
         public string? PrimaryBackground { get; set; }
         public int Quantite { get; set; }
 

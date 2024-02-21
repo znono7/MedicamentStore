@@ -18,15 +18,16 @@ namespace MedicamentStore
     /// <summary> 
     /// Interaction logic for NewStockPage.xaml
     /// </summary>
-    public partial class NewStockPage : BasePage<NewStockViewModel>
+    public partial class NewStockPage : BasePage
     {
         public NewStockPage()
         {
             InitializeComponent();
         }
-        public NewStockPage(NewStockViewModel viewModel) : base(viewModel) 
+        public NewStockPage(NewStockViewModel viewModel) 
         {
             InitializeComponent();
+            DataContext = viewModel;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

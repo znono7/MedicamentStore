@@ -11,11 +11,12 @@ namespace MedicamentStore
     { 
       
         Task<IEnumerable<MedicamentStock>> GetPagedStocksAsync(int pageNumber, int pageSize, ProduitsPharmaceutiquesType type);
-        Task<IEnumerable<TransactionDto>> GetPagedEntreeStocksAsync(int pageNumber, int pageSize, ProduitsPharmaceutiquesType type);
+        Task<IEnumerable<TransactionDto>> GetPagedEntreeStocksAsync(int pageNumber, int pageSize, ProduitsPharmaceutiquesType type); 
+        Task<IEnumerable<MedicamentStock>> GetAllEntreeStocksAsync(int pageNumber, int pageSize, ProduitsPharmaceutiquesType type);
         Task<IEnumerable<TransactionDto>> GetPagedSorteStocksAsync(int pageNumber, int pageSize, ProduitsPharmaceutiquesType type);
-        Task<DbResponse> DeleteStockAsync(Stock stock); 
+        Task<DbResponse> DeleteStockAsync(int id); 
         Task<DbResponse> UpdateStockAsync(MedicamentStock stock);
-        Task<DbResponse<NewProduitPharmaStock>> AddNewStockAsync(ObservableCollection<NewProduitPharmaStock> newProducts);
+        Task<DbResponse<NewProduitPharmaStock>> AddNewStockAsync(ObservableCollection<NewProduitPharmaStock> newProducts); 
         Task<IEnumerable<ProduitPharma>> GetProduitStocksAsync(string Word, int id);
         Task<IEnumerable<MedicamentStock>> GetMedicamentStocksAsync(ProduitsPharmaceutiquesType type);
         IEnumerable<Unite> GetUnitsAsync();
@@ -25,6 +26,9 @@ namespace MedicamentStore
 
         #region Stock Enter
         Task<DbResponse<StockEnter>> AddStockEnterAsync(StockEnter stockEnter);
+
+        Task<DbResponse> UpdateStock(List<MedicamentUpdateStock> newProduits, Invoice invoice, List<InvoiceItem> invoiceItems);
+        Task<DbResponse> NewStock(List<NewProduitPharmaStock> newProduits, Invoice invoice, List<InvoiceItem> invoiceItems);
 
         #endregion
     }

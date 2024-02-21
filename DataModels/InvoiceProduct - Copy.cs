@@ -30,7 +30,7 @@ namespace MedicamentStore
                     PrixTotal = 0;
                     return;
 
-                }
+                } 
                 if(value > QuantiteRest)
                 {
                     IoC.NotificationBox.ShowMessage(new NotificationBoxViewModel(NotificationType.Error, "La Quantité ne peut pas être Supérieure à la Quantité Restante."));

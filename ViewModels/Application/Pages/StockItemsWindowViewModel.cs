@@ -76,7 +76,7 @@ namespace MedicamentStore
         #endregion 
 
         #region Public Command 
-         
+          
         public ICommand SetItemCommand { get; set; }
 
         /// <summary>
@@ -145,6 +145,7 @@ namespace MedicamentStore
 
         public void OnProduitSelected(ProduitPharma produitPharma)
         {
+            
             ProduitSelected?.Invoke(this, new SelectProduitEventArgs { SelectedProductStock = produitPharma});
         }
         public async Task ProduitSelectedFunc(object param)

@@ -11,17 +11,19 @@ namespace MedicamentStore
     public class PrintMovmentStockViewModel : BaseViewModel
     {
         public ICommand ReturnCommand { get; set; }
-        public ObservableCollection<TransactionDto> Stocks { get; }
+        public ObservableCollection<MouvementStocks> Stocks { get; set; }
 
-        public PrintMovmentStockViewModel(ObservableCollection<TransactionDto> stocks) 
+        public PrintMovmentStockViewModel(ObservableCollection<MouvementStocks> stocks) 
         {
             ReturnCommand = new RelayCommand(async () => await ToBackPage());
             Stocks = stocks;
         }
-
-        private async Task ToBackPage()
+         
+        private async Task ToBackPage() 
         {
-            IoC.Application.GoToPage(ApplicationPage.MouvementPage);
+            
+           // IoC.Application.GoToPage(ApplicationPage.MouvementPage,new MouvementViewModel(Stocks.FirstOrDefault().IdMedicament));
+            IoC.Application.GoToPage(ApplicationPage.MainMovmentStockPage);
             await Task.Delay(1);
         }
     }

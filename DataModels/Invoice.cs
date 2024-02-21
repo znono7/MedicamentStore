@@ -9,9 +9,14 @@ namespace MedicamentStore
     public class Invoice
     {
         public int Id { get; set; }
-        public string? Date { get; set; }
+        public DateTime Date { get; set; }
         public string? Number { get; set; }
         public double MontantTotal { get; set; }
         public int ProduitTotal { get; set; }
+        public int IdSupplie { get; set; }
+        public int InvoiceType { get; set; }
+
+        public string NomSupplie { get; set; }
+
     }
 }

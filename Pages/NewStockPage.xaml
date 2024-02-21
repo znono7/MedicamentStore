@@ -1,4 +1,4 @@
-﻿<local:BasePage x:TypeArguments="local:NewStockViewModel" x:Class="MedicamentStore.NewStockPage"
+﻿<local:BasePage  x:Class="MedicamentStore.NewStockPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -15,17 +15,7 @@
                           />
 
         </Grid.InputBindings>
-        <!-- Popup Overlay 
-         Command="{Binding ElementName=cmbCustomer, Path=DataContext.PopupClickawayCommand}"
-                  Visibility="{Binding ElementName=cmbCustomer,Path=DataContext.AnyPopupVisible, Converter={local:BooleanToVisiblityConverter}, ConverterParameter=True}"
--->
-        <!--<Border Background="Transparent" 
-          Panel.ZIndex="1"
-          Visibility="{Binding AnyPopupVisible, Converter={local:BooleanToVisiblityConverter}, ConverterParameter=True}">
-            <Border.InputBindings>
-                <MouseBinding MouseAction="LeftClick" Command="{Binding PopupClickawayCommand}" />
-            </Border.InputBindings>
-        </Border>-->
+       
         <Grid Margin="10 30 10 30">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
@@ -33,8 +23,8 @@
 
             </Grid.RowDefinitions>
             <StackPanel  Height="48" Orientation="Horizontal" HorizontalAlignment="Left">
-                <Button  Command="{Binding ReturnCommand}" Style="{StaticResource IconGrowButton}" Content="&#xf060;"/>
-                <TextBlock Grid.Column="1" Text="Nouvelle Entrée de Stock" Margin="20 10"
+                <Button  Cursor="Hand" Command="{Binding ReturnCommand}" Style="{StaticResource IconGrowButton}" Content="&#xf060;"/>
+                <TextBlock Grid.Column="1" Text="{Binding TitlePage}" Margin="20 10"
                             FontFamily="{StaticResource Baloo-Regular}" Foreground="{StaticResource TertiaryTextColor}" 
                             FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
@@ -66,11 +56,93 @@
                 </Border>
                 <Grid Margin="10">
                     <local:CustomerCmbSuppControl HorizontalAlignment="Left" x:Name="cmbCustomer" DataContext="{Binding SuppCmb}"/>
-                    <local:TextEntryDateInvControl HorizontalAlignment="Right" DataContext="{Binding dateViewModel}"/>
+                    <!--<local:TextEntryDateInvControl HorizontalAlignment="Right" DataContext="{Binding dateViewModel}"/>-->
+                    <local:InvoiceInfoControl HorizontalAlignment="Right" DataContext="{Binding invoice}"/>
+
                 </Grid>
                 <Grid Margin="10" Grid.Row="1">
                     <StackPanel>
-                        <ScrollViewer  VerticalScrollBarVisibility="Auto">
+                        <!--#region DataGrid for Update -->
+                        <ScrollViewer Visibility="{Binding IsForUpdate,Converter={local:BooleanToCollapsedConverter} , ConverterParameter=true}"   VerticalScrollBarVisibility="Auto">
+                            <DataGrid Style="{DynamicResource DataGridStyle2}"
+                                  RowStyle="{DynamicResource DataGridRowStyle2}"
+                                  CellStyle="{DynamicResource DataGridCellStyle2}"
+                                  ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle2}"
+                                  ItemsSource="{Binding UpdateStockProducts}">
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn  Header="Produit Pharmaceutique" Width="*"   IsReadOnly="True"  CanUserResize="False">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10 0 0 0">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock x:Name="tbPercent" Text="{Binding Nom_Commercial}" FontSize="16"
+                                                                       Foreground="{StaticResource TertiaryTextColor}"
+                                                                       FontFamily="{StaticResource OakSans-Regular}"
+                                                                       ToolTip="{Binding Nom_Commercial}"/>
+                                                        <TextBlock Text="  "/>
+                                                        <TextBlock x:Name="tbPercent2" VerticalAlignment="Bottom" Text="{Binding Dosage}" FontSize="12"
+                                                                           Foreground="{StaticResource TertiaryTextColor}"
+                                                                           FontFamily="{StaticResource OakSans-Regular}"/>
+                                                        <TextBlock Text="  "/>
+                                                        <TextBlock x:Name="tbPercent3" VerticalAlignment="Bottom" Text="{Binding Forme}" FontSize="12"
+                                                                       Foreground="{StaticResource TertiaryTextColor}"
+                                                                       FontFamily="{StaticResource OakSans-Regular}"/>
+                                                    </StackPanel>
+                                                    <!--<TextBlock x:Name="tbPercent4" VerticalAlignment="Bottom" Text="{Binding Conditionnement}" FontSize="12"
+                                               Foreground="{StaticResource TertiaryTextColor}"
+                                               FontFamily="{StaticResource OakSans-Regular}"/>-->
+
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+
+                                    <DataGridTemplateColumn Header="Quantité" Width="130">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBox Text="{Binding QuantiteAdded,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay,Converter={local:IntegerConverter}}" Style="{StaticResource TextEntryQua}" Margin="0"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn 
+                                                            Header="Quantité en Stock" Width="Auto" IsReadOnly="True" CanUserReorder="False" CanUserResize="False" CanUserSort="False">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBox IsReadOnly="True" Text="{Binding Quantite,UpdateSourceTrigger=PropertyChanged,Converter={local:IntegerConverter}}" Style="{StaticResource TextEntryQua}" Margin="0"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="Unité" Width="Auto">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBox IsReadOnly="True" Text="{Binding Unite,UpdateSourceTrigger=PropertyChanged,Converter={local:IntegerConverter}}" Style="{StaticResource TextEntryQua}" Margin="0"/>
+
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="Prix" Width="130">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBox Text="{Binding Prix,UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{StaticResource TextEntryQua}" Margin="0"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="Prix Total" IsReadOnly="True" Width="110" CanUserSort="False" CanUserReorder="False" CanUserResize="False">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBox IsReadOnly="True" Text="{Binding PrixTotal,UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{StaticResource TextEntryQua}" Margin="0"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                 
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
+
+                        <!--#endregion-->
+                        <!--#region DataGrid For New Stock -->
+                        <ScrollViewer Visibility="{Binding IsForUpdate,Converter={local:BooleanToCollapsedConverter}}"   VerticalScrollBarVisibility="Auto">
                             <DataGrid Style="{DynamicResource DataGridStyle2}"
                                   RowStyle="{DynamicResource DataGridRowStyle2}"
                                   CellStyle="{DynamicResource DataGridCellStyle2}"
@@ -112,6 +184,7 @@
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
+                                  
                                     <DataGridTemplateColumn Header="Unité" Width="94">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
@@ -128,7 +201,15 @@
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
-                                    <DataGridTemplateColumn  IsReadOnly="True" Width="40" CanUserResize="False">
+                                    <DataGridTemplateColumn Header="Prix Total" IsReadOnly="True" Width="110" CanUserSort="False" CanUserReorder="False" CanUserResize="False">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBox IsReadOnly="True" Text="{Binding PrixTotal,UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{StaticResource TextEntryQua}" Margin="0"/>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn  
+                                                            IsReadOnly="True" Width="40" CanUserResize="False">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -145,11 +226,14 @@
                                 </DataGrid.Columns>
                             </DataGrid>
                         </ScrollViewer>
-                        <Button Foreground="#D64646"  Margin="0"  HorizontalAlignment="Right" VerticalAlignment="Bottom" Style="{StaticResource TextButton}" 
+                        <!--#endregion-->
+                        <Button Visibility="{Binding IsForUpdate,Converter={local:BooleanToCollapsedConverter}}" 
+                            Foreground="#D64646"  Margin="0"  HorizontalAlignment="Right" VerticalAlignment="Bottom" Style="{StaticResource TextButton}" 
                             Content="Nettoyer" Command="{Binding ClearCommand}" />
                     </StackPanel>
                 </Grid>
-                <Button Grid.Row="2" HorizontalAlignment="Left" Style="{StaticResource TextButton}" Tag="{StaticResource plus}"
+                <Button Visibility="{Binding IsForUpdate,Converter={local:BooleanToCollapsedConverter}}" 
+                        Grid.Row="2" HorizontalAlignment="Left" Style="{StaticResource TextButton}" Tag="{StaticResource plus}"
                         Content="Ajouter Produit Pharmaceutique" Command="{Binding OpenWindowCommand}" />
             </Grid>
 

@@ -23,7 +23,7 @@ namespace MedicamentStore
                 OnPropertyChanged(nameof(Users));
             }
         }
-
+         
         public string NbrUser { get; set; } = "Aucun utilisateur";
         public ICommand? NewUser {  get; set; } 
         public ICommand? DeleteCommand {  get; set; }

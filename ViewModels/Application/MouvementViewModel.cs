@@ -17,9 +17,9 @@ namespace MedicamentStore
 {
     public class MouvementViewModel : BaseViewModel
     {
-        protected ObservableCollection<TransactionDto> stocks;
-        public ObservableCollection<TransactionDto> Stocks
-        { 
+        protected ObservableCollection<MouvementStocks> stocks;
+        public ObservableCollection<MouvementStocks> Stocks
+        {  
             get => stocks;   
             set
             {
@@ -27,11 +27,11 @@ namespace MedicamentStore
                     return;
                 stocks = value;
 
-                FilteredStocks = new ObservableCollection<TransactionDto>(stocks);
+                FilteredStocks = new ObservableCollection<MouvementStocks>(stocks);
             }
         }
          
-        public ObservableCollection<TransactionDto> FilteredStocks { get; set; }
+        public ObservableCollection<MouvementStocks> FilteredStocks { get; set; }
         public DateFilterViewModel DateFilterViewModel { get; set; }
         public ObservableCollection<TypeProduct> TypeItems { get; set; }
         public string DateStat => DateFilterViewModel.DateStat;
@@ -71,31 +71,71 @@ namespace MedicamentStore
   
                     if(_selectedIndex == 0)
                     {
-                        FilteredStocks = new ObservableCollection<TransactionDto>(Stocks);
+                        FilteredStocks = new ObservableCollection<MouvementStocks>(Stocks);
 
                     }
                     else
                     {
-                        FilteredStocks = new ObservableCollection<TransactionDto>(Stocks.Where(item => item.Type == _selectedIndex));
+                        FilteredStocks = new ObservableCollection<MouvementStocks>(Stocks.Where(item => item.Type == _selectedIndex));
 
                     }
 
                 }
             }
         }
-        public MouvementViewModel()
+
+        public int IdMedicament { get; set; }
+        public bool IsLoading { get; set; }
+        public ICommand ReturnCommand { get; set; }
+
+        public MouvementViewModel(int idMedicament)
         {
             DateFilterViewModel = new DateFilterViewModel();
-            GetTypes();
+           // GetTypes();
             ExpandCommand = new RelayCommand(AttachmentMenuButton);
             PopupClickawayCommand = new RelayCommand(ClickawayMenuButton);
             FilterDataCommand = new RelayCommand(async () => await FilterData());
             PrintCommand = new RelayCommand(async () => await ShowDocument());
             PrintPdfCommand = new RelayCommand(ShowPdfDocument);
+            ReturnCommand = new RelayCommand(async () => await ToBackPage());
 
-            _ = LoadData();
+            //_ = LoadData();
+            IdMedicament = idMedicament;
+            _ = GetMovment(IdMedicament);
+
         }
+        private async Task ToBackPage()
+        {
+            IoC.Application.GoToPage(ApplicationPage.MainMovmentStockPage);
+            await Task.Delay(1);
+        }
+        private async Task GetMovment(int id)
+        {
+            IsLoading = true;
+            var Result = await IoC.TransactionManager.GetAllMovement(id);
+            if (Result != null)
+            {
+                Stocks = new ObservableCollection<MouvementStocks>(Result);
+                foreach (var item in Stocks)
+                {
+                    item.TypeMed = ((ProduitsPharmaceutiquesType)item.Type).ToProduitsPharmaceutiques();
+                    if(item.TypeTransaction == 1)
+                    {
+                        item.StockIn = $"+{item.QuantiteTransaction}";
+                        item.StockOut = "/";
 
+                    }
+                    else
+                    {
+                        item.StockIn = "/";
+
+                        item.StockOut = $"-{item.QuantiteTransaction}";
+                    }
+                }
+            }
+            IsLoading = false;
+
+        }
         private void ShowPdfDocument()
         {
            
@@ -125,34 +165,37 @@ namespace MedicamentStore
             }
 
 
-            
+
         }
 
         private async Task ShowDocument()
         {
+            if(FilteredStocks.Any())
+            {
+                IoC.Application.GoToPage(ApplicationPage.PrintMovmentStockPage, new PrintMovmentStockViewModel(FilteredStocks));
+            }
 
-            IoC.Application.GoToPage(ApplicationPage.PrintMovmentStockPage, new PrintMovmentStockViewModel(FilteredStocks));
             await Task.Delay(1);
         }
         public async Task LoadData()
         {
-            var Result = await IoC.TransactionManager.GetAll();
-            Stocks = new ObservableCollection<TransactionDto>(Result);
-            foreach (var item in Stocks)
-            {
-                if(item.TypeTransaction == 1) 
-                {
-                    item.SymbleType = "+";
-                    item.PrimaryBackground = "349432";
-                }else if (item.TypeTransaction == 2)
-                {
-                    item.SymbleType = "-";
-                    item.PrimaryBackground = "EF4444";
-                }
-                item.PrixTotal = double.Parse(string.Format("{0:0.00}", item.Prix * item.Quantite));
-                item.TypeMed = ((ProduitsPharmaceutiquesType)item.Type).ToProduitsPharmaceutiques();
+            //var Result = await IoC.TransactionManager.GetAll();
+            //Stocks = new ObservableCollection<TransactionDto>(Result);
+            //foreach (var item in Stocks)
+            //{
+            //    if(item.TypeTransaction == 1) 
+            //    {
+            //        item.SymbleType = "+";
+            //        item.PrimaryBackground = "349432";
+            //    }else if (item.TypeTransaction == 2)
+            //    {
+            //        item.SymbleType = "-";
+            //        item.PrimaryBackground = "EF4444";
+            //    }
+            //    item.PrixTotal = double.Parse(string.Format("{0:0.00}", item.Prix * item.Quantite));
+            //    item.TypeMed = ((ProduitsPharmaceutiquesType)item.Type).ToProduitsPharmaceutiques();
 
-            }
+            //}
         }
         private async Task FilterData()
         {
@@ -161,7 +204,7 @@ namespace MedicamentStore
             switch (DateFilterViewModel.CurrentDateFilterType)
             {
                 case DateFilterType.None:
-                    FilteredStocks = new ObservableCollection<TransactionDto>(Stocks);
+                    FilteredStocks = new ObservableCollection<MouvementStocks>(Stocks);
                     return;
                 case DateFilterType.Today:
                     startDate = DateTime.Today;
@@ -195,7 +238,7 @@ namespace MedicamentStore
             }
             if (startDate > endDate)
                 return;
-            FilteredStocks = new ObservableCollection<TransactionDto>( Stocks.Where(item => item.Date >= startDate.Date &&
+            FilteredStocks = new ObservableCollection<MouvementStocks>( Stocks.Where(item => item.Date >= startDate.Date &&
                                                                                             item.Date <= endDate.Date));
             await Task.Delay(1);
 

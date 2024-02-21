@@ -9,14 +9,14 @@ namespace MedicamentStore
 {
     public class EntreeStockDocViewModel : BaseViewModel
     {
-        public ObservableCollection<TransactionDto> Stocks { get; set; }
+        public ObservableCollection<EnterTransaction> Stocks { get; set; }
 
         public bool HeaderVisible { get; set; }
         public bool FooterVisible { get; set; }
         public string NumPage { get; set; }
         public string TypeString { get; set; }
         public string DateTod {  get; set; }
-        public EntreeStockDocViewModel(ObservableCollection<TransactionDto> stocks, bool headerVisible, bool footerVisible, string numPage)
+        public EntreeStockDocViewModel(ObservableCollection<EnterTransaction> stocks, bool headerVisible, bool footerVisible, string numPage)
         {
             Stocks = stocks;
             HeaderVisible = headerVisible; 
@@ -40,7 +40,7 @@ namespace MedicamentStore
         public bool HeaderVisible { get; set; }
         public bool FooterVisible { get; set; }
         public string NumPage { get; set; }
-        public string TypeString { get; set; } 
+        public string TypeString { get; set; }  
         public string DateTod { get; set; }
         public SorteStockDocViewModel(ObservableCollection<TransactionDto> stocks, bool headerVisible, bool footerVisible, string numPage)
         {

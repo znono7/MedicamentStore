@@ -19,9 +19,9 @@ namespace MedicamentStore
         public ICommand? InvoicePage { get; set; }
         public ICommand? MouvementPage { get; set; }//EntreeStockPage
         public ICommand? EntreeStockPage { get; set; }//
-
+         
         public MenuViewModel()
-        {
+        { 
             HomePage = new RelayCommand(async () => await HomePageAsync());
             UsersPage = new RelayCommand(async () => await UsersPageAsync());
             ParemetrePage = new RelayCommand(async () => await ParemPageAsync());
@@ -35,13 +35,14 @@ namespace MedicamentStore
 
         private async Task ToEntreeStockPageAsync()
         {
-            IoC.Application.GoToPage(ApplicationPage.EntreeStockPage);
+            IoC.Application.GoToPage(ApplicationPage.MainEntreeStockPage);
+            //IoC.Application.GoToPage(ApplicationPage.EntreeStockPage);
             await Task.Delay(1);
         }
 
         private async Task ToMouvementPagePageAsync()
         {
-            IoC.Application.GoToPage(ApplicationPage.MouvementPage);
+            IoC.Application.GoToPage(ApplicationPage.MainMovmentStockPage);
             await Task.Delay(1);
         }
 

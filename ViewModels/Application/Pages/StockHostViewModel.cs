@@ -1,14 +1,17 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using QuestPDF.Fluent;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
+using System.Diagnostics;
+using System.Globalization; 
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Input;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Windows.Input; 
 
 namespace MedicamentStore
 {
@@ -28,8 +31,8 @@ namespace MedicamentStore
         } 
 
         private int _currentPage = 1;   
-        private int _pageSize = 10; // Number of rows per page     
-            
+        private int _pageSize = 10; // Number of rows per page       
+              
         public int CurrentPage   
         {
             get { return _currentPage; }
@@ -45,9 +48,10 @@ namespace MedicamentStore
         }
 
         public ICommand NextPageCommand { get; private set; }
-        public ICommand PreviousPageCommand { get; private set; }
+        public ICommand PreviousPageCommand { get; private set; } 
         public ICommand PrintCommand { get; private set; }
         public ICommand UpdateQuantiteCommand { get; private set; }
+        public ICommand PrintPdfCommand { get; set; }
         public BaseViewModel CurrentPageViewModel { get; set; } 
          
         protected ObservableCollection<MedicamentStock> stocks;   
@@ -167,6 +171,39 @@ namespace MedicamentStore
             PreviousPageCommand = new RelayCommand(PreviousPage);
             PrintCommand = new RelayCommand(ShowDocument);
             UpdateQuantiteCommand = new RelayParameterizedCommand((p) => UpdateQuantite(p));
+            PrintPdfCommand = new RelayCommand(ShowPdfDocument);
+
+        }
+
+        private void ShowPdfDocument()
+        {
+
+            // Create a SaveFileDialog
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "PDF files (*.pdf)|*.pdf|All files (*.*)|*.*";
+            saveFileDialog.FilterIndex = 1;
+            saveFileDialog.RestoreDirectory = true;
+
+            // Show the dialog and get the selected file path
+            bool? result = saveFileDialog.ShowDialog();
+
+            if (result == true)
+            {
+                string filePath = saveFileDialog.FileName;
+
+                var document = new InitialStockDocument(FilteredStocks);
+                document.GeneratePdf(filePath);
+
+                Process.Start("explorer.exe", filePath);
+
+                MessageBox.Show("PDF saved successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show("File saving canceled.", "Canceled", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+
+
 
         }
 
@@ -188,40 +225,51 @@ namespace MedicamentStore
 
         private void UpdateQuantite(object p)
         {
-            if (p is MedicamentStock medicament)
+            if (p is MedicamentStock medicament) 
             {
-                
-                AddStockWindowViewModel viewModel = new AddStockWindowViewModel(medicament);
-
-                var itemToUpdate = Stocks.FirstOrDefault(item => item.Id == medicament.Id);
-
-                viewModel.UpdateQuantiteProduit += (sender, e) =>
+                ObservableCollection<MedicamentUpdateStock> l = new ObservableCollection<MedicamentUpdateStock> 
+                { 
+                    new MedicamentUpdateStock
                     {
-                        if(itemToUpdate != null)
-                        {
-                            itemToUpdate.Quantite =  e.UpdateQuantiteStock.Quantite;
+                        IdMedicament = medicament.Id,
+                        Nom_Commercial = medicament.Nom_Commercial,
+                        Forme = medicament.Forme,
+                        Dosage = medicament.Dosage,
+                        Unite = medicament.Unite,
+                        Prix = medicament.Prix,
+                        IdStock = medicament.Ids,
+                        Quantite = medicament.Quantite,
+                        IdUnite = medicament.IdUnite,
+                        Type = medicament.Type,
+                    }
+                };
+               
+                IoC.Application.GoToPage(ApplicationPage.NewStockPage,new NewStockViewModel(l));
 
-                            int index = Stocks.IndexOf(itemToUpdate);
-                            Stocks[index] = itemToUpdate;
-                            FilteredStocks = new ObservableCollection<MedicamentStock>(Stocks);
-                        }
-                    };
-                AddStockWindow window = new AddStockWindow(viewModel);
-                window.Show();
+                //AddStockWindowViewModel viewModel = new AddStockWindowViewModel(medicament);
+
+                //var itemToUpdate = Stocks.FirstOrDefault(item => item.Id == medicament.Id); 
+
+                //viewModel.UpdateQuantiteProduit += (sender, e) =>
+                //    {
+                //        if(itemToUpdate != null)
+                //        {
+                //            itemToUpdate.Quantite =  e.UpdateQuantiteStock.Quantite;
+
+                //            int index = Stocks.IndexOf(itemToUpdate);
+                //            Stocks[index] = itemToUpdate;
+                //            FilteredStocks = new ObservableCollection<MedicamentStock>(Stocks);
+                //        }
+                //    };
+                //AddStockWindow window = new AddStockWindow(viewModel);
+                //window.Show();
             }
         }
 
         private void ShowDocument()
         {
 
-            DocumentsReportHost documentsReport = new DocumentsReportHost(CurrentTypePage);
-            documentsReport.Show();
-            //IoC.StockDocuments.ShowDocument(new PrintStockListViewModel(CurrentTypePage)
-            //{
-             
-            //    Title = "Aperçu Avant Impression",
-            //    TypeString = CurrentTypePage.ToProduitsPharmaceutiques()
-            //});
+            IoC.Application.GoToPage(ApplicationPage.PrintInitialStockPage, new PrintInitialStockViewModel(FilteredStocks));
         }
         private void NextPage()
         {
@@ -246,10 +294,7 @@ namespace MedicamentStore
                 IoC.ConfirmBox.ShowMessage(viewModel);
                 if (viewModel.IsConfirmed)
                 {
-                   var res = IoC.StockManager.DeleteStockAsync(new Stock
-                    {
-                        Id = newProduit.Ids
-                    });
+                   var res = IoC.StockManager.DeleteStockAsync(newProduit.Ids);
                     if (res.Result.Successful)
                     {
                         Stocks.Remove(newProduit);
@@ -298,6 +343,8 @@ namespace MedicamentStore
             foreach (var Stock in Result)
             {
                 UpdateStatus(Stock);
+                Stock.TypeMed = ((ProduitsPharmaceutiquesType)Stock.Type).ToProduitsPharmaceutiques();
+
             }
             Stocks = new ObservableCollection<MedicamentStock>(Result);
             _ = GetStockNumbers(CurrentTypePage);

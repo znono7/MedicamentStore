@@ -19,7 +19,7 @@ namespace MedicamentStore
          
         public NotificationBoxViewModel notificationBoxViewModel { get; set; }
         public bool AttachmentNotifVisible { get; set; } 
-
+         
         /// <summary>
         /// True if any popup menus are visible
         /// </summary>
@@ -69,7 +69,7 @@ namespace MedicamentStore
 
         public async Task Save()
         {
-            if(InvoiceProducts.Count == 0)
+            if(InvoiceProducts.Count == 0) 
             {
                 await IoC.NotificationBox.ShowMessage(new NotificationBoxViewModel(NotificationType.Warning, $"Voulez Choisez les Produits..."));
                 return;
@@ -79,7 +79,7 @@ namespace MedicamentStore
             var InvoiceInfo = new Invoice
             {
                 Number = invoice.EnteredNumText,
-                Date = invoice.SelectedDate.ToShortDateString(),
+                Date = invoice.SelectedDate,
                 ProduitTotal = InvoiceProducts.Count,
                 MontantTotal = InvoiceProducts.Sum(x => x.PrixTotal)
             };

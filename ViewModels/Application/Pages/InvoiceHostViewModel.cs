@@ -18,7 +18,7 @@ namespace MedicamentStore
         public DateFilterViewModel DateFilterViewModel { get; set; }
 
         private ProduitsPharmaceutiquesType _CurrentTypePage { get; set; } = ProduitsPharmaceutiquesType.None;
-        public ProduitsPharmaceutiquesType CurrentTypePage 
+        public ProduitsPharmaceutiquesType CurrentTypePage  
         {
             get => _CurrentTypePage;
             set
@@ -342,10 +342,7 @@ namespace MedicamentStore
                 IoC.ConfirmBox.ShowMessage(viewModel);
                 if (viewModel.IsConfirmed)
                 {
-                    var res = IoC.StockManager.DeleteStockAsync(new Stock
-                    {
-                        Id = newProduit.IdStock
-                    });
+                    var res = IoC.StockManager.DeleteStockAsync(newProduit.IdStock);
                     if (res.Result.Successful)
                     {
                         Stocks.Remove(newProduit);
@@ -421,8 +418,8 @@ namespace MedicamentStore
 
         private async Task ToNewItemStockWindow()
         {
-            IoC.Application.GoToPage(ApplicationPage.NewInvoice); 
-            await Task.Delay(1);
+            IoC.Application.GoToPage(ApplicationPage.NewInvoice ); 
+            await Task.Delay(1); 
         }
         public async Task MedicamentButton(object param)
         {

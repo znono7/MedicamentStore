@@ -8,18 +8,57 @@ namespace MedicamentStore
    public class NewProduitPharmaStock : BaseViewModel
     {
         public int Id { get; set; }
-        public string? Nom_Commercial { get; set; } 
+        public int IdStock { get; set; }
+        public string? Nom_Commercial { get; set; }  
         public string? Forme { get; set; } 
         public string? Dosage { get; set; } 
+        public string? UniteStock { get; set; } 
         public string? Conditionnement { get; set; }
-        public int Type { get; set; } = 0;
+        public int Type { get; set; } = 0; 
 
-        public double Prix { get; set; } = 0;  
-        public int Quantite { get; set; } = 0; 
+        private double _prix {  get; set; }
+        public double Prix {get => _prix; 
+            set 
+            {
+                _prix = value;
+                PrixTotal = Quantite * _prix;
+                OnPropertyChanged(nameof(Quantite));
+                OnPropertyChanged(nameof(PrixTotal));
+            }
+        }
+      
+        public double PrixTotal { get; set; }
+
+        public int QEnStock { get; set; }
+        protected int _quanttie { get; set; }
+        public int Quantite
+        {
+            get => _quanttie;
+            set
+
+            {
+                if (value == 0)
+                {
+                   
+                    _quanttie = 0;
+                    PrixTotal = 0;
+                    return;
+
+                }
+               
+                _quanttie = value;
+
+               
+                PrixTotal = _quanttie * Prix;
+                OnPropertyChanged(nameof(Quantite));
+                OnPropertyChanged(nameof(PrixTotal)); 
+            }
+        }
         public int Unit { get; set; } 
         public int IdSupplie { get; set; } = 0;
         public string? Date { get; set; }
 
+        public bool IsStock { get; set; }
         private ObservableCollection<Unite> _items;
 
         public ObservableCollection<Unite> Items
@@ -32,27 +71,7 @@ namespace MedicamentStore
             }
         }
         public Unite SelectedUnite { get; set; }
-        //private Unite _selectedUnite {  get; set; }
-
-        //public Unite SelectedUnite
-        //{
-        //    get { return _selectedUnite; }
-        //    set
-        //    {
-        //        OnPropertyChanged(nameof(SelectedUnite));
-
-        //        // Your additional logic when the selection changes
-        //        if (_selectedUnite == null)
-        //        {
-        //            Unit = 1;
-        //        }
-        //        else
-        //        {
-        //            Unit = _selectedUnite.Id;
-        //        }
-
-        //    }
-        //}
+       
         public NewProduitPharmaStock()
         {
              Initialize();

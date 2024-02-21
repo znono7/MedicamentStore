@@ -14,7 +14,7 @@ namespace MedicamentStore
         public int Id { get; set; }
         public int IdS { get; set; }
          
-        public string? InvoiceNumber { get; set; } 
+        public string? InvoiceNumber { get; set; }  
         public int ProductId { get; set; } 
 
         protected int _quanttie { get; set; } 
@@ -64,7 +64,8 @@ namespace MedicamentStore
 
         private string? source;
 
-      
+        public string? Nom { get; set; }
+
 
         public string? Img
         {

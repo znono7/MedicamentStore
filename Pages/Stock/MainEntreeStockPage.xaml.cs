@@ -20,18 +20,32 @@ namespace MedicamentStore
     /// <summary>
     /// Interaction logic for StockHostPage.xaml
     /// </summary>
-    public partial class EntreeStockPage : BasePage 
+    public partial class MainEntreeStockPage : BasePage<MainEntreeStockViewModel> 
     {
-        public EntreeStockPage()
+        public MainEntreeStockPage()
         {
             InitializeComponent();
         } 
-        public EntreeStockPage(EntreeStockViewModel viewModel) 
+        public MainEntreeStockPage(MainEntreeStockViewModel viewModel) : base(viewModel) 
         {
             InitializeComponent();
-            DataContext = viewModel;
         }
 
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string searchText = SearchTextBox.Text.ToLower();
+            foreach (RadioButton button in PanelBtns.Children.OfType<RadioButton>())
+            {
+                if (button.Content != null && button.Content.ToString().ToLower().Contains(searchText))
+                {
+                    button.Visibility = Visibility.Visible; // Show the button if it matches the search text
+                }
+                else
+                {
+                    button.Visibility = Visibility.Collapsed; // Hide the button if it doesn't match the search text
+                }
+            }
+        }
 
        
 
@@ -53,7 +67,7 @@ namespace MedicamentStore
                 Duration = TimeSpan.FromSeconds(0.3)
             };
 
-            rotateTransform.BeginAnimation(RotateTransform.AngleProperty, rotateAnimation);
+            //rotateTransform.BeginAnimation(RotateTransform.AngleProperty, rotateAnimation);
         }
     }
 }

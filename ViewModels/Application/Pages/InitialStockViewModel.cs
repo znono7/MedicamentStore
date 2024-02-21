@@ -230,10 +230,7 @@ namespace MedicamentStore
                 IoC.ConfirmBox.ShowMessage(viewModel);
                 if (viewModel.IsConfirmed)
                 {
-                   var res = IoC.StockManager.DeleteStockAsync(new Stock
-                    {
-                        Id = newProduit.Ids
-                    });
+                   var res = IoC.StockManager.DeleteStockAsync(newProduit.Ids);
                     if (res.Result.Successful)
                     {
                         Stocks.Remove(newProduit);

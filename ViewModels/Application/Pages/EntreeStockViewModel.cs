@@ -16,13 +16,13 @@ namespace MedicamentStore
 
     public class EntreeStockViewModel : BaseViewModel
     {
-        public DateFilterViewModel DateFilterViewModel { get; set; } 
+        public DateFilterViewModel DateFilterViewModel { get; set; }   
 
         private ProduitsPharmaceutiquesType _CurrentTypePage { get; set; } = ProduitsPharmaceutiquesType.None;
-        public ProduitsPharmaceutiquesType CurrentTypePage
+        public ProduitsPharmaceutiquesType CurrentTypePage  
         { 
             get => _CurrentTypePage;
-            set
+            set 
             {
                 if (_CurrentTypePage != value) 
                 {
@@ -33,7 +33,7 @@ namespace MedicamentStore
             }
         }
 
-        private int _currentPage = 1;
+        private int _currentPage = 1; 
         private int _pageSize = 10; // Number of rows per page     
 
         public int CurrentPage
@@ -52,7 +52,8 @@ namespace MedicamentStore
 
         public ICommand NextPageCommand { get; private set; }
         public ICommand PreviousPageCommand { get; private set; }
-        public ICommand PrintCommand { get; private set; }
+        public ICommand PrintCommand { get; private set; }//ReturnCommand
+        public ICommand ReturnCommand { get; private set; }//
         public ICommand UpdateQuantiteCommand { get; private set; }
         public BaseViewModel CurrentPageViewModel { get; set; }
 
@@ -154,15 +155,17 @@ namespace MedicamentStore
         public ICommand FilterDataCommand { get; set; }
         public ICommand PrintPdfCommand { get; set; }
 
-        public EntreeStockViewModel()
+       
+        public EntreeStockViewModel(int identerMedicaments)
         {
+            IdEnterMedicaments = identerMedicaments;
             DateFilterViewModel = new DateFilterViewModel();
             StockInitialCommand = new RelayCommand(SetStockInitial);
             StockEnterCommand = new RelayCommand(SetStockEnter);
             FilterDataCommand = new RelayCommand(async () => await FilterData());
             PrintPdfCommand = new RelayCommand(ShowPdfDocument);
-
-            _ = LoadStockPagedsAsync(CurrentTypePage);
+            _ = GetEntrees(IdEnterMedicaments);
+           // _ = LoadStockPagedsAsync(CurrentTypePage);
            // _ = GetStockNumbers(CurrentTypePage);
             SortMed = new List<string>
             {
@@ -183,7 +186,35 @@ namespace MedicamentStore
             PrintCommand = new RelayCommand(ShowDocument);
             UpdateQuantiteCommand = new RelayParameterizedCommand((p) => UpdateQuantite(p));
             PopupClickawayCommand = new RelayCommand(ClickawayMenuButton);
+            ReturnCommand = new RelayCommand(BackPage);
+        }
 
+        private void BackPage()
+        {
+            IoC.Application.GoToPage(ApplicationPage.MainEntreeStockPage);
+        }
+
+        protected ObservableCollection<EnterTransaction> MenterTransactions { get;  set; }
+        public ObservableCollection<EnterTransaction> EnterTransactions { get => MenterTransactions; set
+            {
+                MenterTransactions = value;
+                FilterTransactions = new ObservableCollection<EnterTransaction>(MenterTransactions);
+            } }
+        public ObservableCollection<EnterTransaction> FilterTransactions { get;  set; }
+        public async Task GetEntrees(int id)
+        {
+            
+            IsLoading = true;
+            await Task.Delay(1000); 
+            var Result = await IoC.TransactionManager.GetAllEnter(id);
+
+            foreach (var Stock in Result)
+            {
+               
+                Stock.TypeMed = ((ProduitsPharmaceutiquesType)Stock.Type).ToProduitsPharmaceutiques();
+            }
+            EnterTransactions = new ObservableCollection<EnterTransaction>(Result);
+            IsLoading = false;
         }
         public bool isExpanded { get; set; }
 
@@ -194,7 +225,7 @@ namespace MedicamentStore
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "PDF files (*.pdf)|*.pdf|All files (*.*)|*.*";
             saveFileDialog.FilterIndex = 1;
-            saveFileDialog.RestoreDirectory = true;
+            saveFileDialog.RestoreDirectory = true; 
 
             // Show the dialog and get the selected file path
             bool? result = saveFileDialog.ShowDialog();
@@ -203,7 +234,7 @@ namespace MedicamentStore
             {
                 string filePath = saveFileDialog.FileName;
 
-                var document = new EntreeStockDocument(FilteredStocks);
+                var document = new EntreeTransactionDocument(EnterTransactions.ToList());
                 document.GeneratePdf(filePath);
 
                 Process.Start("explorer.exe", filePath);
@@ -218,7 +249,7 @@ namespace MedicamentStore
 
 
         }
-
+        
         private async Task FilterData()
         {
             DateTime startDate = new(); 
@@ -226,7 +257,7 @@ namespace MedicamentStore
             switch (DateFilterViewModel.CurrentDateFilterType)
             {
                 case DateFilterType.None:
-                    FilteredStocks = new ObservableCollection<TransactionDto>(Stocks);
+                    FilterTransactions = new ObservableCollection<EnterTransaction>(EnterTransactions);
                     return;
                 case DateFilterType.Today:
                     startDate = DateTime.Today;
@@ -260,7 +291,7 @@ namespace MedicamentStore
             }
             if (startDate > endDate)
                 return;
-            FilteredStocks = new ObservableCollection<TransactionDto>(Stocks.Where(item => item.Date >= startDate.Date &&
+            FilterTransactions = new ObservableCollection<EnterTransaction>(EnterTransactions.Where(item => item.Date >= startDate.Date &&
                                                                                             item.Date <= endDate.Date));
             await Task.Delay(1);
         }
@@ -296,7 +327,7 @@ namespace MedicamentStore
 
                 AddStockWindowViewModel viewModel = new AddStockWindowViewModel(medicament);
 
-                var itemToUpdate = Stocks.FirstOrDefault(item => item.Id == medicament.Id);
+                var itemToUpdate = Stocks.FirstOrDefault(item => item.Id == medicament.Id); 
 
                 viewModel.UpdateQuantiteProduit += (sender, e) =>
                 {
@@ -317,7 +348,7 @@ namespace MedicamentStore
         private void ShowDocument()
         {
 
-            IoC.Application.GoToPage(ApplicationPage.PrintEntreeStockPage, new PrintEntreeStockViewModel(FilteredStocks));
+            IoC.Application.GoToPage(ApplicationPage.PrintEntreeStockPage, new PrintEntreeStockViewModel(EnterTransactions));
         }
         private void NextPage()
         {
@@ -343,10 +374,7 @@ namespace MedicamentStore
                 IoC.ConfirmBox.ShowMessage(viewModel);
                 if (viewModel.IsConfirmed)
                 {
-                    var res = IoC.StockManager.DeleteStockAsync(new Stock
-                    {
-                        Id = newProduit.IdStock
-                    });
+                    var res = IoC.StockManager.DeleteStockAsync(newProduit.IdStock);
                     if (res.Result.Successful)
                     {
                         Stocks.Remove(newProduit);
@@ -368,6 +396,8 @@ namespace MedicamentStore
         }
         public double MontantTotal { get; set; }
         public string produitTotal { get; set; }
+        public int IdEnterMedicaments { get; set; }
+
         //private async Task LoadStocksAsync(ProduitsPharmaceutiquesType type)
         //{
         //    IsLoading = true;
@@ -395,7 +425,7 @@ namespace MedicamentStore
             foreach (var Stock in Result)
             {
                 Stock.SymbleType = "+";
-                Stock.PrimaryBackground = "349432";
+                Stock.PrimaryBackground = "349432"; 
                 Stock.PrixTotal = double.Parse(string.Format("{0:0.00}", Stock.Prix * Stock.Quantite));  
                 Stock.TypeMed = ((ProduitsPharmaceutiquesType)Stock.Type).ToProduitsPharmaceutiques();
             }
@@ -436,8 +466,27 @@ namespace MedicamentStore
 
         private async Task ToNewItemStockWindow()
         {
-            IoC.Application.GoToPage(ApplicationPage.NewStockPage);
-            await Task.Delay(1);
+            if (EnterTransactions.Count == 0)
+                return;
+            var model = EnterTransactions.FirstOrDefault(); 
+            ObservableCollection<MedicamentUpdateStock> l = new ObservableCollection<MedicamentUpdateStock>
+                {
+                    new MedicamentUpdateStock
+                    {
+                        IdMedicament = model.IdMedicament,
+                        Nom_Commercial = model.Nom_Commercial,
+                        Forme = model.Forme,
+                        Dosage = model.Dosage,
+                        Unite = model.Unite,
+                        Prix = model.Prix,
+                        IdStock = model.IdStock,
+                        Quantite = model.Quantite,
+                        IdUnite = model.IdUnite,
+                        Type = model.Type,
+                    }
+                };
+            IoC.Application.GoToPage(ApplicationPage.NewStockPage , new NewStockViewModel(l)); 
+            await Task.Delay(1); 
         }
         public async Task MedicamentButton(object param)
         {

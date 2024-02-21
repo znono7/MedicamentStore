@@ -37,7 +37,7 @@
 
         </StackPanel>
         <StackPanel Visibility="{Binding HeaderVisible,Converter={local:BooleanToCollapsedConverter},ConverterParameter=True}" Grid.Row="2" HorizontalAlignment="Center">
-            <TextBlock Text="Liste des Entrées de Stock de Produits Pharmaceutiques"
+            <TextBlock Text="Fiche de Stock"
              Style="{StaticResource TextH2}" Margin="0 20 0 15"/>
             <TextBlock Text="{Binding TypeString}" 
              Style="{StaticResource TextH2}" Margin="0 0 0 15"/>
@@ -49,8 +49,8 @@
                                   ItemsSource="{Binding Stocks}" x:Name="MyGridData"
                    VerticalAlignment="Stretch" Height="Auto">
             <DataGrid.Columns>
-                
-                <DataGridTemplateColumn  Header="Produit Pharmaceutique" Width="*"   IsReadOnly="True"  CanUserResize="False">
+
+                <DataGridTemplateColumn  Header="Produit&#x0a;Pharmaceutique" Width="*"   IsReadOnly="True"  CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10 0 0 0">
@@ -84,16 +84,27 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn IsReadOnly="True" Header="Quantité" Width="Auto"  CanUserSort="False" CanUserReorder="False" CanUserResize="False">
+                <DataGridTemplateColumn IsReadOnly="True" Header="Entrée" Width="Auto"  CanUserSort="False" CanUserReorder="False" CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
-                                <TextBlock TextWrapping="Wrap" Height="Auto" x:Name="tbPercents" VerticalAlignment="Center" Text="{Binding SymbleType}" FontSize="11"
+                                <TextBlock TextWrapping="Wrap" Height="Auto" x:Name="tbPercents" VerticalAlignment="Center" Text="+" FontSize="11"
                                              Foreground="#000000" HorizontalAlignment="Center"
                                              FontFamily="{StaticResource OakSans-Regular}" />
-                                <TextBlock TextWrapping="Wrap" Height="Auto" x:Name="tbPercent5" VerticalAlignment="Center" Text="{Binding QuantiteTransaction}" FontSize="11"
+                                <TextBlock TextWrapping="Wrap" Height="Auto" x:Name="tbPercent5" VerticalAlignment="Center" Text="{Binding QuantiteTransaction}" FontSize="13"
                                              Foreground="#000000" HorizontalAlignment="Center"
                                              FontFamily="{StaticResource OakSans-Regular}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn IsReadOnly="True" Header="Stock&#x0a;Initial" Width="Auto"  CanUserSort="False" CanUserReorder="False" CanUserResize="False">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
+                                <TextBlock TextWrapping="Wrap" Height="Auto" x:Name="tbPercent5" VerticalAlignment="Center" Text="{Binding PreviousQuantity}" FontSize="13"
+                              Foreground="#000000" HorizontalAlignment="Center"
+                              FontFamily="{StaticResource OakSans-Regular}" />
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -105,25 +116,11 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Prix" IsReadOnly="True" Width="Auto"  CanUserSort="False" CanUserReorder="False" CanUserResize="False">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock TextWrapping="Wrap" Height="Auto" VerticalAlignment="Center" FontSize="12" Text="{Binding Prix,Converter={local:CurrencyConverter}}" Style="{StaticResource TextH2}" Margin="0"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <!--<DataGridTemplateColumn Header="Prix Total" IsReadOnly="True" Width="Auto" CanUserSort="False" CanUserReorder="False" CanUserResize="False">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock TextWrapping="Wrap" Height="Auto" VerticalAlignment="Center" FontSize="12" Text="{Binding PrixTotal,Converter={local:CurrencyConverter}}" Style="{StaticResource TextH2}" Margin="0"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                   
-                </DataGridTemplateColumn>-->
+                
                 <DataGridTemplateColumn Header="à la Date" Width="Auto" IsReadOnly="True" CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock TextWrapping="Wrap" Height="Auto" FontSize="12" x:Name="tbPercent5"  Text="{Binding Date,StringFormat=dd/MM/yyyy}" TextAlignment="Center"  Foreground="#000000" Margin="0"
+                            <TextBlock TextWrapping="Wrap" Height="Auto" FontSize="13" x:Name="tbPercent5"  Text="{Binding Date,StringFormat=dd/MM/yyyy}" TextAlignment="Center"  Foreground="#000000" Margin="0"
                                         Style="{StaticResource TextH4}"
                                           ToolTip="{Binding Date}" HorizontalAlignment="Center"/>
                         </DataTemplate>
