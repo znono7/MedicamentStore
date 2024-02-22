@@ -39,7 +39,7 @@ namespace MedicamentStore.ViewModels.Application
             // Set the view model
             CurrentPageViewModel = viewModel;
 
-           
+            
 
             // Set the current page
             CurrentPage = page;

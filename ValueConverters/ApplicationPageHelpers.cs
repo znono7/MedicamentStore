@@ -63,7 +63,12 @@ namespace MedicamentStore
                     return new MainEntreeStockPage(viewModel as MainEntreeStockViewModel);
                 case ApplicationPage.MainMovmentStockPage://
                     return new MainMovmentStockPage(viewModel as MainMovmentStockViewModel);
-
+                case ApplicationPage.MainSorteStockPage://
+                    return new MainSorteStockPage(viewModel as MainSoretStockViewModel);
+                case ApplicationPage.SorteStockPage://
+                    return new SorteStockPage(viewModel as SorteStockViewModel);
+                case ApplicationPage.FacturePage://
+                    return new FacturesPage(viewModel as FacturesViewModel);
                 default:
                     Debugger.Break();
                     return null;
@@ -123,6 +128,12 @@ namespace MedicamentStore
                 return ApplicationPage.MainEntreeStockPage;
             if (page is MainMovmentStockPage)//
                 return ApplicationPage.MainMovmentStockPage;
+            if (page is MainSorteStockPage)//
+                return ApplicationPage.MainSorteStockPage;
+            if (page is SorteStockPage)//
+                return ApplicationPage.SorteStockPage;
+            if (page is FacturesPage)//
+                return ApplicationPage.FacturePage;
             // Alert developer of issue
             Debugger.Break();
             return default(ApplicationPage);

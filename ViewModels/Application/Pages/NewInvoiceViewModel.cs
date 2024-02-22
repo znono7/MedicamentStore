@@ -12,10 +12,10 @@ namespace MedicamentStore
     {
 
         public ObservableCollection<InvoiceProductDataGrid> InvoiceProducts { get; set; }
-        public ObservableCollection<InvoiceProduct> InvoiceProductsSets { get; set; }
+        public ObservableCollection<InvoiceItem> InvoiceProductsSets { get; set; }
 
 
-        public InvoiceInfoViewModel invoice {  get; set; }  
+        public InvoiceInfoViewModel invoice {  get; set; }    
          
         public NotificationBoxViewModel notificationBoxViewModel { get; set; }
         public bool AttachmentNotifVisible { get; set; } 
@@ -42,13 +42,18 @@ namespace MedicamentStore
            
             invoice = new InvoiceInfoViewModel();
             PopupClickawayCommand = new RelayCommand(PopupClickaway);
-            ReturnCommand = new RelayCommand(PopupClickaway);
+            ReturnCommand = new RelayCommand(BackPage);
             SaveCommand = new RelayCommand(async()=>await Save());
             DeleteCommand = new RelayParameterizedCommand((p)=> DeleteItem(p));
             ClearCommand = new RelayCommand(() => InvoiceProducts = new ObservableCollection<InvoiceProductDataGrid>());
             NeeItemCommand = new RelayCommand(ToNewItemWindow);
-            InvoiceProductsSets = new ObservableCollection<InvoiceProduct>();
+            InvoiceProductsSets = new ObservableCollection<InvoiceItem>();
             InvoiceProducts = new ObservableCollection<InvoiceProductDataGrid>();
+        }
+
+        private void BackPage()
+        {
+            IoC.Application.GoToPage(ApplicationPage.MainSorteStockPage);       
         }
 
         public bool ValidateQuantity(double quantity, double restQuantity)
@@ -74,19 +79,28 @@ namespace MedicamentStore
                 await IoC.NotificationBox.ShowMessage(new NotificationBoxViewModel(NotificationType.Warning, $"Voulez Choisez les Produits..."));
                 return;
             }
-            InvoiceProductsSets = new ObservableCollection<InvoiceProduct>();
+            InvoiceProductsSets = new ObservableCollection<InvoiceItem>();
 
             var InvoiceInfo = new Invoice
             {
                 Number = invoice.EnteredNumText,
                 Date = invoice.SelectedDate,
                 ProduitTotal = InvoiceProducts.Count,
-                MontantTotal = InvoiceProducts.Sum(x => x.PrixTotal)
+                MontantTotal = InvoiceProducts.Sum(x => x.PrixTotal),
+                InvoiceType = 2,
             };
             foreach (var item in InvoiceProducts)
             {
-                item.InvoiceNumber = invoice.EnteredNumText;
-                InvoiceProductsSets.Add(ToInvoiceProduct(item));
+                var i = new InvoiceItem
+                {
+                    IdStock = item.IdS,
+                    IdMedicament = item.ProductId,
+                    InvoiceNumber = invoice.EnteredNumText,
+                    Quantite = item.Quantite,
+                    Prix = item.Prix,
+                    
+                };
+                InvoiceProductsSets.Add(i);
             }
             var ResFinal = await IoC.InvoiceManager.InsertInvoice(InvoiceInfo, InvoiceProductsSets);
             if (ResFinal.Successful)

@@ -419,9 +419,36 @@ namespace MedicamentStore
                                 INNER JOIN PharmaceuticalProducts m ON s.IdMedicament = m.Id 
                                 INNER JOIN Supplies p ON p.Id = s.IdSupplie
                                 INNER JOIN Units u ON u.Id = s.Unit 
-                                INNER JOIN [Transaction] t ON t.IdStock = s.Id"; 
+                                INNER JOIN [Transaction] t ON t.IdStock = s.Id
+                                WHERE t.TypeTransaction = 1"; 
                         
-            var typeCondition = " WHERE s.Type = @Val AND TypeTransaction = 1";
+            var typeCondition = " AND s.Type = @Val  ";
+
+            var finalQuery = type != ProduitsPharmaceutiquesType.None ? $"{baseQuery}{typeCondition}" : baseQuery;
+
+            finalQuery += " ORDER BY s.Id DESC LIMIT @PageSize OFFSET @Offset;";
+
+            var resultFinal = await _connection.QueryAsync<MedicamentStock>(finalQuery, parameters);
+
+            return resultFinal.Any() ? resultFinal : Enumerable.Empty<MedicamentStock>();
+        }
+
+        public async Task<IEnumerable<MedicamentStock>> GetAllSorteStocksAsync(int pageNumber, int pageSize, ProduitsPharmaceutiquesType type)
+        {
+            int intValue = (int)type;
+            int offset = (pageNumber - 1) * pageSize;
+
+            var parameters = new { PageSize = pageSize, Offset = offset, Val = intValue };
+
+            var baseQuery = @"SELECT Distinct m.Id, m.Nom_Commercial, m.Dosage, m.Forme, m.Conditionnement, s.Quantite, m.Img, s.Prix, p.Nom, s.Date, s.Id AS Ids ,u.Name AS Unite,u.Id AS IdUnite,s.Type
+                                FROM Stock s
+                                INNER JOIN PharmaceuticalProducts m ON s.IdMedicament = m.Id 
+                                INNER JOIN Supplies p ON p.Id = s.IdSupplie
+                                INNER JOIN Units u ON u.Id = s.Unit 
+                                INNER JOIN [Transaction] t ON t.IdStock = s.Id 
+                                WHERE t.TypeTransaction = 2"; 
+
+            var typeCondition = " AND  s.Type = @Val  ";
 
             var finalQuery = type != ProduitsPharmaceutiquesType.None ? $"{baseQuery}{typeCondition}" : baseQuery;
 

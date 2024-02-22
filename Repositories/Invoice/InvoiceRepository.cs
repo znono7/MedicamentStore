@@ -152,33 +152,36 @@ namespace MedicamentStore
             }
         }
 
-        public async Task<DbResponse> InsertInvoice(Invoice invoice, ObservableCollection<InvoiceProduct> invoiceDetails)
+        public async Task<DbResponse> InsertInvoice(Invoice invoice, ObservableCollection<InvoiceItem> invoiceDetails)
         {
             using (var transaction = _connection.Connection().BeginTransaction()) 
             {
-                try
-                {
-                    string sql = @"INSERT INTO Invoice (Date,Number,MontantTotal,ProduitTotal) 
-                            VALUES (@Date,@Number,@MontantTotal,@ProduitTotal)";
+                try 
+                { 
+                    string sql = @"INSERT INTO Invoice (Date,Number,MontantTotal,ProduitTotal,InvoiceType) 
+                            VALUES (@Date,@Number,@MontantTotal,@ProduitTotal,2)";
                     await _connection.ExecuteAsync(transaction.Connection,sql,transaction, invoice); 
                     foreach (var item in invoiceDetails)
                     {
-                        var ProductStock = (await _connection.QueryAsync<Stock>("SELECT * FROM Stock WHERE Id=@idS", new { idS = item.IdS })).SingleOrDefault() ;
+                        var ProductStock = (await _connection.QueryAsync<Stock>("SELECT * FROM Stock WHERE Id=@idS", new { idS = item.IdStock })).SingleOrDefault() ;
 
                         if(ProductStock != null)
                         {
+                            int PrevQte = ProductStock.Quantite ;
                             ProductStock.Quantite -= item.Quantite;
 
                             await _connection.ExecuteAsync(transaction.Connection, "UPDATE Stock SET Quantite=@Quantite WHERE Id=@Id", transaction,ProductStock);
 
-                            await _connection.ExecuteAsync(transaction.Connection, @"INSERT INTO InvoiceDetail (InvoiceNumber,ProductId,Quantite,QuantiteRest,PrixTotal)
-                                                                            VALUES (@InvoiceNumber,@ProductId,@Quantite,@QuantiteRest,@PrixTotal);
-                                                                                   ",
+                            await _connection.ExecuteAsync(transaction.Connection, 
+                                @"INSERT INTO InvoiceItem (IdInvoice,InvoiceNumber,IdMedicament,IdTypeProduct,IdUnite,Quantite,Prix)                                             
+                              VALUES (@IdInvoice,@InvoiceNumber,@IdMedicament,@IdTypeProduct,@IdUnite,@Quantite,@Prix);",
+                                                                                   
                                             transaction: transaction, item);
 
                             string QeuryTrans = @"INSERT INTO [Transaction] (IdStock,TypeTransaction,QuantiteTransaction,Date,PreviousQuantity)
                                                                             VALUES (@LastIdStock,2,@q,@d,@PreviousQuantity)";
-                            await _connection.ExecuteAsync(transaction.Connection, QeuryTrans, transaction: transaction, new { LastIdStock = ProductStock.Id , q = item.Quantite ,d =invoice.Date, PreviousQuantity = ProductStock.Quantite.ToString() });
+                            await _connection.ExecuteAsync(transaction.Connection, QeuryTrans, transaction: transaction, 
+                                new { LastIdStock = ProductStock.Id , q = item.Quantite ,d =invoice.Date, PreviousQuantity = PrevQte.ToString() });
 
                         }
 

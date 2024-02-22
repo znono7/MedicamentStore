@@ -36,6 +36,7 @@ namespace MedicamentStore
         MainEntreeStockPage = 17,
         MainSorteStockPage = 18,
         MainMovmentStockPage = 19,
-
+        SorteStockPage = 20,
+        FacturePage = 21,
     }
 }

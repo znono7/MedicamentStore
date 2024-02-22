@@ -77,5 +77,20 @@ namespace MedicamentStore
 
             return resultFinal.Any() ? resultFinal : Enumerable.Empty<MouvementStocks>();
         }
+
+        public async Task<IEnumerable<EnterTransaction>> GetAllSorte(int IdMedicament)
+        {
+            var baseQuery = @"SELECT t.Id, m.Nom_Commercial, m.Dosage, m.Forme, m.Conditionnement, s.Quantite, m.Img, s.Prix, p.Nom, t.Date, s.Id AS IdStock , t.TypeTransaction ,t.QuantiteTransaction , s.Type , u.Name AS Unite,u.Id AS IdUnite,t.PreviousQuantity
+                                FROM  [Transaction] t
+                                INNER JOIN Stock s ON s.Id = t.IdStock
+                                INNER JOIN PharmaceuticalProducts m ON s.IdMedicament = m.Id
+                                INNER JOIN Supplies p ON p.Id = s.IdSupplie 
+                                INNER JOIN Units u ON u.Id = s.Unit 
+                                WHERE t.TypeTransaction = 2 AND m.Id = @IdMed";
+
+            var resultFinal = await _connection.QueryAsync<EnterTransaction>(baseQuery, new { IdMed = IdMedicament });
+
+            return resultFinal.Any() ? resultFinal : Enumerable.Empty<EnterTransaction>();
+        }
     }
 }

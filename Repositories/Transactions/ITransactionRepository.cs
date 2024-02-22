@@ -11,6 +11,7 @@ namespace MedicamentStore
         Task<IEnumerable<TransactionDto>> GetAll();
         Task<IEnumerable<MouvementStocks>> GetAllMovement(int IdMedicament);
         Task<IEnumerable<EnterTransaction>> GetAllEnter(int IdMedicament);
+        Task<IEnumerable<EnterTransaction>> GetAllSorte(int IdMedicament);
         Task<IEnumerable<EnterTransaction>> GetAllEnter();
     }
 }

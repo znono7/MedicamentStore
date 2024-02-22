@@ -9323,6 +9323,9 @@
     <Compile Update="Controls\StockTypesPagesHost.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Pages\FacturesPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Pages\PrintInitialStockPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -9336,6 +9339,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Pages\NewUser.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Stock\SorteStockPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Stock\MainSorteStockPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Pages\Stock\MainMovmentStockPage.xaml.cs">
