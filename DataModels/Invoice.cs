@@ -17,6 +17,7 @@ namespace MedicamentStore
         public int InvoiceType { get; set; }
 
         public string NomSupplie { get; set; }
+        public string FactType { get; set; }
 
     }
 }

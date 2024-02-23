@@ -63,7 +63,8 @@ namespace MedicamentStore
 
         public async Task<IEnumerable<Invoice>> GetAllInvoices()
         {
-            var Qeury = "SELECT * FROM Invoice";
+            var Qeury = @"SELECT i.Id , i.Number , i.Date,i.MontantTotal,i.ProduitTotal,i.InvoiceType , s.Nom AS NomSupplie
+                            FROM Invoice i LEFT JOIN Supplies s ON s.Id = i.IdSupplie"; 
 
             var ResultFinal = await _connection.QueryAsync<Invoice>(Qeury);
 
@@ -94,6 +95,18 @@ namespace MedicamentStore
                 return Enumerable.Empty<Invoice>();
 
             }
+        }
+
+        public async Task<IEnumerable<InvoiceItemDto>> GetInvoiceItems(string num)
+        {
+            var Qeury = @"SELECT p.Nom_Commercial,p.Forme,p.Dosage,p.Conditionnement,p.Id AS IdMedicament ,s.Quantite ,
+                            s.Prix , u.Name AS Unite , t.type AS TypeProduct 
+                            FROM PharmaceuticalProducts p INNER JOIN InvoiceItem s ON s.IdMedicament = p.Id
+                            INNER JOIN Units u ON u.Id = s.Unit
+                            INNER JOIN Type t ON t.Id = s.Type  
+                            WHERE s.InvoiceNumber = @nbr";
+            var ResultFinal = await _connection.QueryAsync<InvoiceItemDto>(Qeury, new { nbr = num });
+            return ResultFinal.Any() ? ResultFinal : Enumerable.Empty<InvoiceItemDto>();
         }
 
         public async Task<int> GetLastInvoiceNumber()

@@ -162,6 +162,26 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
+                            <DataGridTemplateColumn CanUserResize="False" Header="Type" Width="*" IsReadOnly="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Border Padding="6 2" Height="28" Width="Auto" CornerRadius="8" HorizontalAlignment="Center" Background="#8AA5ED">
+
+                                                <TextBlock x:Name="TypeTxt" FontSize="13" TextWrapping="Wrap" Height="Auto" TextAlignment="Center"  Foreground="#000000" ToolTip="{Binding FactType}" Text="{Binding FactType,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextH4}" Margin="0"/>
+                                            </Border>
+                                        </Grid>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="TypeTxt" Value="#ffffff" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="TypeTxt" Value="#ffffff" />
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                             <DataGridTemplateColumn  IsReadOnly="True" Width="140" CanUserResize="False">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -169,7 +189,7 @@
                                             <Button Margin="0" Background="Transparent" Cursor="Hand"  Command="{Binding DataContext.SavePdfCommand ,  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" 
                                                       CommandParameter="{Binding }" 
                                                       Style="{StaticResource PathGrowButton}">
-                                                <Path x:Name="PPlus" Data="{StaticResource pdf}" Fill="#14174C" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Center" Width="8" Height="8"/>
+                                                <Path x:Name="PPlus" Data="{StaticResource pdf}" Fill="#14174C" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Center" Width="16" Height="16"/>
                                             </Button>
                                             <Button Margin="0" Background="Transparent" Cursor="Hand"  Command="{Binding DataContext.PrintCommand ,  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" 
                                                         CommandParameter="{Binding }" 

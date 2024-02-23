@@ -10,8 +10,9 @@ namespace MedicamentStore
     public interface IInvoiceRepository
     {
         Task<int> GetLastInvoiceNumber();  
-        Task<DbResponse<Invoice>> InsertInvoice(Invoice invoice);
+        Task<DbResponse<Invoice>> InsertInvoice(Invoice invoice); 
         Task<IEnumerable<Invoice>> GetAllInvoices();
+        Task<IEnumerable<InvoiceItemDto>> GetInvoiceItems (string num);
         Task<IEnumerable<Invoice>> GetAllInvoices(int pageNumber, int pageSize);
         Task<DbResponse> InsertInvoice(Invoice invoice , ObservableCollection<InvoiceItem> invoiceDetails );
         Task<DbResponse<InvoiceDetail>> InsertInvoiceDetail(ObservableCollection<InvoiceProduct> invoiceDetails);

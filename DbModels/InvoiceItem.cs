@@ -22,7 +22,7 @@ namespace MedicamentStore
     public class InvoiceItemDto : InvoiceItem
     {
         public string? Nom_Commercial { get; set; }
-        public string? Forme { get; set; }
+        public string? Forme { get; set; } 
         public string? Dosage { get; set; }
         public string? Conditionnement { get; set; }
         public string? Unite { get; set; }

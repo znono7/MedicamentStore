@@ -7,19 +7,20 @@ using System.Threading.Tasks;
 
 namespace MedicamentStore
 {
-    public class InitialStockDocViewModel : BaseViewModel
+    public class FacturePageViewModel : BaseViewModel
     {
-        public ObservableCollection<MedicamentStock> Stocks { get; set; }
-
+        public ObservableCollection<InvoiceItem> InvoiceItems { get; set; }
+        public Invoice Invoice { get; set; }
         public bool HeaderVisible { get; set; }
         public bool FooterVisible { get; set; }
         public string NumPage { get; set; }
         public string TypeString { get; set; }
-        public string DateTod { get; set; } 
+        public string DateTod { get; set; }
         public double TotalAmount { get; set; }
-        public InitialStockDocViewModel(ObservableCollection<MedicamentStock> stocks, bool headerVisible, bool footerVisible, string numPage)
+        public FacturePageViewModel(Invoice invoice, bool headerVisible, bool footerVisible, string numPage)
         {
-            Stocks = stocks;
+            
+            Invoice = invoice;
             HeaderVisible = headerVisible;
             FooterVisible = footerVisible;
             NumPage = numPage;
@@ -27,12 +28,17 @@ namespace MedicamentStore
         }
         private void SetDate()
         {
-           if(Stocks.Any())
+            if (Stocks.Any())
             {
-               // TypeString = $"{((ProduitsPharmaceutiquesType)Stocks.FirstOrDefault().Type).ToProduitsPharmaceutiques()}";
-                TotalAmount = Stocks.Sum(c => c.PrixTotal);
+                // TypeString = $"{((ProduitsPharmaceutiquesType)Stocks.FirstOrDefault().Type).ToProduitsPharmaceutiques()}";
+                TotalAmount = Invoice.MontantTotal;
             }
             DateTod = DateTime.Today.ToString("dd/MM/yyyy");
+        }
+
+        public async Task GetInvoiceItems(string num)
+        {
+
         }
     }
 }

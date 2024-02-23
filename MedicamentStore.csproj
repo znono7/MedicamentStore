@@ -9293,6 +9293,9 @@
     <Compile Update="Controls\DocumentPaged\InitialStockDocControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Controls\DocumentPaged\FacturePage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Controls\DocumentPaged\SorteStockDocControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
