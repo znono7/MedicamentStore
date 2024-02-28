@@ -31,8 +31,10 @@ namespace MedicamentStore
 
         public async Task<IEnumerable<EnterTransaction>> GetAllEnter(int IdMedicament) 
         {
-            var baseQuery = @"SELECT t.Id, m.Nom_Commercial, m.Dosage, m.Forme, m.Conditionnement, s.Quantite, m.Img, s.Prix, p.Nom, t.Date, s.Id AS IdStock , t.TypeTransaction ,t.QuantiteTransaction , s.Type , u.Name AS Unite,u.Id AS IdUnite,t.PreviousQuantity
-                                FROM  [Transaction] t
+            var baseQuery = @"SELECT t.Id, m.Nom_Commercial, m.Dosage, m.Forme, m.Conditionnement, s.Quantite, m.Img, 
+                                    s.Prix, p.Nom, t.Date, s.Id AS IdStock , t.TypeTransaction ,t.QuantiteTransaction , 
+                                    s.Type , u.Name AS Unite,u.Id AS IdUnite,t.PreviousQuantity
+                                FROM  [Transaction] t 
                                 INNER JOIN Stock s ON s.Id = t.IdStock
                                 INNER JOIN PharmaceuticalProducts m ON s.IdMedicament = m.Id
                                 INNER JOIN Supplies p ON p.Id = s.IdSupplie 

@@ -15,17 +15,28 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Grid Grid.RowSpan="2" Width="270" local:AnimateSlideInFromLeftProperty.Value="{ Binding MenuVisible,FallbackValue=true}">
+        <Border Grid.RowSpan="4" 
+        Panel.ZIndex="8"
+        Opacity="0.3" Grid.Column="1">
+            <Border Background="{StaticResource PrimaryBlackColor}" 
+                    CornerRadius="0"
+             local:AnimateFadeInProperty.Value="{Binding MenuVisible}"/>
+            <!--<Border.InputBindings>
+                <MouseBinding MouseAction="LeftClick" Command="{Binding PopupClickawayCommand}" />
+            </Border.InputBindings>-->
+        </Border>
+        <Grid Grid.RowSpan="3" Width="270" local:AnimateSlideInFromLeftProperty.Value="{ Binding MenuVisible,FallbackValue=true}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <TextBlock Grid.Column="1" TextAlignment="Center" Text="Produits Pharmaceutiques&#xa; Menu" Margin="5 20 0 2"
-      FontFamily="{StaticResource Baloo-Regular}" Foreground="{StaticResource TertiaryTextColor}" 
-      FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                      FontFamily="{StaticResource Baloo-Regular}" Foreground="{StaticResource TertiaryTextColor}" 
+                      FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <TextBox Name="SearchTextBox" TextChanged="TextBox_TextChanged" Grid.Row="1" Width="265" Margin="2 0 2 10"   Tag="Rechercher dans le menu" Style="{StaticResource SearchMedText}" HorizontalAlignment="Left" />
             <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
                 <StackPanel x:Name="PanelBtns" >
@@ -55,26 +66,20 @@
                 </StackPanel>
             </ScrollViewer>
         </Grid>
-        <!--<local:SideStockMenu Grid.RowSpan="2" Width="260" local:AnimateSlideInFromLeftProperty.Value="{ Binding StockHostViewModel.MenuVisible,Source={x:Static local:ViewModelLocator.Instance}}" />-->
-       
-        <Grid Margin="0 5 5 0" Grid.Column="1">
-            <StackPanel>
-                <Grid>
-                    <Button Cursor="Hand"  Width="24" Height="24" HorizontalAlignment="Left" Command="{Binding MenuVisibleCommand}" Margin="20 20" VerticalAlignment="Top" Style="{StaticResource PathGrowButton}" >
-                        <Path Fill="#ffffff"  Data="{StaticResource menu}" Stretch="Uniform" Height="11" Width="11"/>
+        <Button Grid.Column="1" x:Name="btnMenu" Click="btnMenu_Click" Panel.ZIndex="12" Cursor="Hand"  Width="24" Height="24" HorizontalAlignment="Left" Command="{Binding MenuVisibleCommand}" Margin="20 20" VerticalAlignment="Top" Style="{StaticResource PathGrowButton}" >
+            <Path x:Name="btnMenuIcon" Fill="#ffffff"  Data="{StaticResource Next}" Stretch="Uniform" Height="11" Width="11">
+                <Path.RenderTransform>
+                    <RotateTransform x:Name="rotateTransform" Angle="0" CenterX="3" CenterY="5.5"/>
+                </Path.RenderTransform>
+            </Path>
 
-                    </Button>
-                    <TextBlock  Text="Stock Initial" Margin="60 10" HorizontalAlignment="Left"
-                                 FontFamily="{StaticResource Baloo-Regular}" Foreground="{StaticResource TertiaryTextColor}" 
-                                 FontSize="20"  VerticalAlignment="Center"/>
-                    <!--<Button Style="{StaticResource addButton}" Command="{Binding NewItemCommand}"
-                                     HorizontalAlignment="Right" >
-                        <StackPanel Orientation="Horizontal">
-                            <Path  Data="{StaticResource plus}" Fill="{StaticResource TertiaryBackgroundColor}" Stretch="UniformToFill" VerticalAlignment="Center" Margin="0 1 8 0" Width="11" Height="11"/>
-                            <TextBlock Text="Nouveau Stock" FontFamily="{StaticResource Baloo-Regular}"/>
-                        </StackPanel>
-                    </Button>-->
-                </Grid>
+        </Button>
+        <TextBlock Grid.Column="1"  Text="Stock Initial" Margin="60 10" HorizontalAlignment="Left"
+              FontFamily="{StaticResource Baloo-Regular}" Foreground="{StaticResource TertiaryTextColor}" 
+              FontSize="20"  VerticalAlignment="Center"/>
+
+        <Grid Margin="0 5 5 0" Grid.Row="1" Grid.Column="1">
+               
                 <Grid  Margin="20 3">
                     <Border  CornerRadius="2" Background="{StaticResource TertiaryBackgroundColor}">
                         <Border.Effect>
@@ -100,10 +105,9 @@
                         </Button>
                     </StackPanel>
                 </Grid>
-            </StackPanel>
         </Grid>
         <!--Content-->
-        <Grid Margin="20 10" Grid.Row="1" Grid.Column="1">
+        <Grid Margin="20 10" Grid.Row="2" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
@@ -344,73 +348,15 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
 
-                            <DataGridTemplateColumn  IsReadOnly="True" Width="Auto" CanUserResize="False">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                            <Button Margin="0" Background="Transparent" Cursor="Hand"  Command="{Binding DataContext.UpdateQuantiteCommand ,  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" 
-                                                  CommandParameter="{Binding }" 
-                                                  Style="{StaticResource PathGrowButton}">
-                                                <Path x:Name="PPlus" Data="{StaticResource plus}" Fill="#5D7881" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Center" Width="8" Height="8"/>
-                                            </Button>
-                                            <Button Margin="0" Cursor="Hand" Background="Transparent" Command="{Binding DataContext.DeleteCommand ,  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" 
-                                                  CommandParameter="{Binding }"
-                                                  Style="{StaticResource gridRemoveButton}">
-                                                <Path Data="{StaticResource Delete}" Fill="#BE2623" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Center" Width="11" Height="11"/>
-                                            </Button>
-                                        </StackPanel>
-                                        <DataTemplate.Triggers>
-                                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
-                                                <Setter Property="Fill" TargetName="PPlus" Value="#ffffff" />
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
-                                                <Setter Property="Fill" TargetName="PPlus" Value="#ffffff" />
-                                            </DataTrigger>
-                                        </DataTemplate.Triggers>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </ScrollViewer>
                 <!--#endregion-->
-
-                <Border  Grid.Row="3" HorizontalAlignment="Right"  
-                    BorderBrush="#DEE4EC" BorderThickness="1" CornerRadius="16"
-                    Padding="0" Background="#ffffff" Margin="0 10 20 10" >
-
-                    <StackPanel Orientation="Horizontal" >
-                        <Button Command="{Binding PreviousPageCommand}" Style="{StaticResource pagingButton2}" >
-                            <StackPanel Orientation="Horizontal" >
-                                <Path Data="{StaticResource Prev}"
-                                   Fill="{StaticResource PrimeBlueBrush}"
-                                   Stretch="Uniform" VerticalAlignment="Center" Margin="8 1 0 0"
-                                   Width="11" Height="11"/>
-
-                            </StackPanel>
-                        </Button>
-                        <Rectangle Width="1" Fill="#DEE4EC" Margin="0"/>
-
-                        <Button Command="{Binding NextPageCommand}" Style="{StaticResource pagingButton}" >
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Suivant"/>
-                                <Path Data="{StaticResource Next}"
-                              Fill="{StaticResource PrimeBlueBrush}"
-                              Stretch="Uniform" VerticalAlignment="Center" Margin="8 1 0 0"
-                              Width="11" Height="11"/>
-
-                            </StackPanel>
-                        </Button>
-                    </StackPanel>
-                </Border>
+                <local:PaginationControl DataContext="{Binding paginationView}" Grid.Row="3" HorizontalAlignment="Right"/>
 
             </Grid>
         </Grid>
-        <!--<local:StockTypesPagesHost Grid.Row="1" Grid.Column="1" 
-                CurrentPage="{Binding StockHostViewModel.CurrentPage,
-          Source={x:Static local:ViewModelLocator.Instance}}"
-          CurrentPageViewModel="{Binding StockHostViewModel.CurrentPageViewModel,
-          Source={x:Static local:ViewModelLocator.Instance}}"     />-->
+        
 
     </Grid>
 </local:BasePage>

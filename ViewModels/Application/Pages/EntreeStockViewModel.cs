@@ -22,7 +22,7 @@ namespace MedicamentStore
         public ProduitsPharmaceutiquesType CurrentTypePage  
         { 
             get => _CurrentTypePage;
-            set 
+            set  
             {
                 if (_CurrentTypePage != value) 
                 {
@@ -165,8 +165,7 @@ namespace MedicamentStore
             FilterDataCommand = new RelayCommand(async () => await FilterData());
             PrintPdfCommand = new RelayCommand(ShowPdfDocument);
             _ = GetEntrees(IdEnterMedicaments);
-           // _ = LoadStockPagedsAsync(CurrentTypePage);
-           // _ = GetStockNumbers(CurrentTypePage);
+           
             SortMed = new List<string>
             {
                 "Trier par",
@@ -205,13 +204,13 @@ namespace MedicamentStore
         {
             
             IsLoading = true;
-            await Task.Delay(1000); 
-            var Result = await IoC.TransactionManager.GetAllEnter(id);
+           // await Task.Delay(500); 
+            var Result = await IoC.TransactionManager.GetAllEnter(id); 
 
-            foreach (var Stock in Result)
+            foreach (var S in Result)
             {
                
-                Stock.TypeMed = ((ProduitsPharmaceutiquesType)Stock.Type).ToProduitsPharmaceutiques();
+                S.TypeMed = ((ProduitsPharmaceutiquesType)S.Type).ToProduitsPharmaceutiques();
             }
             EnterTransactions = new ObservableCollection<EnterTransaction>(Result);
             IsLoading = false;

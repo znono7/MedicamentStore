@@ -81,7 +81,7 @@ namespace MedicamentStore
 
         public async Task<IEnumerable<Invoice>> GetAllInvoices(int pageNumber, int pageSize)
         {
-            int offset = (pageNumber - 1) * pageSize;
+            int offset = pageNumber * pageSize;
             var Qeury = "SELECT * FROM Invoice   ORDER BY Id DESC LIMIT @PageSize OFFSET @Offset;";
 
             var ResultFinal = await _connection.QueryAsync<Invoice>(Qeury, new { PageSize = pageSize, Offset = offset });
@@ -190,7 +190,7 @@ namespace MedicamentStore
                               VALUES (@IdInvoice,@InvoiceNumber,@IdMedicament,@IdTypeProduct,@IdUnite,@Quantite,@Prix);",
                                                                                    
                                             transaction: transaction, item);
-
+                            
                             string QeuryTrans = @"INSERT INTO [Transaction] (IdStock,TypeTransaction,QuantiteTransaction,Date,PreviousQuantity)
                                                                             VALUES (@LastIdStock,2,@q,@d,@PreviousQuantity)";
                             await _connection.ExecuteAsync(transaction.Connection, QeuryTrans, transaction: transaction, 

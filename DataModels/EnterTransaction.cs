@@ -8,7 +8,7 @@ namespace MedicamentStore
 {
     public class EnterTransaction : EnterMedicaments
     {
-        public int QuantiteTransaction {  get; set; }
+        public int QuantiteTransaction {  get; set; } 
         public string PreviousQuantity {  get; set; }
         public DateTime Date { get; set; }
         public string? Unite { get; set; }   

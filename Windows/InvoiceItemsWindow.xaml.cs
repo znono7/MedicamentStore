@@ -9,6 +9,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
@@ -16,9 +17,11 @@ namespace MedicamentStore
 {
     /// <summary>
     /// Interaction logic for InvoiceItemsWindow.xaml
-    /// </summary>
+    /// </summary> 
     public partial class InvoiceItemsWindow : Window
     {
+        private bool isExpanded = false;
+
         public InvoiceItemsWindow(InvoiceItemsWindowViewModel ViewModel)
         {
             InitializeComponent();
@@ -28,6 +31,20 @@ namespace MedicamentStore
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void expandButton_Click(object sender, RoutedEventArgs e)
+        {
+            isExpanded = !isExpanded;
+
+            DoubleAnimation rotateAnimation = new DoubleAnimation
+            {
+                To = isExpanded ? 180 : 0,
+                Duration = TimeSpan.FromSeconds(0.3)
+            };
+
+            rotateTransform.BeginAnimation(RotateTransform.AngleProperty, rotateAnimation);
+
         }
     }
 }

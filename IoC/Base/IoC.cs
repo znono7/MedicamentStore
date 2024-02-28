@@ -93,10 +93,10 @@ namespace MedicamentStore
             Kernel.Bind<ApplicationViewModel>().ToConstant(new ApplicationViewModel());
             Kernel.Bind<ParemetresViewModel>().ToConstant(new ParemetresViewModel());
             //  Kernel.Bind<StockHostViewModel>().ToConstant(new  StockHostViewModel());
+            string s = "E:\\WPF\\My Projects\\MedicamentStore\\DataBase\\StoreDB.db;Version = 3;";
 
-            
-            Kernel.Bind<SqliteDbConnection>().ToSelf().WithConstructorArgument("connectionString",
-                                                                           "Data Source =|DataDirectory|\\DataBase\\StoreDB.db;Version = 3;");
+            Kernel.Bind<SqliteDbConnection>().ToSelf().WithConstructorArgument("connectionString", $"Data Source ={s}");
+                                                                           //"Data Source =|DataDirectory|\\DataBase\\StoreDB.db;Version = 3;");
 
             BindRepository<IUserRepository, UserRepository>("context");
 

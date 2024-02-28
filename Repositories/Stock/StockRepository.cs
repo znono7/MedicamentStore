@@ -125,11 +125,11 @@ namespace MedicamentStore
         public async Task<IEnumerable<MedicamentStock>> GetPagedStocksAsync(int pageNumber, int pageSize, ProduitsPharmaceutiquesType type)
         {
             int intValue = (int)type;  
-            int offset = (pageNumber - 1) * pageSize;  
+            int offset = pageNumber * pageSize;   
               
             var parameters = new { PageSize = pageSize, Offset = offset, Val = intValue };
 
-            var baseQuery = @"SELECT m.Id, m.Nom_Commercial, m.Dosage, m.Forme, m.Conditionnement, s.Quantite, m.Img, s.Prix, p.Nom, s.Date, s.Id AS Ids ,u.Name AS Unite,u.Id AS IdUnite,s.Type
+            var baseQuery = @"SELECT  m.Id, m.Nom_Commercial, m.Dosage, m.Forme, m.Conditionnement, s.Quantite, m.Img, s.Prix, p.Nom, s.Date, s.Id AS Ids ,u.Name AS Unite,u.Id AS IdUnite,s.Type
                         FROM Stock s
                         INNER JOIN PharmaceuticalProducts m ON s.IdMedicament = m.Id 
                         INNER JOIN Supplies p ON p.Id = s.IdSupplie
@@ -238,7 +238,7 @@ namespace MedicamentStore
         public async Task<IEnumerable<TransactionDto>> GetPagedEntreeStocksAsync(int pageNumber, int pageSize, ProduitsPharmaceutiquesType type)
         {
             int intValue = (int)type;  
-            int offset = (pageNumber - 1) * pageSize; 
+            int offset = pageNumber * pageSize; 
 
             var parameters = new { PageSize = pageSize, Offset = offset, Val = intValue };
 
@@ -264,7 +264,7 @@ namespace MedicamentStore
         public async Task<IEnumerable<TransactionDto>> GetPagedSorteStocksAsync(int pageNumber, int pageSize, ProduitsPharmaceutiquesType type)
         {
             int intValue = (int)type;
-            int offset = (pageNumber - 1) * pageSize;
+            int offset = pageNumber * pageSize;
 
             var parameters = new { PageSize = pageSize, Offset = offset, Val = intValue };
 
@@ -351,7 +351,7 @@ namespace MedicamentStore
             using (var transaction = _connection.Connection().BeginTransaction())
             {
                 try
-                {
+                { 
                     // Insert Invoice
                     string sql = @"INSERT INTO Invoice (Date,Number,MontantTotal,ProduitTotal,IdSupplie,InvoiceType) 
                                     VALUES (@Date,@Number,@MontantTotal,@ProduitTotal,@IdSupplie,@InvoiceType)";
@@ -410,7 +410,7 @@ namespace MedicamentStore
         public async Task<IEnumerable<MedicamentStock>> GetAllEntreeStocksAsync(int pageNumber, int pageSize, ProduitsPharmaceutiquesType type)
         {
             int intValue = (int)type;
-            int offset = (pageNumber - 1) * pageSize; 
+            int offset = pageNumber * pageSize; 
 
             var parameters = new { PageSize = pageSize, Offset = offset, Val = intValue };
 
@@ -436,7 +436,7 @@ namespace MedicamentStore
         public async Task<IEnumerable<MedicamentStock>> GetAllSorteStocksAsync(int pageNumber, int pageSize, ProduitsPharmaceutiquesType type)
         {
             int intValue = (int)type;
-            int offset = (pageNumber - 1) * pageSize;
+            int offset = pageNumber * pageSize;
 
             var parameters = new { PageSize = pageSize, Offset = offset, Val = intValue };
 

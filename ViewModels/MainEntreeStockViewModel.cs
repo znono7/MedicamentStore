@@ -12,11 +12,13 @@ namespace MedicamentStore
 {
     public class MainEntreeStockViewModel : BaseViewModel
     {
+        public PaginationViewModel paginationView { get; set; }
+
         public ICommand MenuVisibleCommand { get; set; }
         public bool MenuVisible { get; set; }
         public string TextType { get; set; } = ProduitsPharmaceutiquesType.None.ToProduitsPharmaceutiques();
         public ICommand MedicamentCommand { get; set; }//
-        public ICommand UpdateQuantiteCommand { get; set; }//  
+        public ICommand UpdateQuantiteCommand { get; set; }//   
 
         public ObservableCollection<MedicamentStock> FilteredMedicaments { get; set; }
 
@@ -48,24 +50,7 @@ namespace MedicamentStore
             }
         }
 
-        private int _currentPage = 1;
         private int _pageSize = 20; // Number of rows per page     
-
-        public int CurrentPage
-        {
-            get { return _currentPage; }
-            set
-            {
-                if (_currentPage != value)
-                {
-                    _currentPage = value;
-                    OnPropertyChanged(nameof(CurrentPage));
-                    _ = LoadStockPagedsAsync(CurrentTypePage); // Call a method to load data based on the current page
-                }
-            }
-        }
-
-       
 
         public ICommand NextPageCommand { get; private set; }
         public ICommand PreviousPageCommand { get; private set; }
@@ -99,8 +84,11 @@ namespace MedicamentStore
         public ICommand DeleteCommand { get; set; }
         public MainEntreeStockViewModel()
         {
-            NextPageCommand = new RelayCommand(NextPage);
-            PreviousPageCommand = new RelayCommand(PreviousPage);
+            paginationView = new PaginationViewModel();
+            paginationView.TotalPages = CalculateTotalPages(GetTotalItems(CurrentTypePage).Result, _pageSize);
+            paginationView.PageIndexChanged += PaginationViewModel_PageIndexChanged;
+
+           
             MedicamentCommand = new RelayParameterizedCommand(async (param) => await MedicamentButton(param));
             MenuVisibleCommand = new RelayCommand(MenuButton);
             NewItemCommand = new RelayCommand(async () => await ToNewStockPage());
@@ -109,9 +97,26 @@ namespace MedicamentStore
             DeleteCommand = new RelayParameterizedCommand(async (param) => await DeleteEntree(param));
             UpdateQuantiteCommand = new RelayParameterizedCommand(async (param) => await ToNewItemStockWindow(param));
 
-            _ = LoadStockPagedsAsync(CurrentTypePage);
+            _ = GetStocksAsync(CurrentTypePage, paginationView.CurrentPageIndex, _pageSize);
+
+        }
+        private void PaginationViewModel_PageIndexChanged(object? sender, int e)
+        {
+            _ = GetStocksAsync(CurrentTypePage, e, _pageSize);
         }
 
+        private int CalculateTotalPages(int totalItems, int itemsPerPage)
+        {
+            if (totalItems == 0)
+                return 0;
+            if (totalItems <= itemsPerPage)
+                return 1;
+            return totalItems / itemsPerPage + (totalItems % itemsPerPage == 0 ? 0 : 1);
+        }
+        private async Task<int> GetTotalItems(ProduitsPharmaceutiquesType type)
+        {
+            return await IoC.StockManager.GetProduitTotalStockAsync(type);
+        }
         private async Task ToNewStockPage()
         {
             IoC.Application.GoToPage(ApplicationPage.NewStockPage, new NewStockViewModel());
@@ -151,7 +156,7 @@ namespace MedicamentStore
         {
             if(param is MedicamentStock medicament)
             { 
-                IoC.Application.GoToPage(ApplicationPage.EntreeStockPage, new EntreeStockViewModel(medicament.Id));
+                IoC.Application.GoToPage(ApplicationPage.EntreeStockPage, new EntreeStockViewModel(medicament.Id)); 
             }
             await Task.Delay(1);
         }
@@ -188,33 +193,36 @@ namespace MedicamentStore
         }
         public async Task MedicamentButton(object param)
         {
-            if (param is ProduitsPharmaceutiquesType selectedType)
+            if (param is ProduitsPharmaceutiquesType selectedType) 
             {
                 CurrentTypePage = selectedType;
                 TextType = selectedType.ToProduitsPharmaceutiques();
-                // _ = LoadStocksAsync(selectedType);
-                _ = LoadStockPagedsAsync(CurrentTypePage);
-                MenuVisible = false;
+                paginationView.Reset();
+                await GetStocksAsync(CurrentTypePage, paginationView.CurrentPage, _pageSize);
+                paginationView.TotalPages = CalculateTotalPages(GetTotalItems(CurrentTypePage).Result, _pageSize);
+
             }
             await Task.Delay(1);
         }
-
-        private async Task LoadStockPagedsAsync(ProduitsPharmaceutiquesType currentTypePage)
+        private async Task GetStocksAsync(ProduitsPharmaceutiquesType type, int currentPage, int pageSize)
         {
-            CurrentTypePage = currentTypePage;
+            // Stocks = new ObservableCollection<MedicamentStock>();
+            CurrentTypePage = type;
             IsLoading = true;
             await Task.Delay(1000);
-            var Result = await IoC.StockManager.GetAllEntreeStocksAsync(CurrentPage, _pageSize, CurrentTypePage);
+            var Result = await IoC.StockManager.GetAllEntreeStocksAsync(currentPage, pageSize, CurrentTypePage);
 
             foreach (var Stock in Result)
             {
-               
+                //UpdateStatus(Stock);
                 Stock.TypeMed = ((ProduitsPharmaceutiquesType)Stock.Type).ToProduitsPharmaceutiques();
+
             }
             EnterMedicaments = new ObservableCollection<MedicamentStock>(Result);
             //_ = GetStockNumbers(CurrentTypePage);
             IsLoading = false;
         }
+       
         protected string mLastSearchText;
 
         private void Search()
@@ -243,17 +251,6 @@ namespace MedicamentStore
             mLastSearchText = SearchText;
         }
 
-        private void NextPage()
-        {
-            CurrentPage++;
-        }
-
-        private void PreviousPage()
-        {
-            if (CurrentPage > 1)
-            {
-                CurrentPage--;
-            }
-        }
+       
     }
 }

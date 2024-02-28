@@ -16,7 +16,8 @@ using System.Windows.Input;
 namespace MedicamentStore
 {
     public class StockHostViewModel : BaseViewModel 
-    {
+    { 
+        public PaginationViewModel paginationView { get; set; }
         private ProduitsPharmaceutiquesType _CurrentTypePage { get; set; } = ProduitsPharmaceutiquesType.None;
         public ProduitsPharmaceutiquesType CurrentTypePage { get => _CurrentTypePage;
              set 
@@ -29,24 +30,9 @@ namespace MedicamentStore
 
             }
         } 
-
-        private int _currentPage = 1;   
-        private int _pageSize = 10; // Number of rows per page       
-              
-        public int CurrentPage   
-        {
-            get { return _currentPage; }
-            set
-            {
-                if (_currentPage != value)
-                {
-                    _currentPage = value;
-                    OnPropertyChanged(nameof(CurrentPage));
-                    _ = LoadStockPagedsAsync(CurrentTypePage); // Call a method to load data based on the current page
-                }
-            }
-        }
-
+           
+        private int _pageSize = 10;    
+         
         public ICommand NextPageCommand { get; private set; }
         public ICommand PreviousPageCommand { get; private set; } 
         public ICommand PrintCommand { get; private set; }
@@ -117,7 +103,6 @@ namespace MedicamentStore
         #region Side Menu Buttons
         public ICommand MedicamentCommand { get; set; }
         public ICommand DeleteCommand { get; set; }
-        public List<string> SortMed { get; private set; }
 
         private int _selectedIndex;
         public int SelectedIndex
@@ -147,34 +132,54 @@ namespace MedicamentStore
             }
         }
         #endregion
+
+        public ICommand PopupClickawayCommand { get; set; }
         public StockHostViewModel()
         {
+            paginationView = new PaginationViewModel();
+            paginationView.TotalPages = CalculateTotalPages(GetTotalItems(CurrentTypePage).Result, _pageSize);
+            paginationView.PageIndexChanged += PaginationViewModel_PageIndexChanged;
+
             StockInitialCommand = new RelayCommand(SetStockInitial);
             StockEnterCommand = new RelayCommand(SetStockEnter);
 
-            _ = LoadStockPagedsAsync(CurrentTypePage);
-            _ = GetStockNumbers(CurrentTypePage);
-            SortMed = new List<string>
-            {
-                "Trier par",
-                "Trier par Nom",
-                "Trier par Quantité",
-                "Trier par Prix"
-            };
+            _ = GetStocksAsync(CurrentTypePage, paginationView.CurrentPageIndex, _pageSize);
+            //_ = GetStockNumbers(CurrentTypePage);
             
             MenuVisibleCommand = new RelayCommand(MenuButton);
             SearchCommand = new RelayCommand(Search);
             MedicamentCommand = new  RelayParameterizedCommand(async (param)=> await MedicamentButton(param));
             NewItemCommand = new RelayCommand(async () => await ToNewItemStockWindow());
             DeleteCommand = new RelayParameterizedCommand((p) => DeleteProduit(p));
-            NextPageCommand = new RelayCommand(NextPage);
-            PreviousPageCommand = new RelayCommand(PreviousPage);
+           
             PrintCommand = new RelayCommand(ShowDocument);
             UpdateQuantiteCommand = new RelayParameterizedCommand((p) => UpdateQuantite(p));
             PrintPdfCommand = new RelayCommand(ShowPdfDocument);
-
+            PopupClickawayCommand = new RelayCommand(HideMenu);
         }
 
+        private void HideMenu()
+        {
+            MenuVisible = false;
+        }
+
+        private void PaginationViewModel_PageIndexChanged(object? sender, int e)
+        {
+            _ = GetStocksAsync(CurrentTypePage, e, _pageSize);
+        }
+
+        private int CalculateTotalPages(int totalItems, int itemsPerPage)
+        {
+            if(totalItems == 0)
+                return 0;
+            if (totalItems <= itemsPerPage)
+                return 1;
+            return totalItems / itemsPerPage + (totalItems % itemsPerPage == 0 ? 0 : 1);
+        }
+        private async Task<int> GetTotalItems(ProduitsPharmaceutiquesType type)
+        {
+           return await IoC.StockManager.GetProduitTotalStockAsync(type);
+        }
         private void ShowPdfDocument()
         {
 
@@ -246,23 +251,7 @@ namespace MedicamentStore
                
                 IoC.Application.GoToPage(ApplicationPage.NewStockPage,new NewStockViewModel(l));
 
-                //AddStockWindowViewModel viewModel = new AddStockWindowViewModel(medicament);
-
-                //var itemToUpdate = Stocks.FirstOrDefault(item => item.Id == medicament.Id); 
-
-                //viewModel.UpdateQuantiteProduit += (sender, e) =>
-                //    {
-                //        if(itemToUpdate != null)
-                //        {
-                //            itemToUpdate.Quantite =  e.UpdateQuantiteStock.Quantite;
-
-                //            int index = Stocks.IndexOf(itemToUpdate);
-                //            Stocks[index] = itemToUpdate;
-                //            FilteredStocks = new ObservableCollection<MedicamentStock>(Stocks);
-                //        }
-                //    };
-                //AddStockWindow window = new AddStockWindow(viewModel);
-                //window.Show();
+               
             }
         }
 
@@ -271,18 +260,7 @@ namespace MedicamentStore
 
             IoC.Application.GoToPage(ApplicationPage.PrintInitialStockPage, new PrintInitialStockViewModel(FilteredStocks));
         }
-        private void NextPage()
-        {
-            CurrentPage++;
-        }
-
-        private void PreviousPage()
-        {
-            if (CurrentPage > 1)
-            {
-                CurrentPage--;
-            }
-        }
+       
         private void DeleteProduit(object p)
         {
             if (p is MedicamentStock newProduit)
@@ -316,30 +294,15 @@ namespace MedicamentStore
         }
         public double MontantTotal {  get; set; }
         public string produitTotal { get; set; }
-        private async Task LoadStocksAsync(ProduitsPharmaceutiquesType type)
+       
+        private async Task GetStocksAsync(ProduitsPharmaceutiquesType type, int currentPage, int pageSize)
         {
-            IsLoading = true; 
-            await Task.Delay(2000);
-            var Result = await IoC.StockManager.GetMedicamentStocksAsync(type);
-           
-            produitTotal = Result.Count().ToString();
-            foreach (var Stock in Result)
-            {
-                UpdateStatus(Stock);
-            }
-            MontantTotal = Result.Sum(d => d.PrixTotal);
-            Stocks = new ObservableCollection<MedicamentStock>(Result);
-            IsLoading = false;
-        }
-
-        private async Task LoadStockPagedsAsync(ProduitsPharmaceutiquesType type)
-        {
-           // Stocks = new ObservableCollection<MedicamentStock>();
-            CurrentTypePage = type; 
+            // Stocks = new ObservableCollection<MedicamentStock>();
+            CurrentTypePage = type;
             IsLoading = true;
             await Task.Delay(1000);
-            var Result = await IoC.StockManager.GetPagedStocksAsync(CurrentPage, _pageSize, CurrentTypePage);
-            
+            var Result = await IoC.StockManager.GetPagedStocksAsync(currentPage, pageSize, CurrentTypePage);
+
             foreach (var Stock in Result)
             {
                 UpdateStatus(Stock);
@@ -350,6 +313,7 @@ namespace MedicamentStore
             _ = GetStockNumbers(CurrentTypePage);
             IsLoading = false;
         }
+       
         private async Task GetStockNumbers(ProduitsPharmaceutiquesType type)
         {
             MontantTotal = await IoC.StockManager.GetAmountTotalStockAsync(type);
@@ -391,10 +355,12 @@ namespace MedicamentStore
             if (param is ProduitsPharmaceutiquesType selectedType)
             { 
                 CurrentTypePage = selectedType;
-                TextType = selectedType.ToProduitsPharmaceutiques(); 
-                // _ = LoadStocksAsync(selectedType);
-                _ = LoadStockPagedsAsync(CurrentTypePage);
-                MenuVisible = false;
+                TextType = selectedType.ToProduitsPharmaceutiques();
+                paginationView.Reset();
+                await GetStocksAsync(CurrentTypePage, paginationView.CurrentPage, _pageSize);
+                paginationView.TotalPages = CalculateTotalPages(GetTotalItems(CurrentTypePage).Result, _pageSize);
+
+                //MenuVisible = false;
             }
             await Task.Delay(1);
         }
@@ -408,15 +374,7 @@ namespace MedicamentStore
        
         private void UpdateStatus(MedicamentStock stock)
         {
-            //if(stock.Img == "0")
-            //{
-            //    stock.Img = $"../Pictures/24.png";
-
-            //}
-            //else
-            //{
-            //    stock.Img = $"../Pictures/{stock.Img}";
-            //}
+            
 
             if (stock.Quantite == 0)
             {

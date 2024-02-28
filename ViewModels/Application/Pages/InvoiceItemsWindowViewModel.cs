@@ -1,15 +1,68 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace MedicamentStore 
 {
    public class InvoiceItemsWindowViewModel : BaseViewModel
     {
+        public bool MenuVisible { get; set; } = false;
+        public TypeProduitViewModel TypeProduitCtrl { get; set; }
+        public ObservableCollection<MedicamentStock> FilteredStocks { get; set; }
+        public ObservableCollection<MedicamentStock> Stocks
+        {
+            get => mStocks;
+            set
+            {
+                if (mStocks == value) 
+                    return;
+                mStocks = value;
+                FilteredStocks = new ObservableCollection<MedicamentStock>(mStocks);
+            }
+        }
+        protected ObservableCollection<MedicamentStock> mStocks { get; set; }
+
+        public int MaxPageCount { get; set; }
+        private ProduitsPharmaceutiquesType _CurrentTypePage { get; set; } = ProduitsPharmaceutiquesType.None;
+        public ProduitsPharmaceutiquesType CurrentTypePage
+        {
+            get => _CurrentTypePage;
+            set
+            {
+                if (_CurrentTypePage != value)
+                {
+                    _CurrentTypePage = value;
+                    OnPropertyChanged(nameof(CurrentTypePage));
+                }
+
+            }
+        }
+
+        private int _currentPage = 1;
+        private int _pageSize = 10; // Number of rows per page       
+
+        public int CurrentPage
+        {
+            get { return _currentPage; }
+            set
+            {
+                if (_currentPage != value)
+                {
+                    _currentPage = value;
+                    OnPropertyChanged(nameof(CurrentPage));
+                    //_ = LoadStockPagedsAsync(CurrentTypePage); // Call a method to load data based on the current page
+                }
+            }
+        }
+        public ICommand NextPageCommand { get; private set; }
+        public ICommand PreviousPageCommand { get; private set; }//PopupClickawayCommand
+        public ICommand PopupClickawayCommand { get;  set; }//
         #region Protected Members
 
         /// <summary>
@@ -27,17 +80,8 @@ namespace MedicamentStore
 
         #endregion
 
-        #region Public Members
-        public ObservableCollection<InvoiceProduct> FilteredItems { get; set; }
-        public ObservableCollection<InvoiceProduct> InvoiceItems { get => minvoiceItems; 
-            set
-            {
-                if (minvoiceItems == value)
-                    return;
-                minvoiceItems = value;
-                FilteredItems = new ObservableCollection<InvoiceProduct>(minvoiceItems);
-            } }
-        protected ObservableCollection<InvoiceProduct> minvoiceItems { get; set; }
+        #region Public Members 
+      
 
         public ObservableCollection<TypeProduct> TypeItems { get; set; } 
         public event EventHandler<SelectedItemEventArgs> ItemSelected;
@@ -75,7 +119,7 @@ namespace MedicamentStore
             set
             {
                 _selectedType = value;
-                _ = GetProducts(_selectedType.Id);
+                //_ = GetProducts(_selectedType.Id);
                 //Unit = _selectedUnite?.Id ?? 0;
             }
         }
@@ -92,29 +136,103 @@ namespace MedicamentStore
         /// <summary>
         /// The command for when the user wants to search
         /// </summary>
-        public ICommand SearchCommand { get; set; }
+        public ICommand SearchCommand { get; set; }//Command="{Binding MenuVisibleCommand}"
+        public ICommand MenuVisibleCommand { get; set; }//Command="{Binding MenuVisibleCommand}"
 
         #endregion
         public InvoiceItemsWindowViewModel() 
         {
-              
-            _ = GetTypes();
-            _ = GetProducts(1);
-            SelectedType = TypeItems[0];
+            TypeProduitCtrl = new TypeProduitViewModel { CommitAction = SetType };
+          //_ = GetTypes();
+            _ = LoadStockPagedsAsync(CurrentTypePage);
+           // SelectedType = TypeItems[0];
             SetItemCommand = new RelayParameterizedCommand(async (param) => await ItemSelectedC(param));
 
             SearchCommand = new RelayCommand(async()=> await Search());
+            MenuVisibleCommand = new RelayCommand(MenuButton);
+            PopupClickawayCommand = new RelayCommand(HideMenuButton);
+        }
+
+        private void HideMenuButton()
+        {
+            MenuVisible = false;
 
         }
 
-        public async Task GetProducts(int type)
+        private void MenuButton()
         {
+            MenuVisible ^= true;
+
+        }
+        private async Task SetType(object arg)
+        {
+            if(arg is ProduitsPharmaceutiquesType type)
+            {
+                await LoadStockPagedsAsync(type);
+            }
+        }
+
+        private async Task LoadStockPagedsAsync(ProduitsPharmaceutiquesType type)
+        {
+            CurrentTypePage = type;
             IsLoading = true;
             await Task.Delay(1000);
-            var Res = await IoC.InvoiceManager.GetAllInvoiceProduct(type);
-            InvoiceItems = new ObservableCollection<InvoiceProduct>(Res);
-            IsLoading = false;
+            var Result = await IoC.StockManager.GetPagedStocksAsync(CurrentPage, _pageSize, CurrentTypePage);
 
+            foreach (var Stock in Result)
+            {
+                UpdateStatus(Stock);
+                Stock.TypeMed = ((ProduitsPharmaceutiquesType)Stock.Type).ToProduitsPharmaceutiques();
+
+            }
+            Stocks = new ObservableCollection<MedicamentStock>(Result);
+            _ = GetStockNumbers(CurrentTypePage);
+            IsLoading = false;
+        }
+        private async Task GetStockNumbers(ProduitsPharmaceutiquesType type)
+        {
+            var MontantTotal = await IoC.StockManager.GetAmountTotalStockAsync(type);
+            var produitTotal = (await IoC.StockManager.GetProduitTotalStockAsync(type)).ToString();
+        }
+
+        private void UpdateStatus(MedicamentStock stock)
+        {
+
+
+            if (stock.Quantite == 0)
+            {
+                stock.Status = "En Rupture";
+                stock.PrimaryBackground = "FF423C";
+
+            }
+            else
+            if (stock.Quantite > 0 && stock.Quantite < 5)
+            {
+                stock.Status = "Faible";
+                stock.PrimaryBackground = "F09E43";
+            }
+            else
+            {
+                stock.Status = "Disponible";
+                stock.PrimaryBackground = "349432";
+            }
+            //double x = stock.Prix * stock.Quantite;
+            //stock.PrixTotal = string.Format("{0:0.00}", x);
+            stock.PrixTotal = double.Parse(string.Format("{0:0.00}", stock.Prix * stock.Quantite));
+
+        }
+
+        public async Task MedicamentButton(object param)
+        {
+            if (param is ProduitsPharmaceutiquesType selectedType)
+            {
+                CurrentTypePage = selectedType;
+               // TextType = selectedType.ToProduitsPharmaceutiques();
+                // _ = LoadStocksAsync(selectedType);
+                _ = LoadStockPagedsAsync(CurrentTypePage);
+                //MenuVisible = false;
+            }
+            await Task.Delay(1);
         }
         public async Task GetTypes()
         {
@@ -146,10 +264,10 @@ namespace MedicamentStore
                 return;
 
             // If we have no search text, or no items
-            if (string.IsNullOrEmpty(SearchText) || InvoiceItems == null || InvoiceItems.Count <= 0)
+            if (string.IsNullOrEmpty(SearchText) || Stocks == null || Stocks.Count <= 0)
             {
                 // Make filtered list the same
-                FilteredItems = new ObservableCollection<InvoiceProduct>(InvoiceItems);
+                FilteredStocks = new ObservableCollection<MedicamentStock>(Stocks);
 
                 // Set last search text
                 mLastSearchText = SearchText;
@@ -161,7 +279,8 @@ namespace MedicamentStore
             // TODO: Make more efficient search
 
 
-            FilteredItems = new ObservableCollection<InvoiceProduct>(InvoiceItems.Where(x => x.Nom_Commercial.Contains(SearchText, StringComparison.OrdinalIgnoreCase)));
+            FilteredStocks = new ObservableCollection<MedicamentStock>
+                (Stocks.Where(x => x.Nom_Commercial.Contains(SearchText, StringComparison.OrdinalIgnoreCase)));
            
             // Set last search text
             mLastSearchText = SearchText;

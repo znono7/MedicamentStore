@@ -10,6 +10,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -54,6 +55,19 @@ namespace MedicamentStore
             e.Handled = true;
         }
 
-       
+        private bool isExpanded {  get; set; }
+        private void btnMenu_Click(object sender, RoutedEventArgs e)
+        {
+
+            isExpanded = !isExpanded;
+
+            DoubleAnimation rotateAnimation = new DoubleAnimation
+            {
+                To = isExpanded ? 180 : 0,
+                Duration = TimeSpan.FromSeconds(0.3)
+            };
+
+            rotateTransform.BeginAnimation(RotateTransform.AngleProperty, rotateAnimation);
+        }
     }
 }

@@ -12,7 +12,7 @@ namespace MedicamentStore
 
         public ICommand? HomePage { get; set; }
         public ICommand? MedicamentPage { get; set; }
-        public ICommand? UsersPage { get; set; }
+        public ICommand? UsersPage { get; set; } 
         public ICommand? ParemetrePage { get; set; }
         public ICommand? NewInvoicePage { get; set; } 
         public ICommand? StockPage { get; set; }

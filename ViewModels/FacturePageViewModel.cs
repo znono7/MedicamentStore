@@ -28,7 +28,7 @@ namespace MedicamentStore
         }
         private void SetDate()
         {
-            if (Stocks.Any())
+            if (InvoiceItems.Any())
             {
                 // TypeString = $"{((ProduitsPharmaceutiquesType)Stocks.FirstOrDefault().Type).ToProduitsPharmaceutiques()}";
                 TotalAmount = Invoice.MontantTotal;
