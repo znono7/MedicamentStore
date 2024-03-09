@@ -16,17 +16,17 @@ namespace MedicamentStore
             {
                 try
                 {
-                    return new BitmapImage(new Uri(imagePath, UriKind.RelativeOrAbsolute));
+                    return new BitmapImage(new Uri($"pack://siteoforigin:,,,/Pictures/{imagePath}", UriKind.RelativeOrAbsolute));
                 }
                 catch (Exception)
                 {
-                    return new BitmapImage(new Uri("pack://application:,,,/Pictures/Lp.jpg", UriKind.RelativeOrAbsolute));
+                    return new BitmapImage(new Uri("pack://siteoforigin:,,,/Pictures/Lp.jpg", UriKind.RelativeOrAbsolute));
 
                 }
             }
 
             // Return a default image source if the conversion fails
-            return new BitmapImage(new Uri("pack://application:,,,/Pictures/Lp.jpg", UriKind.RelativeOrAbsolute));
+            return new BitmapImage(new Uri("pack://siteoforigin:,,,/Pictures/Lp.jpg", UriKind.RelativeOrAbsolute));
 
           
         }

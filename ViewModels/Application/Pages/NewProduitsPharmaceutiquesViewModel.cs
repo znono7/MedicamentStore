@@ -145,13 +145,15 @@ namespace MedicamentStore
             ;
             var produit = new PharmaceuticalProduct
             {
+
                 Nom_Commercial = ProductName.EnteredText.ToUpper(),
                 Forme = Forme.EnteredText,
                 Dosage = Dosage.EnteredText,
                 Conditionnement = Conditionnement.EnteredText,
                 Img = ImageName,
                 Type = SelectedProduit.Id,
-                imageSource = MyImageSource
+                imageSource = MyImageSource,
+                IdProduct = Guid.NewGuid()
             };
             OnProduitAded(produit);
            //var res = IoC.ProduitManager.InsertProduit(produit);

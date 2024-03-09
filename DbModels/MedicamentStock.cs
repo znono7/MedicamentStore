@@ -11,24 +11,29 @@ namespace MedicamentStore
     { 
         private string? source;    
         public int Type { get; set; }     
-         
-        public int Id { get; set; }  
-        public int IdMedicament { get; set; }
-        public int Ids { get; set; } 
-        public string? Img 
-        {
-            get => source;
-            set
-            {
-                if (value == "0")
-                {
-                    source = $"pack://application:,,,/Pictures/Lp.jpg";
-                    return;
-                }
-                source = $"pack://application:,,,/Pictures/{value}";
+        public string IdProduct { get; set; }
 
-            }
-        }
+        public int Id { get; set; }  
+        public int IdMedicament { get; set; } 
+        public int Ids { get; set; } 
+        public string? Img { get; set;} 
+        //public string? Img
+        //{
+        //    get => source;
+        //    set
+        //    {
+        //        if (value is null)
+        //        {
+        //            source = $"pack://application:,,,/Pictures/Lp.jpg";
+        //        }
+        //        else
+        //        {
+        //            source = $"pack://application:,,,/Pictures/{value}";
+
+        //        }
+
+        //    }
+        //}
 
         public string TypeMed {  get; set; }
         public string? DesignName => $"{Nom_Commercial} \n {Forme} {Dosage} {Conditionnement}";

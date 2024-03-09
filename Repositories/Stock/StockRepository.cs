@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing.Printing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 namespace MedicamentStore
 {
@@ -125,17 +128,18 @@ namespace MedicamentStore
         public async Task<IEnumerable<MedicamentStock>> GetPagedStocksAsync(int pageNumber, int pageSize, ProduitsPharmaceutiquesType type)
         {
             int intValue = (int)type;  
-            int offset = pageNumber * pageSize;   
+            int offset = pageNumber * pageSize;    
               
             var parameters = new { PageSize = pageSize, Offset = offset, Val = intValue };
 
-            var baseQuery = @"SELECT  m.Id, m.Nom_Commercial, m.Dosage, m.Forme, m.Conditionnement, s.Quantite, m.Img, s.Prix, p.Nom, s.Date, s.Id AS Ids ,u.Name AS Unite,u.Id AS IdUnite,s.Type
+            var baseQuery = @"SELECT  m.IdProduct, m.Nom_Commercial, m.Dosage, m.Forme, m.Conditionnement, s.Quantite, m.Img, 
+                                s.Prix, p.Nom, s.Date, s.Id AS Ids ,u.Name AS Unite,u.Id AS IdUnite,m.Type
                         FROM Stock s
-                        INNER JOIN PharmaceuticalProducts m ON s.IdMedicament = m.Id 
+                        INNER JOIN PharmaceuticalProducts m ON s.IdProduct = m.IdProduct 
                         INNER JOIN Supplies p ON p.Id = s.IdSupplie
                         INNER JOIN Units u ON u.Id = s.Unit";
 
-            var typeCondition = " WHERE s.Type = @Val";
+            var typeCondition = " WHERE m.Type = @Val";
 
             var finalQuery = type != ProduitsPharmaceutiquesType.None ? $"{baseQuery}{typeCondition}" : baseQuery;
 
@@ -177,9 +181,9 @@ namespace MedicamentStore
         {
             int intValue = (int)type; 
             if(intValue > 0)
-                return await _connection.ExecuteScalar<int>("SELECT COUNT(DISTINCT IdMedicament) AS NumberOfUniqueProducts FROM Stock WHERE Type = @Val ", new {Val = intValue}) ;
+                return await _connection.ExecuteScalar<int>("SELECT COUNT(DISTINCT IdProduct) AS NumberOfUniqueProducts FROM Stock WHERE Type = @Val ", new {Val = intValue}) ;
             else
-                return await _connection.ExecuteScalar<int>("SELECT COUNT(DISTINCT IdMedicament) AS NumberOfUniqueProducts FROM Stock ");
+                return await _connection.ExecuteScalar<int>("SELECT COUNT(DISTINCT IdProduct) AS NumberOfUniqueProducts FROM Stock ");
 
         } 
 
@@ -350,8 +354,27 @@ namespace MedicamentStore
         {
             using (var transaction = _connection.Connection().BeginTransaction())
             {
-                try 
-                { 
+                try
+                {  //Insert PharmaceuticalProduct
+                    foreach (var item in newProduits)
+                    {
+                        var parameters = new
+                        {
+                            item.IdProduct,
+                            item.Nom_Commercial,
+                            item.Dosage,
+                            item.Forme,
+                            item.Conditionnement,
+                            item.Img,
+                            item.Type,
+
+                        };
+                        await _connection.ExecuteAsync(transaction.Connection, @"INSERT INTO PharmaceuticalProducts (IdProduct,Nom_Commercial,Dosage,Forme,Conditionnement,Img,Type)
+                                                                            VALUES (@IdProduct,@Nom_Commercial,@Dosage,@Forme,@Conditionnement,@Img,@Type)",
+                                                                                                                        transaction: transaction, parameters);
+                        if(item.imageSource != null && item.Img != null)
+                            SaveImageToDisk(item.imageSource, item.Img);
+                    }
                     // Insert Invoice
                     string sql = @"INSERT INTO Invoice (Date,Number,MontantTotal,ProduitTotal,IdSupplie,InvoiceType) 
                                     VALUES (@Date,@Number,@MontantTotal,@ProduitTotal,@IdSupplie,@InvoiceType)";
@@ -364,8 +387,8 @@ namespace MedicamentStore
                     {
                         itemInvoice.IdInvoice = LastInvoiceId;
                         await _connection.ExecuteAsync(transaction.Connection,
-                            @"INSERT INTO InvoiceItem (IdInvoice,InvoiceNumber,IdMedicament,IdTypeProduct,IdUnite,Quantite,Prix)                                             
-                              VALUES (@IdInvoice,@InvoiceNumber,@IdMedicament,@IdTypeProduct,@IdUnite,@Quantite,@Prix);",
+                            @"INSERT INTO InvoiceItem (IdInvoice,InvoiceNumber,IdProduct,IdTypeProduct,IdUnite,Quantite,Prix)                                             
+                              VALUES (@IdInvoice,@InvoiceNumber,@IdProduct,@IdTypeProduct,@IdUnite,@Quantite,@Prix);",
                                            transaction: transaction, itemInvoice);
                     }
                     // Insert Stocks
@@ -373,16 +396,17 @@ namespace MedicamentStore
                     {
                         var parameters = new
                         {
-                            Id = item.Id,
-                            Quantite = item.Quantite,
-                            IdSupplie = item.IdSupplie,
-                            Prix = item.Prix,
-                            Type = item.Type,
-                            Date = item.Date,
-                            Unit = item.SelectedUnite.Name == null ? 1 : item.SelectedUnite.Id
+                            item.Id,
+                            item.Quantite,
+                            item.IdSupplie,
+                            item.Prix,
+                            item.Type,
+                            item.Date,
+                            Unit = item.SelectedUnite.Name == null ? 1 : item.SelectedUnite.Id ,
+                            item.IdProduct
                         };
-                        await _connection.ExecuteAsync(transaction.Connection, @"INSERT INTO Stock (IdMedicament,Quantite,IdSupplie,Prix,Type,Date,Unit)
-                                                                            VALUES (@Id,@Quantite,@IdSupplie,@Prix,@Type,@Date,@Unit)",
+                        await _connection.ExecuteAsync(transaction.Connection, @"INSERT INTO Stock (IdProduct,Quantite,IdSupplie,Prix,Type,Date,Unit)
+                                                                            VALUES (@IdProduct,@Quantite,@IdSupplie,@Prix,@Type,@Date,@Unit)",
                                              transaction: transaction, parameters);
 
                         int LastStockId = await _connection.ExecuteScalarTransaction<int>(transaction.Connection, "SELECT last_insert_rowid()", transaction: transaction);
@@ -460,5 +484,31 @@ namespace MedicamentStore
         }
 
         #endregion
+
+        private void SaveImageToDisk(ImageSource image, string img)
+        {
+
+
+            // Convert the image source to a BitmapSource
+            BitmapSource bitmapSource = image as BitmapSource;
+
+            if (bitmapSource != null)
+            {
+                // Create a BitmapEncoder based on the desired image format (e.g., JPEG)
+                BitmapEncoder encoder = new JpegBitmapEncoder(); // Change this to the desired format if needed
+
+                // Create a FileStream to write the image data to a file on disk
+                string filePath = $".\\Pictures\\{img}"; // Change this to your desired file path and name
+                using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    // Encode the bitmap source and write it to the file stream
+                    encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
+                    encoder.Save(fileStream);
+                }
+
+            }
+
+        }
+
     }
 }

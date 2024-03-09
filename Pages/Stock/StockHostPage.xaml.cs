@@ -49,11 +49,7 @@ namespace MedicamentStore
 
        
 
-        private void Image_ImageFailed(object sender, ExceptionRoutedEventArgs e)
-        {
-            ((Image)sender).Source = new BitmapImage(new Uri("pack://application:,,,/Pictures/Lp.jpg", UriKind.RelativeOrAbsolute));
-            e.Handled = true;
-        }
+       
 
         private bool isExpanded {  get; set; }
         private void btnMenu_Click(object sender, RoutedEventArgs e)

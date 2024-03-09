@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
 
 namespace MedicamentStore
 {
@@ -185,7 +188,7 @@ namespace MedicamentStore
                 {
                     InvoiceItem invoiceItem = new InvoiceItem
                     {
-                        IdMedicament = item.Id,
+                        IdProduct = item.IdProduct,
                         IdTypeProduct = item.Type,
                         IdUnite = item.SelectedUnite.Id,
                         InvoiceNumber = invoice.EnteredNumText,
@@ -218,12 +221,14 @@ namespace MedicamentStore
                 {
                     NewProduitPharmaStock newProduit = new NewProduitPharmaStock
                     {
-                        //Id = e.SelectedProductPharma.Id,
                         Nom_Commercial = e.SelectedProductPharma.Nom_Commercial,
                         Dosage = e.SelectedProductPharma.Dosage,
                         Forme = e.SelectedProductPharma.Forme,
                         Conditionnement = e.SelectedProductPharma.Conditionnement,
                         Type = e.SelectedProductPharma.Type,
+                        IdProduct = e.SelectedProductPharma.IdProduct,
+                        Img = e.SelectedProductPharma.Img,
+                        imageSource = e.SelectedProductPharma.imageSource,
 
                     };
                     //bool idExists = StockProducts.Any(p =>  p.Nom_Commercial == newProduit.Nom_Commercial && p.Type == newProduit.Type);
@@ -232,7 +237,7 @@ namespace MedicamentStore
                     //    return;
                     //}
                     StockProducts.Add(newProduit);
-                    Products.Add(e.SelectedProductPharma);
+                    //Products.Add(e.SelectedProductPharma);
                 }
             };
             NewProduitsPharmaceutiques newProduits = new NewProduitsPharmaceutiques(viewModel);
@@ -264,7 +269,6 @@ namespace MedicamentStore
             //newWindow.Show();
 
         }
-
         private async Task BackPage()
         {
           

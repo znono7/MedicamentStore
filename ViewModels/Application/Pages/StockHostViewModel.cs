@@ -22,7 +22,7 @@ namespace MedicamentStore
         public ProduitsPharmaceutiquesType CurrentTypePage { get => _CurrentTypePage;
              set 
             {
-                if (_CurrentTypePage != value)
+                if (_CurrentTypePage != value) 
                 {
                     _CurrentTypePage = value;
                     OnPropertyChanged(nameof(CurrentTypePage));
@@ -223,7 +223,14 @@ namespace MedicamentStore
             {
                 UpdateStatus(Stock);
                 Stock.TypeMed = ((ProduitsPharmaceutiquesType)Stock.Type).ToProduitsPharmaceutiques();
-
+                //if (Stock.Img is null)
+                //{
+                //    Stock.Img = ".\\Pictures.\\Lp.jpg";
+                //}
+                //else
+                //{
+                //    Stock.Img = $".\\Pictures.\\{Stock.Img}";
+                //}
             }
             Stocks = new ObservableCollection<MedicamentStock>(Result);
             _ = GetStockNumbers(CurrentTypePage);

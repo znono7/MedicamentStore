@@ -1,15 +1,20 @@
 ﻿
 
+using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace MedicamentStore
 {
    public class NewProduitPharmaStock : BaseViewModel
-    {
-        public int Id { get; set; }
+    { 
+        public int Id { get; set; } 
         public int IdStock { get; set; }
-        public string? Nom_Commercial { get; set; }  
+        public Guid? IdProduct { get; set; }
+        public string? Img { get; set; }
+        public ImageSource? imageSource { get; set; }
+        public string? Nom_Commercial { get; set; }   
         public string? Forme { get; set; } 
         public string? Dosage { get; set; } 
         public string? UniteStock { get; set; } 

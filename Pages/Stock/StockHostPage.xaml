@@ -139,7 +139,7 @@
                             <TextBlock  Text="Montant Total" HorizontalAlignment="Center"
                          FontFamily="{StaticResource SofiaSansCond-Regular}" Foreground="{StaticResource TertiaryTextColor}" 
                          FontSize="13"  VerticalAlignment="Top"/>
-                            <TextBox FontSize="13" TextAlignment="Center" IsReadOnly="True" VerticalAlignment="Bottom" Text="{Binding MontantTotal,UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{StaticResource TextEntryQua}" Margin="0"/>
+                            <TextBlock FontSize="13" TextAlignment="Center"  VerticalAlignment="Bottom" Text="{Binding MontantTotal,UpdateSourceTrigger=PropertyChanged,Converter={local:CurrencyConverter}}" Style="{StaticResource TextH2}" Margin="0"/>
 
                         </StackPanel>
                     </Border>
@@ -180,14 +180,14 @@
                                                 </Border.Effect>
                                             </Border>
 
-                                            <Image Source="{Binding Img, Converter={local:FallbackImageConverter}}"  Style="{StaticResource medImg}" ImageFailed="Image_ImageFailed"/>
+                                            <Image Source="{Binding Img, Converter={local:FallbackImageConverter}}"  Style="{StaticResource medImg}" />
                                             <Popup Width="200" Height="140" x:Name="PopupImage" >
 
                                                 <Border    Background="{StaticResource TertiaryBackgroundColor}">
                                                     <Border.Effect>
                                                         <DropShadowEffect Direction="-130" BlurRadius="30" ShadowDepth="5" Opacity="0.1"/>
                                                     </Border.Effect>
-                                                    <Image Width="160" Height="120"  Style="{StaticResource medImg}" Source="{Binding Img,Converter={local:FallbackImageConverter}}"/>
+                                                    <Image Width="160" Height="120"  Style="{StaticResource medImg}" Source="{Binding Img,UpdateSourceTrigger=PropertyChanged,Converter={local:FallbackImageConverter}}"/>
 
                                                 </Border>
 
