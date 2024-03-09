@@ -44,14 +44,16 @@ namespace MedicamentStore
 
             rotateTransform.BeginAnimation(RotateTransform.AngleProperty, rotateAnimation);
 
-            //if (isExpanded)
-            //{
-            //    popup.IsOpen = true;
-            //}
-            //else
-            //{
-            //    popup.IsOpen = false;
-            //}
+            
+        }
+
+        private void Border_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var ViewModel = (FacturesViewModel)DataContext;
+            ViewModel.isExpanded = false;
+            ViewModel.isDimmedGray = false; 
+            ViewModel.customerFilter.AttachmentMenuVisible = false;
+            expandButton_Click(sender, e);
         }
     }
 }

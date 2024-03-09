@@ -8,7 +8,7 @@ namespace MedicamentStore
 {
     public class SelectProduitPharmaEventArgs : EventArgs
     {
-        public ProduitPharma? SelectedProductPharma { get; set; }
+        public PharmaceuticalProduct? SelectedProductPharma { get; set; }
 
     }
 }

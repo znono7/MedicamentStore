@@ -13,7 +13,7 @@ namespace MedicamentStore
         public int Id { get; set; }
         public int IdS { get; set; }
           
-        public string? InvoiceNumber { get; set; } 
+        public string? InvoiceNumber { get; set; }  
         public int ProductId { get; set; }
 
         protected int _quanttie { get; set; } 
@@ -96,8 +96,10 @@ namespace MedicamentStore
 
             }
         }
+        public int TypeId { get; set; }
 
-        
+        public int IdUnite { get; set; }
+
         public double Prix { get; set; }
 
 

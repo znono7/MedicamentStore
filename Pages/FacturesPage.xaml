@@ -15,18 +15,20 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <!-- Dimmed overlay -->
-            <Border Grid.RowSpan="3"
+            <Border Grid.RowSpan="4"
                      Panel.ZIndex="10"
                      Opacity="0.3" Grid.ColumnSpan="2">
 
-                <Border Background="{StaticResource PrimaryBlackColor}" CornerRadius="8"
-                        local:AnimateFadeInProperty.Value="{Binding isExpanded}"/>
-                <Border.InputBindings>
-                    <MouseBinding MouseAction="LeftClick" Command="{Binding PopupClickawayCommand}" />
-                </Border.InputBindings>
+                <Border  Background="{StaticResource PrimaryBlackColor}" CornerRadius="8"
+                        local:AnimateFadeInProperty.Value="{Binding isDimmedGray}"
+                         MouseDown="Border_MouseDown"/>
+                <!--<Border.InputBindings>
+                    <MouseBinding MouseAction="LeftClick"  Command="{Binding PopupClickawayCommand}" />
+                </Border.InputBindings>-->
             </Border>
             <StackPanel  Height="48" Orientation="Horizontal" HorizontalAlignment="Left">
                 <TextBlock Grid.Column="1" Text="Factures" Margin="20 10"
@@ -41,9 +43,9 @@
                     </Border.Effect>
                 </Border>
                 <StackPanel Orientation="Horizontal">
-                    <ComboBox IsEditable="False"  ItemsSource="{Binding TypeItems}" 
-                              DisplayMemberPath="type" SelectedValuePath="Id" SelectedItem="{Binding SelectedType, UpdateSourceTrigger=PropertyChanged}"
-                              SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}" Style="{DynamicResource ComboBoxStyle3}" HorizontalAlignment="Left" Width="200"/>
+                    <ComboBox IsEditable="False"  ItemsSource="{Binding Types}" 
+                             
+                              SelectedIndex="{Binding SelectedType, Mode=TwoWay}" Style="{DynamicResource ComboBoxStyle3}" HorizontalAlignment="Left" Width="200"/>
                  
 
                     <Button Command="{Binding ExpandCommand}" Click="expandButton_Click" Name="expandButton" Width="240" Style="{StaticResource addButton}" Background="Transparent">
@@ -84,17 +86,26 @@
                             </Button>
                         </Grid>
                     </Popup>
-                   
                 </StackPanel>
-               
+                <local:CustomerFilterSuppControl VerticalAlignment="Center" HorizontalAlignment="Right" DataContext="{Binding customerFilter}"/>
+
             </Grid>
-            <Grid Grid.Row="2" Margin="20 10">
-                <Border   Grid.RowSpan="3" CornerRadius="2" Background="{StaticResource TertiaryBackgroundColor}">
+            <Grid Grid.Row="2" local:AnimateFadeInProperty.Value="{Binding FilterGrid}">
+           
+                <local:TagControl  DataContext="{Binding FilterTag}" Margin="20 10"/>
+                
+            </Grid>
+            <Grid Grid.Row="3" Margin="20 10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Border   Grid.RowSpan="1" CornerRadius="2" Background="{StaticResource TertiaryBackgroundColor}">
                     <Border.Effect>
                         <DropShadowEffect Direction="-130" BlurRadius="30" ShadowDepth="5" Opacity="0.1"/>
                     </Border.Effect>
                 </Border>
-                <Path Panel.ZIndex="1" Grid.Row="1" Visibility="{Binding IsLoading,Converter={local:BooleanToVisiblityConverter}, ConverterParameter=True}" 
+                <Path Panel.ZIndex="1" Grid.Row="0" Visibility="{Binding IsLoading,Converter={local:BooleanToVisiblityConverter}, ConverterParameter=True}" 
                     Data="{StaticResource spinner}" Width="64" Height="64" Style="{StaticResource SpinningPath}" Fill="{StaticResource PrimeBlueBrush}" />
 
                 <!--#region Stock Initial -->
@@ -147,6 +158,36 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Montant Total" IsReadOnly="True" Width="*" CanUserSort="False" CanUserReorder="False" CanUserResize="False">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock x:Name="fornisstxt" TextWrapping="Wrap" Height="Auto" VerticalAlignment="Center" FontSize="12" Text="{Binding MontantTotal,Converter={local:CurrencyConverter}}" Style="{StaticResource TextH2}" Margin="0"/>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="fornisstxt" Value="#ffffff" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="fornisstxt" Value="#ffffff" />
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Produit Total" IsReadOnly="True" Width="*" CanUserSort="False" CanUserReorder="False" CanUserResize="False">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock x:Name="fornisstxt" TextWrapping="Wrap" Height="Auto" VerticalAlignment="Center" FontSize="12" Text="{Binding ProduitTotal}" Style="{StaticResource TextH2}" Margin="0"/>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="fornisstxt" Value="#ffffff" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
+                                                <Setter Property="Foreground" TargetName="fornisstxt" Value="#ffffff" />
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="Fournisseur" IsReadOnly="True" Width="*" CanUserSort="False" CanUserReorder="False" CanUserResize="False">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -166,7 +207,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Grid>
-                                            <Border Padding="6 2" Height="28" Width="Auto" CornerRadius="8" HorizontalAlignment="Center" Background="#8AA5ED">
+                                            <Border Padding="6 2" Height="28" Width="Auto" CornerRadius="8" HorizontalAlignment="Center" Background="{Binding FactTypeColor,Converter={local:StringRGBToBrushConverter}}">
 
                                                 <TextBlock x:Name="TypeTxt" FontSize="13" TextWrapping="Wrap" Height="Auto" TextAlignment="Center"  Foreground="#000000" ToolTip="{Binding FactType}" Text="{Binding FactType,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextH4}" Margin="0"/>
                                             </Border>
@@ -216,6 +257,7 @@
                     </DataGrid>
                 </ScrollViewer>
                 <!--#endregion-->
+                <local:PaginationControl DataContext="{Binding pagination}" Grid.Row="1" Margin="0 10"/>
             </Grid>
         </Grid>
     </Grid>

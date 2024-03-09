@@ -24,7 +24,7 @@ namespace MedicamentStore
             // Find the appropriate page
             switch (page)
             {
-                case ApplicationPage.Login:
+                case ApplicationPage.Login: 
                     return new LoginPage(viewModel as LoginViewModel);
                 case ApplicationPage.Users:
                     return new UsersPage(viewModel as UsersViewModel);
@@ -60,7 +60,7 @@ namespace MedicamentStore
                 case ApplicationPage.PrintInitialStockPage://
                     return new PrintInitialStockPage(viewModel as PrintInitialStockViewModel);
                 case ApplicationPage.MainEntreeStockPage://
-                    return new MainEntreeStockPage(viewModel as MainEntreeStockViewModel);
+                    return new MainEntreeStockPage(viewModel as MainEntreeStockViewModel); 
                 case ApplicationPage.MainMovmentStockPage://
                     return new MainMovmentStockPage(viewModel as MainMovmentStockViewModel);
                 case ApplicationPage.MainSorteStockPage://
@@ -69,6 +69,10 @@ namespace MedicamentStore
                     return new SorteStockPage(viewModel as SorteStockViewModel);
                 case ApplicationPage.FacturePage://
                     return new FacturesPage(viewModel as FacturesViewModel);
+                    
+                case ApplicationPage.PrintFactureStockPage:
+                        return new PrintFactureStockPage(viewModel as PrintFactureStockViewModel);
+
                 default:
                     Debugger.Break();
                     return null;
@@ -134,6 +138,8 @@ namespace MedicamentStore
                 return ApplicationPage.SorteStockPage;
             if (page is FacturesPage)//
                 return ApplicationPage.FacturePage;
+            if (page is PrintFactureStockPage)//
+                return ApplicationPage.PrintFactureStockPage;
             // Alert developer of issue
             Debugger.Break();
             return default(ApplicationPage);

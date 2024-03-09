@@ -9,7 +9,7 @@ namespace MedicamentStore
         public int Id { get; set; }
         public string? Nom_Commercial { get; set; }
         public string? Forme { get; set; }
-        public string? Dosage { get; set; }
+        public string? Dosage { get; set; } 
         public string? Img
         {
             get => source; 

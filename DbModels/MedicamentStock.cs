@@ -12,7 +12,7 @@ namespace MedicamentStore
         private string? source;    
         public int Type { get; set; }     
          
-        public int Id { get; set; } 
+        public int Id { get; set; }  
         public int IdMedicament { get; set; }
         public int Ids { get; set; } 
         public string? Img 

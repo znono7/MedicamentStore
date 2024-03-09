@@ -27,9 +27,9 @@
         <TextBox Grid.Column="1" Text="{Binding EnteredNumText , UpdateSourceTrigger=PropertyChanged}"
           HorizontalAlignment="Left" Style="{StaticResource TextEntry}" Margin="13 0 0 6"
           Height="{Binding height,Mode=TwoWay}" Width="240" IsReadOnly="True"/>
-        <Button Cursor="Hand" Command="{Binding SetFNumberCommand}"  HorizontalAlignment="Left" Grid.Column="2" Style="{StaticResource PathGrowButton}" Margin="10" Background="Transparent" Width="auto" Height="auto" >
+        <!--<Button Cursor="Hand" Command="{Binding SetFNumberCommand}"  HorizontalAlignment="Left" Grid.Column="2" Style="{StaticResource PathGrowButton}" Margin="10" Background="Transparent" Width="auto" Height="auto" >
             <Path Fill="{StaticResource PrimeBlueBrush }"  Data="{StaticResource target}" Stretch="Uniform" Height="16" Width="16"/>
-        </Button>
+        </Button>-->
         <TextBlock Margin="0" Grid.Row="1"
               Text="Date" FontSize="13" 
               Foreground="#97A5B4" TextAlignment="Right"

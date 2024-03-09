@@ -29,8 +29,10 @@ namespace MedicamentStore
             return resultFinal.Any() ? resultFinal : Enumerable.Empty<TransactionDto>();
         }
 
-        public async Task<IEnumerable<EnterTransaction>> GetAllEnter(int IdMedicament) 
+        public async Task<IEnumerable<EnterTransaction>> GetAllEnter(int IdMedicament , int pageNumber, int pageSize) 
         {
+            int offset = pageNumber * pageSize;
+
             var baseQuery = @"SELECT t.Id, m.Nom_Commercial, m.Dosage, m.Forme, m.Conditionnement, s.Quantite, m.Img, 
                                     s.Prix, p.Nom, t.Date, s.Id AS IdStock , t.TypeTransaction ,t.QuantiteTransaction , 
                                     s.Type , u.Name AS Unite,u.Id AS IdUnite,t.PreviousQuantity
@@ -39,9 +41,11 @@ namespace MedicamentStore
                                 INNER JOIN PharmaceuticalProducts m ON s.IdMedicament = m.Id
                                 INNER JOIN Supplies p ON p.Id = s.IdSupplie 
                                 INNER JOIN Units u ON u.Id = s.Unit 
-                                WHERE t.TypeTransaction = 1 AND m.Id = @IdMed";
+                                WHERE t.TypeTransaction = 1 AND m.Id = @IdMed
+                                LIMIT @PageSize OFFSET @Offset;";
 
-            var resultFinal = await _connection.QueryAsync<EnterTransaction>(baseQuery,new { IdMed = IdMedicament});
+
+            var resultFinal = await _connection.QueryAsync<EnterTransaction>(baseQuery,new { IdMed = IdMedicament , PageSize = pageSize, Offset = offset });
 
             return resultFinal.Any() ? resultFinal : Enumerable.Empty<EnterTransaction>();
         }
@@ -61,8 +65,10 @@ namespace MedicamentStore
             return resultFinal.Any() ? resultFinal : Enumerable.Empty<EnterTransaction>();
         }
 
-        public async Task<IEnumerable<MouvementStocks>> GetAllMovement(int IdMedicament)
+        public async Task<IEnumerable<MouvementStocks>> GetAllMovement(int IdMedicament, int pageNumber, int pageSize)
         {
+            int offset = pageNumber * pageSize;
+
             var baseQuery = @"SELECT t.Id, m.Nom_Commercial, m.Dosage, m.Forme, 
                                     m.Conditionnement,s.IdMedicament, 
                                     m.Img, s.Prix, t.Date, s.Id AS IdStock , 
@@ -73,26 +79,58 @@ namespace MedicamentStore
                                 INNER JOIN PharmaceuticalProducts m ON s.IdMedicament = m.Id
                                 INNER JOIN Supplies p ON p.Id = s.IdSupplie 
                                 INNER JOIN Units u ON u.Id = s.Unit 
-                                WHERE m.Id = @IdMed";
+                                WHERE m.Id = @IdMed LIMIT @PageSize OFFSET @Offset;";
 
-            var resultFinal = await _connection.QueryAsync<MouvementStocks>(baseQuery, new { IdMed = IdMedicament });
+            var resultFinal = await _connection.QueryAsync<MouvementStocks>(baseQuery, new { IdMed = IdMedicament, PageSize = pageSize, Offset = offset });
 
             return resultFinal.Any() ? resultFinal : Enumerable.Empty<MouvementStocks>();
         }
 
-        public async Task<IEnumerable<EnterTransaction>> GetAllSorte(int IdMedicament)
+        public async Task<IEnumerable<EnterTransaction>> GetAllSorte(int IdMedicament, int pageNumber, int pageSize)
         {
-            var baseQuery = @"SELECT t.Id, m.Nom_Commercial, m.Dosage, m.Forme, m.Conditionnement, s.Quantite, m.Img, s.Prix, p.Nom, t.Date, s.Id AS IdStock , t.TypeTransaction ,t.QuantiteTransaction , s.Type , u.Name AS Unite,u.Id AS IdUnite,t.PreviousQuantity
-                                FROM  [Transaction] t
+            int offset = pageNumber * pageSize;
+
+            var baseQuery = @"SELECT t.Id, m.Nom_Commercial, m.Dosage, m.Forme, m.Conditionnement, s.Quantite, m.Img, 
+                                    s.Prix, p.Nom, t.Date, s.Id AS IdStock , t.TypeTransaction ,t.QuantiteTransaction , 
+                                    s.Type , u.Name AS Unite,u.Id AS IdUnite,t.PreviousQuantity
+                                FROM  [Transaction] t 
                                 INNER JOIN Stock s ON s.Id = t.IdStock
                                 INNER JOIN PharmaceuticalProducts m ON s.IdMedicament = m.Id
                                 INNER JOIN Supplies p ON p.Id = s.IdSupplie 
                                 INNER JOIN Units u ON u.Id = s.Unit 
-                                WHERE t.TypeTransaction = 2 AND m.Id = @IdMed";
+                                WHERE t.TypeTransaction = 2 AND m.Id = @IdMed
+                                LIMIT @PageSize OFFSET @Offset;";
 
-            var resultFinal = await _connection.QueryAsync<EnterTransaction>(baseQuery, new { IdMed = IdMedicament });
+
+            var resultFinal = await _connection.QueryAsync<EnterTransaction>(baseQuery, new { IdMed = IdMedicament, PageSize = pageSize, Offset = offset });
 
             return resultFinal.Any() ? resultFinal : Enumerable.Empty<EnterTransaction>();
+        }
+
+        public async Task<int> GetTotalEnterStockAsync(int IdMedicament)
+        {
+            return await _connection.ExecuteScalar<int>(@"SELECT COUNT( t.Id) AS NumberOfUniqueProducts 
+                                                          FROM  [Transaction] t                               
+                                                          INNER JOIN Stock s ON s.Id = t.IdStock  
+                                                          WHERE s.IdMedicament = @I AND t.TypeTransaction = 1 ", new {I = IdMedicament});
+
+        }
+
+        public async Task<int> GetTotalMovmentStockAsync(int IdMedicament)
+        {
+            return await _connection.ExecuteScalar<int>(@"SELECT COUNT( t.Id) AS NumberOfUniqueProducts 
+                                                          FROM  [Transaction] t                               
+                                                          INNER JOIN Stock s ON s.Id = t.IdStock  
+                                                          WHERE s.IdMedicament = @I ", new { I = IdMedicament });
+
+        }
+
+        public async Task<int> GetTotalSortieStockAsync(int IdMedicament)
+        {
+            return await _connection.ExecuteScalar<int>(@"SELECT COUNT( t.Id) AS NumberOfUniqueProducts 
+                                                          FROM  [Transaction] t                               
+                                                          INNER JOIN Stock s ON s.Id = t.IdStock  
+                                                          WHERE s.IdMedicament = @I AND t.TypeTransaction = 2 ", new { I = IdMedicament });
         }
     }
 }

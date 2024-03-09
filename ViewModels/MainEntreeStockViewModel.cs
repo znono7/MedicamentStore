@@ -12,12 +12,12 @@ namespace MedicamentStore
 {
     public class MainEntreeStockViewModel : BaseViewModel
     {
-        public PaginationViewModel paginationView { get; set; }
+        public PaginationViewModel paginationView { get; set; } 
 
-        public ICommand MenuVisibleCommand { get; set; }
-        public bool MenuVisible { get; set; }
+        public ICommand MenuVisibleCommand { get; set; } 
+        public bool MenuVisible { get; set; } 
         public string TextType { get; set; } = ProduitsPharmaceutiquesType.None.ToProduitsPharmaceutiques();
-        public ICommand MedicamentCommand { get; set; }//
+        public ICommand MedicamentCommand { get; set; }//  
         public ICommand UpdateQuantiteCommand { get; set; }//   
 
         public ObservableCollection<MedicamentStock> FilteredMedicaments { get; set; }
@@ -50,7 +50,7 @@ namespace MedicamentStore
             }
         }
 
-        private int _pageSize = 20; // Number of rows per page     
+        private int _pageSize = 10; // Number of rows per page     
 
         public ICommand NextPageCommand { get; private set; }
         public ICommand PreviousPageCommand { get; private set; }
@@ -195,7 +195,7 @@ namespace MedicamentStore
         {
             if (param is ProduitsPharmaceutiquesType selectedType) 
             {
-                CurrentTypePage = selectedType;
+                CurrentTypePage = selectedType; 
                 TextType = selectedType.ToProduitsPharmaceutiques();
                 paginationView.Reset();
                 await GetStocksAsync(CurrentTypePage, paginationView.CurrentPage, _pageSize);
@@ -206,11 +206,10 @@ namespace MedicamentStore
         }
         private async Task GetStocksAsync(ProduitsPharmaceutiquesType type, int currentPage, int pageSize)
         {
-            // Stocks = new ObservableCollection<MedicamentStock>();
             CurrentTypePage = type;
             IsLoading = true;
             await Task.Delay(1000);
-            var Result = await IoC.StockManager.GetAllEntreeStocksAsync(currentPage, pageSize, CurrentTypePage);
+            var Result = await IoC.StockManager.GetPagedStocksAsync(currentPage, pageSize, CurrentTypePage);
 
             foreach (var Stock in Result)
             {

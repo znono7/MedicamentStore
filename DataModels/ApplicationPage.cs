@@ -38,5 +38,6 @@ namespace MedicamentStore
         MainMovmentStockPage = 19,
         SorteStockPage = 20,
         FacturePage = 21,
+        PrintFactureStockPage = 22,
     }
 }

@@ -32,7 +32,7 @@ namespace MedicamentStore
             DataContext = viewModel;
         }
 
-
+        
        
 
         private void Image_ImageFailed(object sender, ExceptionRoutedEventArgs e)

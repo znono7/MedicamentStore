@@ -67,7 +67,7 @@ namespace MedicamentStore
                 Duration = TimeSpan.FromSeconds(0.3)
             };
 
-            //rotateTransform.BeginAnimation(RotateTransform.AngleProperty, rotateAnimation);
+            rotateTransform.BeginAnimation(RotateTransform.AngleProperty, rotateAnimation);
         }
     }
 }

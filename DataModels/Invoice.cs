@@ -13,11 +13,12 @@ namespace MedicamentStore
         public string? Number { get; set; }
         public double MontantTotal { get; set; }
         public int ProduitTotal { get; set; }
-        public int IdSupplie { get; set; }
+        public int? IdSupplie { get; set; } 
         public int InvoiceType { get; set; }
+        public int CountNumber { get; set; }
 
         public string NomSupplie { get; set; }
         public string FactType { get; set; }
-
+        public string FactTypeColor { get; set; }
     }
 }

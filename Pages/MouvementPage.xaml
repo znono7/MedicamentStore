@@ -16,6 +16,8 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+
             </Grid.RowDefinitions>
             <!-- Dimmed overlay -->
             <Border Grid.RowSpan="3"
@@ -329,7 +331,10 @@
                     </DataGrid>
                 </ScrollViewer>
                 <!--#endregion-->
+
             </Grid>
+            <local:PaginationControl DataContext="{Binding PaginationView}" HorizontalAlignment="Right" Grid.Row="3"/>
+
         </Grid>
     </Grid>
 </local:BasePage>

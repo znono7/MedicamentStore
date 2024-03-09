@@ -61,39 +61,7 @@
 
 
             </StackPanel>
-            <!--<ComboBox  IsEditable="False"  ItemsSource="{Binding TypeItems}" DisplayMemberPath="type" SelectedValuePath="Id"  
-                       Style="{DynamicResource ComboBoxStyle3}" SelectedItem="{Binding SelectedType, UpdateSourceTrigger=PropertyChanged}"
-                        Margin="0 0 40 0" Width="280" HorizontalAlignment="Right">
-                <ComboBox.Resources>
-                    --><!-- Define your resources here --><!--
-                    <Style TargetType="ComboBoxItem">
-                        <Setter Property="SnapsToDevicePixels" Value="true"/>
-                        <Setter Property="Margin" Value="15 0 0 0"/>
-                        <Setter Property="OverridesDefaultStyle" Value="true"/>
-                        <Setter Property="Foreground" Value="#373737"/>
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate  TargetType="{x:Type ComboBoxItem}">
-                                    <Border  Name="Border" Padding="10 5" SnapsToDevicePixels="true">
-                                        <ContentPresenter  VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                                    </Border>
-
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsHighlighted" Value="true">
-                                            <Setter TargetName="Border" Property="Background" Value="#304FFE"/>
-                                            <Setter Property="Foreground" Value="White"/>
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-
-                        </Setter>
-                       
-                    </Style>
-                </ComboBox.Resources>
-
-
-            </ComboBox>-->
+           
 
         </Grid>
         <Path Grid.Column="1" Panel.ZIndex="1" Grid.Row="2" Visibility="{Binding IsLoading,Converter={local:BooleanToVisiblityConverter}, ConverterParameter=True}" 
@@ -192,7 +160,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Quantite" Width="140" IsReadOnly="True" CanUserResize="False">
+                    <DataGridTemplateColumn Header="Quantite" Width="Auto" IsReadOnly="True" CanUserResize="False">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid>
@@ -247,7 +215,7 @@
                                             Command="{Binding DataContext.SetItemCommand ,  RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}" 
                                                   CommandParameter="{Binding }" 
                                                   Style="{StaticResource PathGrowButton}">
-                                        <Path x:Name="PPlus" Data="{StaticResource addCart}" Fill="#5D7881" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Center" Width="8" Height="8"/>
+                                        <Path x:Name="PPlus" Data="{StaticResource addCart}" Fill="#5D7881" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Center" Width="24" Height="24"/>
                                     </Button>
                                    
                                 </StackPanel>
@@ -265,8 +233,9 @@
                 </DataGrid.Columns>
             </DataGrid>
         </ScrollViewer>
-        <Grid Grid.Column="1" Grid.Row="3" Margin="10">
-            
+        <Grid Grid.Column="1" Grid.Row="3" >
+            <local:PaginationControl DataContext="{Binding paginationView}" 
+                                     />
         </Grid>
     </Grid>
    

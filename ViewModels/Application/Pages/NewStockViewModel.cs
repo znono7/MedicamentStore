@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Documents;
@@ -8,6 +9,7 @@ namespace MedicamentStore
 {
     public class NewStockViewModel : BaseViewModel  
     {
+        public List<PharmaceuticalProduct> Products { get; set; }
         public ObservableCollection<NewProduitPharmaStock> StockProducts { get; set; }
         public ObservableCollection<MedicamentUpdateStock> UpdateStockProducts { get; set; }
         public CustomerCmbSuppViewModel SuppCmb { set; get; }
@@ -17,7 +19,7 @@ namespace MedicamentStore
         public bool AnyPopupVisible => SuppCmb.AttachmentMenuVisible || 
                                        dateViewModel.AttachmentMenuVisible;
                                         
-        public ICommand ReturnCommand { get; set; }  
+        public ICommand ReturnCommand { get; set; }   
         public ICommand SaveCommand { get; set; } 
         public ICommand DeleteCommand { get; set; } 
         public ICommand OpenWindowCommand { get; set; }
@@ -126,6 +128,7 @@ namespace MedicamentStore
                 {
                     InvoiceItem invoiceItem = new InvoiceItem
                     {
+                        IdStock  = item.IdStock,
                         IdMedicament = item.IdMedicament,
                         IdTypeProduct = item.Type,
                         IdUnite = item.IdUnite,
@@ -208,32 +211,58 @@ namespace MedicamentStore
         
         private void  OpenWindow()
         {
-            StockItemsWindowViewModel viewModel = new StockItemsWindowViewModel();
-            viewModel.ProduitSelected += (sender, e) =>
+            NewProduitsPharmaceutiquesViewModel viewModel = new NewProduitsPharmaceutiquesViewModel();
+            viewModel.ProduitAded += (sender, e) =>
             {
-                if (e.SelectedProductStock != null)
+                if(e.SelectedProductPharma != null)
                 {
                     NewProduitPharmaStock newProduit = new NewProduitPharmaStock
                     {
-                        Id = e.SelectedProductStock.Id,
-                        Nom_Commercial = e.SelectedProductStock.Nom_Commercial,
-                        Dosage = e.SelectedProductStock.Dosage,
-                        Forme = e.SelectedProductStock.Forme,
-                        Conditionnement = e.SelectedProductStock.Conditionnement,
-                        Type = e.SelectedProductStock.Type,
-    
+                        //Id = e.SelectedProductPharma.Id,
+                        Nom_Commercial = e.SelectedProductPharma.Nom_Commercial,
+                        Dosage = e.SelectedProductPharma.Dosage,
+                        Forme = e.SelectedProductPharma.Forme,
+                        Conditionnement = e.SelectedProductPharma.Conditionnement,
+                        Type = e.SelectedProductPharma.Type,
+
                     };
-                    bool idExists = StockProducts.Any(p => p.Id == newProduit.Id && p.Type == newProduit.Type);
-                    if (idExists)
-                    {
-                        return;
-                    }
+                    //bool idExists = StockProducts.Any(p =>  p.Nom_Commercial == newProduit.Nom_Commercial && p.Type == newProduit.Type);
+                    //if (idExists)
+                    //{
+                    //    return;
+                    //}
                     StockProducts.Add(newProduit);
+                    Products.Add(e.SelectedProductPharma);
                 }
             };
-            AddStock newWindow = new AddStock(viewModel);
-            newWindow.Show();
-            
+            NewProduitsPharmaceutiques newProduits = new NewProduitsPharmaceutiques(viewModel);
+            newProduits.Show();
+            //StockItemsWindowViewModel viewModel = new StockItemsWindowViewModel();
+            //viewModel.ProduitSelected += (sender, e) =>
+            //{
+            //    if (e.SelectedProductStock != null)
+            //    {
+            //        NewProduitPharmaStock newProduit = new NewProduitPharmaStock
+            //        {
+            //            Id = e.SelectedProductStock.Id,
+            //            Nom_Commercial = e.SelectedProductStock.Nom_Commercial,
+            //            Dosage = e.SelectedProductStock.Dosage,
+            //            Forme = e.SelectedProductStock.Forme,
+            //            Conditionnement = e.SelectedProductStock.Conditionnement,
+            //            Type = e.SelectedProductStock.Type,
+
+            //        };
+            //        bool idExists = StockProducts.Any(p => p.Id == newProduit.Id && p.Type == newProduit.Type);
+            //        if (idExists)
+            //        {
+            //            return;
+            //        }
+            //        StockProducts.Add(newProduit);
+            //    }
+            //};
+            //AddStock newWindow = new AddStock(viewModel);
+            //newWindow.Show();
+
         }
 
         private async Task BackPage()

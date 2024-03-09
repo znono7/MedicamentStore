@@ -8,6 +8,6 @@ namespace MedicamentStore
 {
    public class SelectedItemEventArgs : EventArgs 
     {
-        public InvoiceProduct? SelectedItem { get; set; } 
+        public MedicamentStock? SelectedItem { get; set; } 
     }
 }

@@ -16,14 +16,18 @@ using System.Windows.Shapes;
 namespace MedicamentStore
 {
     /// <summary>
-    /// Interaction logic for InvoiceInfoControl.xaml
+    /// Interaction logic for ProduitStockDoc.xaml
     /// </summary>
-    public partial class InvoiceInfoControl : UserControl
+    public partial class FactureDocControl : UserControl
     {
-        public InvoiceInfoControl()
+        public FactureDocControl(FactureDocViewModel viewModel)
         {
             InitializeComponent();
-            //DataContext = new InvoiceInfoViewModel();
+            DataContext = viewModel;
+
+
         }
+
+       
     }
 }

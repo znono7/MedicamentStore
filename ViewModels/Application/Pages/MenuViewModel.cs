@@ -11,93 +11,119 @@ namespace MedicamentStore
     {
 
         public ICommand? HomePage { get; set; }
-        public ICommand? MedicamentPage { get; set; }
-        public ICommand? UsersPage { get; set; } 
-        public ICommand? ParemetrePage { get; set; }
-        public ICommand? NewInvoicePage { get; set; } 
         public ICommand? StockPage { get; set; }
         public ICommand? InvoicePage { get; set; }
-        public ICommand? MouvementPage { get; set; }//EntreeStockPage
-        public ICommand? EntreeStockPage { get; set; }//FacturePage
-        public ICommand? FacturePage { get; set; }//
+        public ICommand? MouvementPage { get; set; }
+        public ICommand? EntreeStockPage { get; set; }
+        public ICommand? FacturePage { get; set; }
+
+        private ApplicationPage _currentPage;
+
+        // public ApplicationPage CurrentPage { get; set; }
+        public ApplicationPage CurrentPage
+        {
+            get => _currentPage;
+            set
+            {
+                if (_currentPage != value)
+                {
+                    _currentPage = value;
+                    IoC.Application.GoToPage(value);
+                }
+            }
+        }
 
         public MenuViewModel()
-        { 
-            HomePage = new RelayCommand(async () => await HomePageAsync());
-            UsersPage = new RelayCommand(async () => await UsersPageAsync());
-            ParemetrePage = new RelayCommand(async () => await ParemPageAsync());
-            MedicamentPage = new RelayCommand(async () => await MedPageAsync());
-            NewInvoicePage = new RelayCommand(async () => await NewInvoicePageAsync());
-            StockPage = new RelayCommand(async () => await StockPageAsync());
-            InvoicePage = new RelayCommand(async () => await InvoicePageAsync());
-            MouvementPage = new RelayCommand(async () => await ToMouvementPagePageAsync());
-            EntreeStockPage = new RelayCommand(async () => await ToEntreeStockPageAsync());
-            FacturePage = new RelayCommand(async () => await ToFacturePageAsync());
+        {
+            HomePage = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.Home));
+            StockPage = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.StockHostPage));
+            InvoicePage = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.MainSorteStockPage));
+            MouvementPage = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.MainMovmentStockPage));
+            EntreeStockPage = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.MainEntreeStockPage));
+            FacturePage = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.FacturePage));
         }
 
-        private async Task ToFacturePageAsync()
+        private async Task NavigateToPageAsync(ApplicationPage page)
         {
-            IoC.Application.GoToPage(ApplicationPage.FacturePage);
-            await Task.Delay(1);
+            if (CurrentPage == page)
+                return;
 
-        }
-
-        private async Task ToEntreeStockPageAsync()
-        {
-            IoC.Application.GoToPage(ApplicationPage.MainEntreeStockPage);
-            //IoC.Application.GoToPage(ApplicationPage.EntreeStockPage);
+            CurrentPage = page;
             await Task.Delay(1);
         }
 
-        private async Task ToMouvementPagePageAsync()
-        {
-            IoC.Application.GoToPage(ApplicationPage.MainMovmentStockPage);
-            await Task.Delay(1);
-        }
 
-        private async Task InvoicePageAsync()
-        {
-            IoC.Application.GoToPage(ApplicationPage.MainSorteStockPage);
-            await Task.Delay(1);
-        }
 
-        private async Task StockPageAsync()
-        {
-            IoC.Application.GoToPage(ApplicationPage.StockHostPage);
-            await Task.Delay(1);
-        }
 
-        private async Task NewInvoicePageAsync()
-        {
-            IoC.Application.GoToPage(ApplicationPage.NewInvoice);
-            await Task.Delay(1);
-        }
+        //#region MyRegion
+        //public MenuViewModel()
+        //{
+        //    HomePage = new RelayCommand(async () => await HomePageAsync());
 
-        private async Task MedPageAsync()
-        {
-            IoC.Application.GoToPage(ApplicationPage.Medicament);
-            await Task.Delay(1);
-        }
+        //    StockPage = new RelayCommand(async () => await StockPageAsync());
+        //    InvoicePage = new RelayCommand(async () => await InvoicePageAsync());
+        //    MouvementPage = new RelayCommand(async () => await ToMouvementPagePageAsync());
+        //    EntreeStockPage = new RelayCommand(async () => await ToEntreeStockPageAsync());
+        //    FacturePage = new RelayCommand(async () => await ToFacturePageAsync());
+        //}
 
-        private async Task ParemPageAsync()
-        {
-            IoC.Application.GoToPage(ApplicationPage.Paremetres);
-            await Task.Delay(1);
-        }
+        //private async Task ToFacturePageAsync()
+        //{
+        //    if (CurrentPage == ApplicationPage.FacturePage)
+        //        return;
 
-        public async Task HomePageAsync()
-        {
-            // Go to register page?
-            IoC.Application.GoToPage(ApplicationPage.Home);
+        //    CurrentPage = ApplicationPage.FacturePage;
+        //    IoC.Application.GoToPage(CurrentPage);
 
-            await Task.Delay(1);
-        }
-        public async Task UsersPageAsync()
-        {
-            // Go to register page?
-            IoC.Application.GoToPage(ApplicationPage.Users);
+        //    await Task.Delay(1);
 
-            await Task.Delay(1);
-        }
+        //}
+        //private async Task ToEntreeStockPageAsync()
+        //{
+        //    if (CurrentPage == ApplicationPage.MainEntreeStockPage)
+        //        return;
+        //    CurrentPage = ApplicationPage.MainEntreeStockPage;
+        //    IoC.Application.GoToPage(CurrentPage);
+        //    await Task.Delay(1);
+        //}
+
+        //private async Task ToMouvementPagePageAsync()
+        //{
+        //    if (CurrentPage == ApplicationPage.MouvementPage)
+        //        return;
+        //    CurrentPage = ApplicationPage.MouvementPage;
+        //    IoC.Application.GoToPage(CurrentPage);
+        //    await Task.Delay(1);
+        //}
+
+        //private async Task InvoicePageAsync()
+        //{
+        //    if (CurrentPage == ApplicationPage.MainSorteStockPage)
+        //        return;
+        //    CurrentPage = ApplicationPage.MainSorteStockPage;
+        //    IoC.Application.GoToPage(CurrentPage);
+        //    await Task.Delay(1);
+        //}
+
+        //private async Task StockPageAsync()
+        //{
+        //    if (CurrentPage == ApplicationPage.StockHostPage)
+        //        return;
+        //    CurrentPage = ApplicationPage.StockHostPage;
+        //    IoC.Application.GoToPage(CurrentPage);
+        //    await Task.Delay(1);
+        //}
+
+        //public async Task HomePageAsync()
+        //{
+        //    if (CurrentPage != ApplicationPage.Home)
+        //        return;
+        //    CurrentPage = ApplicationPage.Home;
+        //    IoC.Application.GoToPage(CurrentPage);
+
+        //    await Task.Delay(1);
+        //} 
+        //#endregion
+
     }
 }

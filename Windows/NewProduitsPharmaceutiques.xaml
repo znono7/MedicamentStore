@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MedicamentStore"
         mc:Ignorable="d" AllowsTransparency="True" WindowStartupLocation="CenterScreen"
         WindowStyle="None" WindowState="Normal" Background="Transparent"
-        Title="NewProduitsPharmaceutiques" Height="600" Width="400">
+        Title="NewProduitsPharmaceutiques" Height="600" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="48"/>
@@ -15,12 +15,21 @@
             <RowDefinition Height="auto"/>
 
         </Grid.RowDefinitions>
-        <Border Background="{StaticResource PrimaryBackgroundColor}" Grid.RowSpan="4" CornerRadius="8"/>
-        <Button Click="Button_Click" HorizontalAlignment="Right" Margin="5 0" Style="{StaticResource IconButtonsStyle}" Content="{DynamicResource close}"  Tag="IsCloseButton"/>
-        <TextBlock x:Name="tbPercent" Text="Nouveau produit pharmaceutique" FontSize="16"
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="400"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Border    Grid.ColumnSpan="2" Background="{StaticResource PrimaryBackgroundColor}" Grid.RowSpan="4" CornerRadius="8"/>
+        <Grid  Grid.ColumnSpan="2" MouseDown="Grid_MouseDown"
+              >
+            <Border CornerRadius="8" Background="#E1E6EB"/>
+            <TextBlock x:Name="tbPercent" Text="Nouveau produit pharmaceutique" FontSize="16"
         Foreground="{StaticResource TertiaryTextColor}" HorizontalAlignment="Left" Margin="15"
         FontFamily="{StaticResource OakSans-Regular}"
         />
+            <Button  Click="Button_Click" HorizontalAlignment="Right" Margin="5 0" Style="{StaticResource IconButtonsStyle}" Content="{DynamicResource close}"  Tag="IsCloseButton"/>
+
+        </Grid>
 
         <ComboBox Grid.Row="1" Background="Transparent"  IsEditable="False"  ItemsSource="{Binding items}" SelectedItem="{Binding SelectedProduit, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  
                   DisplayMemberPath="type" SelectedValuePath="Id" Style="{StaticResource ComboBoxStyle3}" 
@@ -53,7 +62,7 @@
                 </Style>
             </ComboBox.Resources>
         </ComboBox>
-        <Grid Grid.Row="2" VerticalAlignment="Center" local:AnimateSlideInFromTopProperty.Value="{Binding IsMedicament}">
+        <Grid Grid.Row="2" VerticalAlignment="Center" >
             <StackPanel  Orientation="Vertical">
                 <local:TextEntryControl DataContext="{Binding ProductName}"/>
                 <local:TextEntryControl DataContext="{Binding Forme}"/>
@@ -62,25 +71,54 @@
             </StackPanel>
         </Grid>
 
-        <Grid Grid.Row="2" VerticalAlignment="Center" local:AnimateSlideInFromTopProperty.Value="{Binding IsAutre}">
-            <StackPanel  Orientation="Vertical">
-                <local:TextEntryControl DataContext="{Binding ProductName}"/>
-                <local:TextEntryControl DataContext="{Binding Forme}"/>
-                <local:TextEntryControl DataContext="{Binding Conditionnement}"/>
+        <Grid Margin="0 20 0 0"  Grid.Row="3" Grid.ColumnSpan="2" >
+            <Border CornerRadius="8" Background="White"/>
+
+            <StackPanel  Orientation="Horizontal" Margin="0 20 0 20" HorizontalAlignment="Center" VerticalAlignment="Bottom" >
+                <Button Style="{StaticResource secondaryButton}" Height="32" Click="Button_Click"
+                     FontFamily="{StaticResource Baloo-Regular}" FontSize="14" Content="Annuler" Width="90"/>
+                <Button Click="Button_Click" Style="{StaticResource addButton}" Margin="15 0 0 0"
+                     Command="{Binding SaveCommand}"  Width="90" Height="32">
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Sauvgarder" FontFamily="{StaticResource Baloo-Regular}"/>
+                    </StackPanel>
+                </Button>
             </StackPanel>
         </Grid>
+       
 
-        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0 20 0 20" HorizontalAlignment="Center" VerticalAlignment="Bottom" >
-            <Button Style="{StaticResource secondaryButton}" Height="32" Click="Button_Click"
-                            FontFamily="{StaticResource Baloo-Regular}" FontSize="14" Content="Annuler" Width="90"/>
-            <Button Style="{StaticResource addButton}" Margin="15 0 0 0"
-                            Command="{Binding SaveCommand}"  Width="90" Height="32">
+        <Grid Grid.Row="2" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
 
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Sauvgarder" FontFamily="{StaticResource Baloo-Regular}"/>
-                </StackPanel>
-            </Button>
-        </StackPanel>
+                <!--<RowDefinition Height="Auto"/>-->
+            </Grid.RowDefinitions>
+            <TextBlock Style="{StaticResource TextH2}" Text="Téléchargement d'Image"/>
+            <Grid Grid.Row="1">
+                    
+                <Rectangle AllowDrop="True" Fill="WhiteSmoke" 
+                           RadiusX="10" RadiusY="10" 
+                           StrokeDashArray="12"
+                           StrokeThickness="2" StrokeDashCap="Round"
+                           Stroke="Silver"
+                           Height="300" Width="300"
+                              />
 
+                   
+                  
+                <Path HorizontalAlignment="Center" VerticalAlignment="Center"  Height="50" Fill="#979797"
+                        Stretch="Uniform" Data="{DynamicResource upload}"/>
+                <Border CornerRadius="12" Height="280" Width="280">
+                    <Image   Height="280" Width="280" Panel.ZIndex="10" Source="{Binding MyImageSource}" Stretch="Uniform"/>
+                </Border>
+            </Grid>
+            <Button Command="{Binding ChooseImgCommand}" Grid.Row="2"  Style="{StaticResource secondaryButton}" Height="32" 
+      
+                    FontFamily="{StaticResource Baloo-Regular}" FontSize="14" Content="Choisissez Image" Width="120"/>
+
+        </Grid>
     </Grid>
 </Window>

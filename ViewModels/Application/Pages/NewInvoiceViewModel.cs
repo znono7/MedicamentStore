@@ -88,6 +88,7 @@ namespace MedicamentStore
                 ProduitTotal = InvoiceProducts.Count,
                 MontantTotal = InvoiceProducts.Sum(x => x.PrixTotal),
                 InvoiceType = 2,
+                IdSupplie = null,
             };
             foreach (var item in InvoiceProducts)
             {
@@ -98,6 +99,8 @@ namespace MedicamentStore
                     InvoiceNumber = invoice.EnteredNumText,
                     Quantite = item.Quantite,
                     Prix = item.Prix,
+                    IdTypeProduct = item.TypeId,
+                    IdUnite = item.IdUnite
                     
                 };
                 InvoiceProductsSets.Add(i);
@@ -141,7 +144,7 @@ namespace MedicamentStore
                 
                 if(e.SelectedItem != null)
                 {
-                    if (InvoiceProducts.Where(x => x.IdS == e.SelectedItem.IdS).Any())
+                    if (InvoiceProducts.Where(x => x.IdS == e.SelectedItem.Ids).Any())
                     {
                         return;
                     }
@@ -164,18 +167,20 @@ namespace MedicamentStore
            
         }
 
-        public  InvoiceProductDataGrid ToInvoiceProductDataGrid(InvoiceProduct invoiceProduct)
+        public  InvoiceProductDataGrid ToInvoiceProductDataGrid(MedicamentStock invoiceProduct)
         {
             return new InvoiceProductDataGrid
             {
-                IdS = invoiceProduct.IdS,
+                IdS = invoiceProduct.Ids,
                 Nom_Commercial = invoiceProduct.Nom_Commercial,
                 Forme = invoiceProduct.Forme,
                 Dosage = invoiceProduct.Dosage,
-                QuantiteRest = invoiceProduct.QuantiteRest,
+                QuantiteRest = invoiceProduct.Quantite,
                 Prix = invoiceProduct.Prix,
-                ProductId = invoiceProduct.ProductId,
+                ProductId = invoiceProduct.IdMedicament,
                 Unite = invoiceProduct.Unite,
+                TypeId = invoiceProduct.Type,
+                IdUnite = invoiceProduct.IdUnite,
             };
         }
 

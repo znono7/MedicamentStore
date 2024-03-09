@@ -14,21 +14,22 @@ namespace MedicamentStore
         public int IdStock { get; set; }
         public int IdTypeProduct { get; set; }
         public int IdUnite { get; set; }
-        public string? InvoiceNumber { get; set; }
+        public string? InvoiceNumber { get; set; } 
         public int Quantite { get; set; }
-        public double Prix { get; set; }
+        public double Prix { get; set; } 
 
     }
     public class InvoiceItemDto : InvoiceItem
-    {
+    { 
         public string? Nom_Commercial { get; set; }
         public string? Forme { get; set; } 
         public string? Dosage { get; set; }
         public string? Conditionnement { get; set; }
         public string? Unite { get; set; }
         public string? TypeProduct { get; set; }
-        public double PrixTotal { get; set; }
+        public double PrixTotal => Quantite * Prix;
 
+        public int Indx { get; set; }
     }
 
 }

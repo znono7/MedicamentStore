@@ -16,8 +16,8 @@ using System.Windows.Input;
 namespace MedicamentStore
 {
     public class StockHostViewModel : BaseViewModel 
-    { 
-        public PaginationViewModel paginationView { get; set; }
+    {  
+        public PaginationViewModel paginationView { get; set; } 
         private ProduitsPharmaceutiquesType _CurrentTypePage { get; set; } = ProduitsPharmaceutiquesType.None;
         public ProduitsPharmaceutiquesType CurrentTypePage { get => _CurrentTypePage;
              set 
@@ -29,12 +29,11 @@ namespace MedicamentStore
                 }
 
             }
-        } 
+        }  
            
         private int _pageSize = 10;    
          
-        public ICommand NextPageCommand { get; private set; }
-        public ICommand PreviousPageCommand { get; private set; } 
+      
         public ICommand PrintCommand { get; private set; }
         public ICommand UpdateQuantiteCommand { get; private set; }
         public ICommand PrintPdfCommand { get; set; }
@@ -56,7 +55,6 @@ namespace MedicamentStore
 
         public ObservableCollection<MedicamentStock> FilteredStocks { get; set; }
         public ICommand MenuVisibleCommand { get; set; }
-        public ICommand NewItemCommand { get; set; }
         public ICommand SearchCommand { get; set; }
 
         public bool MenuVisible { get; set; }
@@ -94,15 +92,12 @@ namespace MedicamentStore
             }
         }
 
-        public ICommand StockInitialCommand { get; set; }
-        public ICommand StockEnterCommand { get; set; }
+      
         public bool IsLoading { get; set; }
-        public bool StockInitialPanel { get; set; }
-        public bool StockEnterPanel { get; set; }
+       
 
         #region Side Menu Buttons
         public ICommand MedicamentCommand { get; set; }
-        public ICommand DeleteCommand { get; set; }
 
         private int _selectedIndex;
         public int SelectedIndex
@@ -140,28 +135,19 @@ namespace MedicamentStore
             paginationView.TotalPages = CalculateTotalPages(GetTotalItems(CurrentTypePage).Result, _pageSize);
             paginationView.PageIndexChanged += PaginationViewModel_PageIndexChanged;
 
-            StockInitialCommand = new RelayCommand(SetStockInitial);
-            StockEnterCommand = new RelayCommand(SetStockEnter);
+           
 
             _ = GetStocksAsync(CurrentTypePage, paginationView.CurrentPageIndex, _pageSize);
-            //_ = GetStockNumbers(CurrentTypePage);
             
             MenuVisibleCommand = new RelayCommand(MenuButton);
             SearchCommand = new RelayCommand(Search);
             MedicamentCommand = new  RelayParameterizedCommand(async (param)=> await MedicamentButton(param));
-            NewItemCommand = new RelayCommand(async () => await ToNewItemStockWindow());
-            DeleteCommand = new RelayParameterizedCommand((p) => DeleteProduit(p));
            
             PrintCommand = new RelayCommand(ShowDocument);
-            UpdateQuantiteCommand = new RelayParameterizedCommand((p) => UpdateQuantite(p));
             PrintPdfCommand = new RelayCommand(ShowPdfDocument);
-            PopupClickawayCommand = new RelayCommand(HideMenu);
         }
 
-        private void HideMenu()
-        {
-            MenuVisible = false;
-        }
+      
 
         private void PaginationViewModel_PageIndexChanged(object? sender, int e)
         {
@@ -212,48 +198,9 @@ namespace MedicamentStore
 
         }
 
-        private void SetStockEnter()
-        {
-            if (StockEnterPanel)
-                return;
-            StockEnterPanel = true;
-            StockInitialPanel = false;
-        }
+      
 
-        private void SetStockInitial()
-        {
-            if (StockInitialPanel)
-                return;
-            StockEnterPanel = false;
-            StockInitialPanel = true;
-        }
-
-        private void UpdateQuantite(object p)
-        {
-            if (p is MedicamentStock medicament) 
-            {
-                ObservableCollection<MedicamentUpdateStock> l = new ObservableCollection<MedicamentUpdateStock> 
-                { 
-                    new MedicamentUpdateStock
-                    {
-                        IdMedicament = medicament.Id,
-                        Nom_Commercial = medicament.Nom_Commercial,
-                        Forme = medicament.Forme,
-                        Dosage = medicament.Dosage,
-                        Unite = medicament.Unite,
-                        Prix = medicament.Prix,
-                        IdStock = medicament.Ids,
-                        Quantite = medicament.Quantite,
-                        IdUnite = medicament.IdUnite,
-                        Type = medicament.Type,
-                    }
-                };
-               
-                IoC.Application.GoToPage(ApplicationPage.NewStockPage,new NewStockViewModel(l));
-
-               
-            }
-        }
+       
 
         private void ShowDocument()
         {
@@ -261,37 +208,6 @@ namespace MedicamentStore
             IoC.Application.GoToPage(ApplicationPage.PrintInitialStockPage, new PrintInitialStockViewModel(FilteredStocks));
         }
        
-        private void DeleteProduit(object p)
-        {
-            if (p is MedicamentStock newProduit)
-            {
-                ConfirmBoxDialogViewModel viewModel = new ConfirmBoxDialogViewModel
-                {
-                    Message = "êtes-vous sûr du Processus de Suppression ?", Title= "Confirmer la suppression"
-                };
-                IoC.ConfirmBox.ShowMessage(viewModel);
-                if (viewModel.IsConfirmed)
-                {
-                   var res = IoC.StockManager.DeleteStockAsync(newProduit.Ids);
-                    if (res.Result.Successful)
-                    {
-                        Stocks.Remove(newProduit);
-                        FilteredStocks.Remove(newProduit);
-                        IoC.NotificationBox.ShowMessage(new NotificationBoxViewModel(NotificationType.Succes, "La suppression a été effectuée avec succès"));
-                        produitTotal = Stocks.Count().ToString();
-                        MontantTotal = Stocks.Sum(d => d.PrixTotal);
-
-                    }
-                    else
-                    {
-                        IoC.NotificationBox.ShowMessage(new NotificationBoxViewModel(NotificationType.Error, res.Result.ErrorMessage));
-
-                    }
-
-                }
-               
-            }
-        }
         public double MontantTotal {  get; set; }
         public string produitTotal { get; set; }
        
@@ -345,11 +261,7 @@ namespace MedicamentStore
             mLastSearchText = SearchText;
         }
 
-        private async Task ToNewItemStockWindow()
-        {
-            IoC.Application.GoToPage(ApplicationPage.NewStockPage);
-            await Task.Delay(1);
-        }
+       
         public async Task MedicamentButton(object param) 
         {
             if (param is ProduitsPharmaceutiquesType selectedType)

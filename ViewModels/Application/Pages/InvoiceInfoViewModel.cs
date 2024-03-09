@@ -83,10 +83,10 @@ namespace MedicamentStore
         {  
             SelectedDate = DateTime.Today;
             AttachmentButtonCommand = new RelayCommand(AttachmentButton);
-            SetFNumberCommand = new RelayCommand(SetFactNumButton);
+            SetFNumberCommand = new RelayCommand(SetFactNumButton); 
             _ = GetFactNumber(); 
             SetFactNum(LastFactNum); 
-      //  AttachmentDButtonCommand = new RelayCommand(AttachmentDButton);
+      //  AttachmentDButtonCommand = new RelayCommand(AttachmentDButton); 
 
         //    PaymentTerms = new List<string>
         //{
@@ -135,7 +135,7 @@ namespace MedicamentStore
 
         public void SetFactNum(int x)
         {
-            EnteredNumText = $"Fact-{SelectedDate.ToShortDateString().Replace("/","")}{x}";
+            EnteredNumText = $"Fact-{SelectedDate.ToShortDateString().Replace("/","")}{x+1}";
         }
     }
     }

@@ -135,7 +135,7 @@ namespace MedicamentStore
                 {
                     InvoiceItems = new ObservableCollection<ProduitPharma>
                     {
-                        e.SelectedProductPharma
+                       // e.SelectedProductPharma
                     };
                 }
             };

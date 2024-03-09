@@ -9290,6 +9290,9 @@
     <Compile Update="Controls\Dialogs\ConfirmBox.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Controls\DocumentPaged\FactureDocControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Controls\DocumentPaged\InitialStockDocControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -9311,6 +9314,9 @@
     <Compile Update="Controls\Document\ProduitStockFlowDoc.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Controls\Inputs\CustomerFilterSuppControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Controls\Inputs\CustomerCmbSuppControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -9327,6 +9333,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Pages\FacturesPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\PrintFactureStockPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Pages\PrintInitialStockPage.xaml.cs">

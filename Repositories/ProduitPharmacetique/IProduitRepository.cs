@@ -9,7 +9,9 @@ namespace MedicamentStore
     public interface IProduitRepository
     {
         Task<DbResponse<ProduitPharma>> InsertProduit(ProduitPharma produit);
+        Task<DbResponse<PharmaceuticalProduct>> InsertProduit(PharmaceuticalProduct produit);
 
-        Task<IEnumerable<TypeProduct>> GetAllProduitTypes();
+
+        Task<IEnumerable<TypeProduct>> GetAllProduitTypes(); 
     }
 }

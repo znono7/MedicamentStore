@@ -106,7 +106,7 @@
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellTemplate>
                                     </DataGridTemplateColumn>
-                                    <DataGridTemplateColumn Header="Quantité Restante" Width="Auto" IsReadOnly="True" CanUserReorder="False" CanUserResize="False" CanUserSort="False">
+                                    <DataGridTemplateColumn Header="Stock Initial" Width="Auto" IsReadOnly="True" CanUserReorder="False" CanUserResize="False" CanUserSort="False">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBox IsReadOnly="True" Text="{Binding QRestant,UpdateSourceTrigger=PropertyChanged,Converter={local:IntegerConverter}}" Style="{StaticResource TextEntryQua}" Margin="0"/>

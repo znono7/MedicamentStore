@@ -76,7 +76,7 @@ namespace MedicamentStore
             CancelCommand = new RelayCommand(Cancel);
             SaveCommand = new RelayCommand(async () => await Save());
         }
-
+         
         #endregion
 
         #region Command Methods

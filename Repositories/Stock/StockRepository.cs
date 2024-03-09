@@ -175,13 +175,13 @@ namespace MedicamentStore
 
         public async Task<int> GetProduitTotalStockAsync(ProduitsPharmaceutiquesType type)
         {
-            int intValue = (int)type;
+            int intValue = (int)type; 
             if(intValue > 0)
                 return await _connection.ExecuteScalar<int>("SELECT COUNT(DISTINCT IdMedicament) AS NumberOfUniqueProducts FROM Stock WHERE Type = @Val ", new {Val = intValue}) ;
             else
                 return await _connection.ExecuteScalar<int>("SELECT COUNT(DISTINCT IdMedicament) AS NumberOfUniqueProducts FROM Stock ");
 
-        }
+        } 
 
         public IEnumerable<Unite> GetUnitsAsync()
         {
@@ -350,7 +350,7 @@ namespace MedicamentStore
         {
             using (var transaction = _connection.Connection().BeginTransaction())
             {
-                try
+                try 
                 { 
                     // Insert Invoice
                     string sql = @"INSERT INTO Invoice (Date,Number,MontantTotal,ProduitTotal,IdSupplie,InvoiceType) 

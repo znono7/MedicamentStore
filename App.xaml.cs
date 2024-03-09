@@ -23,7 +23,7 @@ namespace MedicamentStore
 
 
             // Show the main window
-            Current.MainWindow = new MainWindow();
+            Current.MainWindow =  new MainWindow();
 
 
             Current.MainWindow.Show();

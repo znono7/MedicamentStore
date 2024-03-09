@@ -82,7 +82,47 @@ namespace MedicamentStore
                     {
                         command.Execute(dataGrid.SelectedItem);
 
-                        if (dataGrid.SelectedItem is Supplies item && dataGrid.DataContext is CustomerCmbSuppViewModel viewModel)
+                        if (dataGrid.SelectedItem is Supplies item && dataGrid.DataContext is CustomerCmbSuppViewModel viewModel )
+                        {
+                            viewModel.HandleSelectedItem(item);
+                        }
+
+                    }
+                };
+            }
+        }
+
+        #endregion
+
+        #region for Items
+        public static ICommand GetSelectionFSuppChangedCommand(DependencyObject obj)
+        {
+            return (ICommand)obj.GetValue(SelectionFSuppChangedCommandProperty);
+        }
+
+        public static void SetSelectionFSuppChangedCommand(DependencyObject obj, ICommand value)
+        {
+            obj.SetValue(SelectionFSuppChangedCommandProperty, value);
+        }
+        public static readonly DependencyProperty SelectionFSuppChangedCommandProperty =
+        DependencyProperty.RegisterAttached(
+            "SelectionFSuppChangedCommand",
+            typeof(ICommand),
+            typeof(DataGridSelectionChangedBehavior),
+            new PropertyMetadata(null, OnSelectionFSuppChangedCommandChanged));
+
+
+        private static void OnSelectionFSuppChangedCommandChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is DataGrid dataGrid)
+            {
+                dataGrid.SelectionChanged += (sender, args) =>
+                {
+                    if (e.NewValue is ICommand command && command.CanExecute(dataGrid.SelectedItem))
+                    {
+                        command.Execute(dataGrid.SelectedItem);
+
+                        if (dataGrid.SelectedItem is Supplies item && dataGrid.DataContext is CustomerFilterSuppViewModel viewModel)
                         {
                             viewModel.HandleSelectedItem(item);
                         }

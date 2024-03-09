@@ -15,15 +15,15 @@ using System.Windows.Shapes;
 
 namespace MedicamentStore
 {
-    /// <summary>
-    /// Interaction logic for InvoiceInfoControl.xaml
-    /// </summary>
-    public partial class InvoiceInfoControl : UserControl
+    
+    public partial class CustomerFilterSuppControl : UserControl
     {
-        public InvoiceInfoControl()
+       
+       
+        public CustomerFilterSuppControl()
         {
             InitializeComponent();
-            //DataContext = new InvoiceInfoViewModel();
+           // DataContext = new CustomerFilterSuppViewModel();
         }
     }
 }

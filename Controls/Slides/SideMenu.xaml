@@ -33,16 +33,13 @@
             <StackPanel Grid.Row="1" Margin="0 30 0 0">
                 <Separator  Margin=" 20  20"  Background="#E1E6EB"/>
                 <RadioButton Command="{Binding HomePage}" Content="Accueil" Margin="0 0 0 0" Tag="{StaticResource home}" Style="{StaticResource MenuRadioButtonStyle}" IsChecked="True"/>
-                <RadioButton Visibility="Collapsed" Command="{Binding MedicamentPage}" Content="Produits Pharmaceutiques" Margin="0 0 0 0" Tag="{StaticResource drugs}" Style="{StaticResource MenuRadioButtonStyle}" />
                 <RadioButton Command="{Binding StockPage}" Content="Stock Initial" Margin="0 0 0 0" Tag="{StaticResource store}" Style="{StaticResource MenuRadioButtonStyle}" />
                 <RadioButton Command="{Binding EntreeStockPage}" Content="Entrée de Stock" Margin="0 0 0 0" Tag="{StaticResource entreeStck}" Style="{StaticResource MenuRadioButtonStyle}" />
                 <RadioButton Command="{Binding InvoicePage}" Content="Sortie de Stock" Margin="0 0 0 0" Tag="{StaticResource sortiedeStock}" Style="{StaticResource MenuRadioButtonStyle}" />
                 <RadioButton  Command="{Binding MouvementPage}" Content="Mouvement" Margin="0 0 0 0" Tag="{StaticResource movment}" Style="{StaticResource MenuRadioButtonStyle}"  />
                 <RadioButton  Command="{Binding FacturePage}" Content="Factures" Margin="0 0 0 0" Tag="{StaticResource invoice}" Style="{StaticResource MenuRadioButtonStyle}"  />
                 <Separator  Margin=" 20  20"  Background="#E1E6EB"/>
-                <RadioButton Visibility="Collapsed" Command="{Binding UsersPage}" Content="Utilisateurs" Margin="0 0 0 0" Tag="{StaticResource users}" Style="{StaticResource MenuRadioButtonStyle}" />
-                <RadioButton Visibility="Collapsed" Command="{Binding ParemetrePage}" Content="Profil" Margin="0 0 0 0" Tag="{StaticResource settings}" Style="{StaticResource MenuRadioButtonStyle}" />
-
+               
             </StackPanel>
            
         </Grid>

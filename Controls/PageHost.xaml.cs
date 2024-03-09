@@ -21,7 +21,7 @@ namespace MedicamentStore
     /// </summary>
     public partial class PageHost : UserControl
     {
-        #region Dependency Properties
+        #region Dependency Properties 
 
         /// <summary>
         /// The current page to show in the page host

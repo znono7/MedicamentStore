@@ -53,5 +53,30 @@ namespace MedicamentStore
                 };
             }
         }
+
+        public async Task<DbResponse<PharmaceuticalProduct>> InsertProduit(PharmaceuticalProduct produit)
+        {
+            string sql = @"INSERT INTO PharmaceuticalProducts 
+                            (Nom_Commercial,Forme,Dosage,Conditionnement,Img,Type) VALUES
+                            (@Nom_Commercial,@Forme,@Dosage,@Conditionnement,@Img,@Type)";
+
+            int s = await _connection.InsertDataAsync(sql, produit);
+
+            if (s > 0)
+            {
+                produit.Id = s;
+                return new DbResponse<PharmaceuticalProduct>
+                {
+                    Response = produit
+                };
+            }
+            else
+            {
+                return new DbResponse<PharmaceuticalProduct>
+                {
+                    ErrorMessage = "Erreur de connexion à la base de données"
+                };
+            }
+        }
     }
 }

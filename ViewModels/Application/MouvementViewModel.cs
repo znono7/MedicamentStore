@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Microsoft.Win32;
 using QuestPDF.Fluent;
+using QuestPDF.Helpers;
 
 
 namespace MedicamentStore
@@ -21,11 +22,11 @@ namespace MedicamentStore
         public ObservableCollection<MouvementStocks> Stocks
         {  
             get => stocks;   
-            set
+            set 
             {
                 if (stocks == value)
                     return;
-                stocks = value;
+                stocks = value; 
 
                 FilteredStocks = new ObservableCollection<MouvementStocks>(stocks);
             }
@@ -87,11 +88,15 @@ namespace MedicamentStore
         public int IdMedicament { get; set; }
         public bool IsLoading { get; set; }
         public ICommand ReturnCommand { get; set; }
-
+        public PaginationViewModel PaginationView { get; private set; }
+        public int PageSize { get; private set; } = 10;
         public MouvementViewModel(int idMedicament)
         {
+            IdMedicament = idMedicament;
+            PaginationView = new PaginationViewModel();
+            PaginationView.TotalPages = CalculateTotalPages(GetTotalItems(IdMedicament).Result, PageSize);
+            PaginationView.PageIndexChanged += PaginationViewModel_PageIndexChanged;
             DateFilterViewModel = new DateFilterViewModel();
-           // GetTypes();
             ExpandCommand = new RelayCommand(AttachmentMenuButton);
             PopupClickawayCommand = new RelayCommand(ClickawayMenuButton);
             FilterDataCommand = new RelayCommand(async () => await FilterData());
@@ -100,19 +105,37 @@ namespace MedicamentStore
             ReturnCommand = new RelayCommand(async () => await ToBackPage());
 
             //_ = LoadData();
-            IdMedicament = idMedicament;
-            _ = GetMovment(IdMedicament);
+            
+            _ = GetMovment(IdMedicament, PaginationView.CurrentPageIndex, PageSize);
 
+        }
+        private void PaginationViewModel_PageIndexChanged(object? sender, int e)
+        {
+            _ = GetMovment(IdMedicament, e, PageSize);
+
+        }
+
+        private int CalculateTotalPages(int totalItems, int itemsPerPage)
+        {
+            if (totalItems == 0)
+                return 0;
+            if (totalItems <= itemsPerPage)
+                return 1;
+            return totalItems / itemsPerPage + (totalItems % itemsPerPage == 0 ? 0 : 1);
+        }
+        private async Task<int> GetTotalItems(int i)
+        {
+            return await IoC.TransactionManager.GetTotalMovmentStockAsync(i);
         }
         private async Task ToBackPage()
         {
             IoC.Application.GoToPage(ApplicationPage.MainMovmentStockPage);
             await Task.Delay(1);
         }
-        private async Task GetMovment(int id)
+        private async Task GetMovment(int id, int pageNumber, int pageSize)
         {
             IsLoading = true;
-            var Result = await IoC.TransactionManager.GetAllMovement(id);
+            var Result = await IoC.TransactionManager.GetAllMovement( id,  pageNumber,  pageSize);
             if (Result != null)
             {
                 Stocks = new ObservableCollection<MouvementStocks>(Result);
@@ -177,26 +200,7 @@ namespace MedicamentStore
 
             await Task.Delay(1);
         }
-        public async Task LoadData()
-        {
-            //var Result = await IoC.TransactionManager.GetAll();
-            //Stocks = new ObservableCollection<TransactionDto>(Result);
-            //foreach (var item in Stocks)
-            //{
-            //    if(item.TypeTransaction == 1) 
-            //    {
-            //        item.SymbleType = "+";
-            //        item.PrimaryBackground = "349432";
-            //    }else if (item.TypeTransaction == 2)
-            //    {
-            //        item.SymbleType = "-";
-            //        item.PrimaryBackground = "EF4444";
-            //    }
-            //    item.PrixTotal = double.Parse(string.Format("{0:0.00}", item.Prix * item.Quantite));
-            //    item.TypeMed = ((ProduitsPharmaceutiquesType)item.Type).ToProduitsPharmaceutiques();
-
-            //}
-        }
+      
         private async Task FilterData()
         {
             DateTime startDate = new();
@@ -254,31 +258,8 @@ namespace MedicamentStore
             isExpanded ^= true;
         }
 
-        public void GetTypes()
-        {
-            TypeItems = new ObservableCollection<TypeProduct>
-            {
-                new TypeProduct
-                {
-                    Id = 0,
-                    type = "Produits Pharmaceutiques"
-                }
-            };
-            foreach (ProduitsPharmaceutiquesType type in Enum.GetValues(typeof(ProduitsPharmaceutiquesType)))
-            {
-                if (type == ProduitsPharmaceutiquesType.None)
-                    continue;
-                string convertedValue = type.ToProduitsPharmaceutiques();
-                int i = (int)type;
-                if (convertedValue != null)
-                {
-                    TypeItems.Add(new TypeProduct
-                    {
-                        Id = i,
-                        type = convertedValue
-                    });
-                }
-            }
-        }
+       
+            
+        
     }
 }

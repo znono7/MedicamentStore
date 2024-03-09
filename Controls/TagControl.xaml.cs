@@ -16,14 +16,13 @@ using System.Windows.Shapes;
 namespace MedicamentStore
 {
     /// <summary>
-    /// Interaction logic for InvoiceInfoControl.xaml
+    /// Interaction logic for TagControl.xaml
     /// </summary>
-    public partial class InvoiceInfoControl : UserControl
+    public partial class TagControl : UserControl
     {
-        public InvoiceInfoControl()
+        public TagControl()
         {
             InitializeComponent();
-            //DataContext = new InvoiceInfoViewModel();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿
+using QuestPDF.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,13 +13,14 @@ namespace MedicamentStore
 {
    public class InvoiceItemsWindowViewModel : BaseViewModel
     {
+        public PaginationViewModel paginationView { get; set; }
         public bool MenuVisible { get; set; } = false;
         public TypeProduitViewModel TypeProduitCtrl { get; set; }
         public ObservableCollection<MedicamentStock> FilteredStocks { get; set; }
         public ObservableCollection<MedicamentStock> Stocks
         {
             get => mStocks;
-            set
+            set 
             {
                 if (mStocks == value) 
                     return;
@@ -83,7 +85,6 @@ namespace MedicamentStore
         #region Public Members 
       
 
-        public ObservableCollection<TypeProduct> TypeItems { get; set; } 
         public event EventHandler<SelectedItemEventArgs> ItemSelected;
 
         public bool IsLoading { get; set; }
@@ -111,18 +112,7 @@ namespace MedicamentStore
         #endregion
 
         #region selected 
-        private TypeProduct _selectedType { get; set; }
-
-        public TypeProduct SelectedType
-        {
-            get { return _selectedType; }
-            set
-            {
-                _selectedType = value;
-                //_ = GetProducts(_selectedType.Id);
-                //Unit = _selectedUnite?.Id ?? 0;
-            }
-        }
+      
 
         
         public InvoiceItem SelectedInvoiceItem { get; set; }
@@ -143,16 +133,51 @@ namespace MedicamentStore
         public InvoiceItemsWindowViewModel() 
         {
             TypeProduitCtrl = new TypeProduitViewModel { CommitAction = SetType };
-          //_ = GetTypes();
-            _ = LoadStockPagedsAsync(CurrentTypePage);
-           // SelectedType = TypeItems[0];
+            paginationView = new PaginationViewModel();
+            paginationView.TotalPages = CalculateTotalPages(GetTotalItems(CurrentTypePage).Result, _pageSize);
+            paginationView.PageIndexChanged += PaginationViewModel_PageIndexChanged;
+            _ = GetStocksAsync(CurrentTypePage, paginationView.CurrentPageIndex, _pageSize);
+
             SetItemCommand = new RelayParameterizedCommand(async (param) => await ItemSelectedC(param));
 
             SearchCommand = new RelayCommand(async()=> await Search());
             MenuVisibleCommand = new RelayCommand(MenuButton);
             PopupClickawayCommand = new RelayCommand(HideMenuButton);
         }
+        private void PaginationViewModel_PageIndexChanged(object? sender, int e)
+        {
+            _ = GetStocksAsync(CurrentTypePage, e, _pageSize);
+        }
 
+        private int CalculateTotalPages(int totalItems, int itemsPerPage)
+        {
+            if (totalItems == 0)
+                return 0;
+            if (totalItems <= itemsPerPage)
+                return 1;
+            return totalItems / itemsPerPage + (totalItems % itemsPerPage == 0 ? 0 : 1);
+        }
+        private async Task<int> GetTotalItems(ProduitsPharmaceutiquesType type)
+        {
+            return await IoC.StockManager.GetProduitTotalStockAsync(type);
+        }
+
+        private async Task GetStocksAsync(ProduitsPharmaceutiquesType type, int currentPage, int pageSize)
+        {
+            CurrentTypePage = type;
+            IsLoading = true;
+            await Task.Delay(1000);
+            var Result = await IoC.StockManager.GetPagedStocksAsync(currentPage, pageSize, CurrentTypePage);
+
+            foreach (var Stock in Result)
+            {
+                UpdateStatus(Stock);
+                Stock.TypeMed = ((ProduitsPharmaceutiquesType)Stock.Type).ToProduitsPharmaceutiques();
+
+            }
+            Stocks = new ObservableCollection<MedicamentStock>(Result);
+            IsLoading = false;
+        }
         private void HideMenuButton()
         {
             MenuVisible = false;
@@ -168,32 +193,15 @@ namespace MedicamentStore
         {
             if(arg is ProduitsPharmaceutiquesType type)
             {
-                await LoadStockPagedsAsync(type);
+                CurrentTypePage = type;
+                paginationView.Reset();
+                await GetStocksAsync(CurrentTypePage, paginationView.CurrentPage, _pageSize);
+                paginationView.TotalPages = CalculateTotalPages(GetTotalItems(CurrentTypePage).Result, _pageSize);
             }
         }
 
-        private async Task LoadStockPagedsAsync(ProduitsPharmaceutiquesType type)
-        {
-            CurrentTypePage = type;
-            IsLoading = true;
-            await Task.Delay(1000);
-            var Result = await IoC.StockManager.GetPagedStocksAsync(CurrentPage, _pageSize, CurrentTypePage);
-
-            foreach (var Stock in Result)
-            {
-                UpdateStatus(Stock);
-                Stock.TypeMed = ((ProduitsPharmaceutiquesType)Stock.Type).ToProduitsPharmaceutiques();
-
-            }
-            Stocks = new ObservableCollection<MedicamentStock>(Result);
-            _ = GetStockNumbers(CurrentTypePage);
-            IsLoading = false;
-        }
-        private async Task GetStockNumbers(ProduitsPharmaceutiquesType type)
-        {
-            var MontantTotal = await IoC.StockManager.GetAmountTotalStockAsync(type);
-            var produitTotal = (await IoC.StockManager.GetProduitTotalStockAsync(type)).ToString();
-        }
+       
+       
 
         private void UpdateStatus(MedicamentStock stock)
         {
@@ -222,37 +230,8 @@ namespace MedicamentStore
 
         }
 
-        public async Task MedicamentButton(object param)
-        {
-            if (param is ProduitsPharmaceutiquesType selectedType)
-            {
-                CurrentTypePage = selectedType;
-               // TextType = selectedType.ToProduitsPharmaceutiques();
-                // _ = LoadStocksAsync(selectedType);
-                _ = LoadStockPagedsAsync(CurrentTypePage);
-                //MenuVisible = false;
-            }
-            await Task.Delay(1);
-        }
-        public async Task GetTypes()
-        {
-            TypeItems = new ObservableCollection<TypeProduct>();
-            foreach (ProduitsPharmaceutiquesType type in Enum.GetValues(typeof(ProduitsPharmaceutiquesType)))
-            {
-                if (type == ProduitsPharmaceutiquesType.None)
-                    continue;
-                string convertedValue = type.ToProduitsPharmaceutiques();
-                int i = (int)type;
-                if (convertedValue != null)
-                {
-                    TypeItems.Add(new TypeProduct
-                    {
-                        Id = i,
-                        type = convertedValue
-                    });
-                }
-            }
-        }
+       
+       
         /// <summary>
         /// Searches the current message list and filters the view
         /// </summary>
@@ -285,7 +264,7 @@ namespace MedicamentStore
             // Set last search text
             mLastSearchText = SearchText;
         }
-        public void OnItemSelected(InvoiceProduct selectedItem)
+        public void OnItemSelected(MedicamentStock selectedItem)
         {
             ItemSelected?.Invoke(this, new SelectedItemEventArgs { SelectedItem = selectedItem });
         }
@@ -293,7 +272,7 @@ namespace MedicamentStore
        
         public async Task ItemSelectedC(object param)
         {
-            if (param is InvoiceProduct item) 
+            if (param is MedicamentStock item) 
             {
                 OnItemSelected(item);
 

@@ -11,7 +11,7 @@ namespace MedicamentStore
     {
         public ObservableCollection<MedicamentStock> Stocks { get; set; }
 
-        public bool HeaderVisible { get; set; }
+        public bool HeaderVisible { get; set; } 
         public bool FooterVisible { get; set; }
         public string NumPage { get; set; }
         public string TypeString { get; set; }
