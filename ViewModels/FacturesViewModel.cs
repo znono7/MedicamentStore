@@ -77,7 +77,7 @@ namespace MedicamentStore
         public RelayCommand FilterDataCommand { get; private set; }
         public CustomerFilterSuppViewModel customerFilter { get; set; }
         #endregion
-
+         
 
         #region Constructor
         public FacturesViewModel()
@@ -162,6 +162,12 @@ namespace MedicamentStore
             FilterTag.TagName = "";
             SelectedType = 0;
             DateFilterViewModel = new DateFilterViewModel();
+            customerFilter = new CustomerFilterSuppViewModel
+            {
+                AttachmentAction = AttachmentButton,
+                SetSupplieAction = GetDataBySupplier,
+
+            };
             pagination.Reset();
             pagination.TotalPages = CalculateTotalPages(GetTotalItems().Result, PageSize);
             
@@ -204,19 +210,21 @@ namespace MedicamentStore
             isDimmedGray = false;
                 
             customerFilter.SearchIsOpen = false;
-            pagination.Reset();
-            pagination.TotalPages = CalculateTotalPages(await GetTotalItems(DateFilterViewModel.SelectedFromDate, DateFilterViewModel.SelectedToDate,0,0), PageSize);
             (DateTime startDate, DateTime endDate) = await FilterData();
             if (startDate > endDate)
                 return;
-            if(DateFilterViewModel.CurrentDateFilterType == DateFilterType.None)
+           
+            if (DateFilterViewModel.CurrentDateFilterType == DateFilterType.None)
             {
                 FilterByDate = false;
                 FilterBySupplier = false;
+                pagination.Reset();
                 pagination.TotalPages = CalculateTotalPages(await GetTotalItems(0), PageSize);
                 await GetInvoices(pagination.CurrentPageIndex, PageSize, 0);
                 return;
             }
+            pagination.Reset();
+            pagination.TotalPages = CalculateTotalPages(await GetTotalItems(startDate, endDate, 0, 0), PageSize);
             await LoadDataByDate(startDate, endDate, pagination.CurrentPageIndex, PageSize, 0);
                
         }
@@ -408,7 +416,8 @@ namespace MedicamentStore
         }
         private async Task<int> GetTotalItems(DateTime startDate, DateTime endDate, int type, int idSupp = 0)
         {
-            return await IoC.InvoiceManager.GetTotalInvoicesByDate(startDate, endDate, type, idSupp);
+            int t = await IoC.InvoiceManager.GetTotalInvoicesByDate(startDate, endDate, type, idSupp);
+            return t;
         }
         #endregion
     }

@@ -10,7 +10,7 @@ namespace MedicamentStore
     public class PharmaceuticalProduct
     {
         public int Id { get; set; }
-        public Guid? IdProduct { get; set; }
+        public string? IdProduct { get; set; }
         public string? Nom_Commercial { get; set; }
         public string? Forme { get; set; }
         public string? Dosage { get; set; }

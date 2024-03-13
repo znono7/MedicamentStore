@@ -19,7 +19,7 @@ namespace MedicamentStore
         public string TextType { get; set; } = ProduitsPharmaceutiquesType.None.ToProduitsPharmaceutiques();
         public ICommand MedicamentCommand { get; set; }//
         public ICommand UpdateQuantiteCommand { get; set; }//   
-
+         
         public ObservableCollection<MedicamentStock> FilteredMedicaments { get; set; }
 
         public ObservableCollection<MedicamentStock> EnterMedicaments  
@@ -134,7 +134,7 @@ namespace MedicamentStore
         {
             if(param is MedicamentStock medicament)
             { 
-                IoC.Application.GoToPage(ApplicationPage.MouvementPage, new MouvementViewModel(medicament.Id));
+                IoC.Application.GoToPage(ApplicationPage.MouvementPage, new MouvementViewModel(medicament.IdProduct));
             }
             await Task.Delay(1); 
         }

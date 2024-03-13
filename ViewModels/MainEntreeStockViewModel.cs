@@ -17,7 +17,7 @@ namespace MedicamentStore
         public ICommand MenuVisibleCommand { get; set; } 
         public bool MenuVisible { get; set; } 
         public string TextType { get; set; } = ProduitsPharmaceutiquesType.None.ToProduitsPharmaceutiques();
-        public ICommand MedicamentCommand { get; set; }//  
+        public ICommand MedicamentCommand { get; set; }//    
         public ICommand UpdateQuantiteCommand { get; set; }//   
 
         public ObservableCollection<MedicamentStock> FilteredMedicaments { get; set; }
@@ -156,7 +156,7 @@ namespace MedicamentStore
         {
             if(param is MedicamentStock medicament)
             { 
-                IoC.Application.GoToPage(ApplicationPage.EntreeStockPage, new EntreeStockViewModel(medicament.Id)); 
+                IoC.Application.GoToPage(ApplicationPage.EntreeStockPage, new EntreeStockViewModel(medicament.IdProduct)); 
             }
             await Task.Delay(1);
         }
@@ -179,6 +179,7 @@ namespace MedicamentStore
                         Quantite = model.Quantite,
                         IdUnite = model.IdUnite,
                         Type = model.Type,
+                        IdProduct = model.IdProduct
                     }
                 };
                 IoC.Application.GoToPage(ApplicationPage.NewStockPage, new NewStockViewModel(l));

@@ -30,27 +30,5 @@ namespace MedicamentStore
             DataContext = viewModel;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-
-            //InNewStockPage.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-            //double currentPageWidth = InNewStockPage.ActualWidth;
-            //double currentPageHeight = InNewStockPage.ActualHeight;
-
-            //// Calculate the position above the current page
-            //double offsetX = 0; // Set your desired horizontal offset from the left of the screen
-            //double offsetY = -currentPageHeight; // Place the new window above the current page
-            //// Calculate window position based on the Frame's position
-            //Point relativePoint = InNewStockPage.TransformToAncestor(InNewStockPage).Transform(new Point(0, 0));
-            //double windowLeft = relativePoint.X + offsetX;
-            //double windowTop = relativePoint.Y + offsetY;
-
-            AddStock  newWindow = new AddStock(new StockItemsWindowViewModel());
-            //newWindow.Left = windowLeft;
-            //newWindow.Top = windowTop;
-            //newWindow.Width = currentPageWidth;
-            //newWindow.Height = currentPageHeight;
-            newWindow.Show();
-        }
     }
 }

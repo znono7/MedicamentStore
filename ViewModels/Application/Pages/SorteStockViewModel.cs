@@ -26,7 +26,7 @@ namespace MedicamentStore
             get => _CurrentTypePage;
             set 
             {
-                if (_CurrentTypePage != value) 
+                if (_CurrentTypePage != value)  
                 {
                     _CurrentTypePage = value;
                     OnPropertyChanged(nameof(CurrentTypePage));
@@ -92,7 +92,7 @@ namespace MedicamentStore
         public ICommand PrintPdfCommand { get; set; }
 
        
-        public SorteStockViewModel(int identerMedicaments)
+        public SorteStockViewModel(string identerMedicaments)
         {
             IdEnterMedicaments = identerMedicaments;
 
@@ -116,7 +116,7 @@ namespace MedicamentStore
             ReturnCommand = new RelayCommand(BackPage);
         }
 
-        private async Task GetSortie(int idEnterMedicaments, int currentPageIndex, int pageSize)
+        private async Task GetSortie(string idEnterMedicaments, int currentPageIndex, int pageSize)
         {
             IsLoading = true;
             // await Task.Delay(500); 
@@ -145,7 +145,7 @@ namespace MedicamentStore
                 return 1;
             return totalItems / itemsPerPage + (totalItems % itemsPerPage == 0 ? 0 : 1);
         }
-        private async Task<int> GetTotalItems(int i)
+        private async Task<int> GetTotalItems(string i)
         {
             return await IoC.TransactionManager.GetTotalSortieStockAsync(i);
         }
@@ -263,7 +263,7 @@ namespace MedicamentStore
         }
        
        
-        public int IdEnterMedicaments { get; set; }
+        public string IdEnterMedicaments { get; set; }
         public PaginationViewModel PaginationView { get; private set; }
 
        

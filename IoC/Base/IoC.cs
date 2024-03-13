@@ -1,4 +1,5 @@
-﻿using MedicamentStore.ViewModels.Application;
+﻿using HashidsNet;
+using MedicamentStore.ViewModels.Application;
 using Ninject;
 using System;
 using System.Collections.Generic;
@@ -36,7 +37,6 @@ namespace MedicamentStore
         /// A shortcut to access the <see cref="IConfirmManager"/>
         /// </summary>
         public static INotificationManager NotificationBox => IoC.Get<INotificationManager>();
-        public static IStockListDocument StockDocuments => IoC.Get<IStockListDocument>();
 
         /// <summary>
         /// A shortcut to access the <see cref="ApplicationViewModel"/>
@@ -58,6 +58,7 @@ namespace MedicamentStore
         public static IProduitRepository ProduitManager => IoC.Get<IProduitRepository>();
         public static IInvoiceRepository InvoiceManager => IoC.Get<IInvoiceRepository>();
         public static ITransactionRepository TransactionManager  => IoC.Get<ITransactionRepository>();
+        public static IHashids HashidsManager    => IoC.Get<IHashids>();
 
 
 
@@ -125,8 +126,7 @@ namespace MedicamentStore
 
             Kernel.Bind<INotificationManager>().ToConstant(new NotificationManager());
 
-            Kernel.Bind<IStockListDocument>().ToConstant(new StockListDocument());
-
+            Kernel.Bind<IHashids>().ToConstant(new Hashids("Etablissement Public de Santé de  Proximité à Aflou",8));
 
 
 

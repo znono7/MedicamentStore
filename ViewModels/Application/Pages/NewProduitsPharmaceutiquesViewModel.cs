@@ -18,9 +18,9 @@ namespace MedicamentStore
     {
         private ImageSource _imageSource;
 
-
-        public ImageSource MyImageSource
-        {
+        private string IdProduct { get; set; }
+        public ImageSource MyImageSource 
+        { 
             get { return _imageSource; }
             set
             {
@@ -52,8 +52,9 @@ namespace MedicamentStore
 
         public event EventHandler<SelectProduitPharmaEventArgs> ProduitAded;
         public ProduitPharma ProduitPharmaAded { get; set; }
-        public NewProduitsPharmaceutiquesViewModel(ProduitsPharmaceutiquesType type = ProduitsPharmaceutiquesType.Medicaments)
+        public NewProduitsPharmaceutiquesViewModel(int productCount,ProduitsPharmaceutiquesType type = ProduitsPharmaceutiquesType.Medicaments)
         {
+           // string R = Guid.NewGuid().ToString("N");
             _ = GetTypes();
             ProductName = new TextEntryViewModel { Label = "Nom de Produit" };
             Forme = new TextEntryViewModel { Label = "Forme" };
@@ -63,8 +64,25 @@ namespace MedicamentStore
             SelectedProduit = type == ProduitsPharmaceutiquesType.Medicaments ? items[0] : items[(int)type-1];
             SaveCommand = new RelayCommand(Save);
             ChooseImgCommand = new RelayCommand(async () => await ChooseImg());
-        }
+            ProductCount = productCount;
 
+            _ = GetLastProductId();
+        }
+        private async Task GetLastProductId()
+        {
+            var res = await IoC.StockManager.GetLastProductNumber();
+
+            if (res.Successful)
+            {
+                int productIdOffset = ProductCount == 0 ? 1 : ProductCount + 1;
+                IdProduct = IoC.HashidsManager.Encode(res.Response + productIdOffset);
+
+            }
+            else
+            {
+               await IoC.NotificationBox.ShowMessage(new NotificationBoxViewModel(NotificationType.Error, "Erreur lors de la récupération du dernier numéro de produit"));
+            }
+        }
         private async Task ChooseImg()
         {
             Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
@@ -79,6 +97,7 @@ namespace MedicamentStore
                 ImageName = Path.GetFileName(selectedFilePath);
                 LoadImageFromDisk(selectedFilePath);
             }
+            await Task.Delay(1);
         }
 
         private void LoadImageFromDisk(string filePath)
@@ -104,39 +123,14 @@ namespace MedicamentStore
         {
             ProduitAded?.Invoke(this, new SelectProduitPharmaEventArgs { SelectedProductPharma = produitPharma });
         }
-        private void SaveImageToDisk()
-        {
-            
-
-            // Convert the image source to a BitmapSource
-            BitmapSource bitmapSource = MyImageSource as BitmapSource;
-           
-            if (bitmapSource != null)
-            {
-                // Create a BitmapEncoder based on the desired image format (e.g., JPEG)
-                BitmapEncoder encoder = new JpegBitmapEncoder(); // Change this to the desired format if needed
-
-                // Create a FileStream to write the image data to a file on disk
-                string filePath = $".\\Pictures\\{ImageName}"; // Change this to your desired file path and name
-                using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
-                {
-                    // Encode the bitmap source and write it to the file stream
-                    encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
-                    encoder.Save(fileStream);
-                }
-
-                MessageBox.Show("Image saved successfully!");
-            }
-            else
-            {
-                MessageBox.Show("Failed to save image. Image source is invalid.");
-            }
-        }
 
         private void Save()
         {
-            //SaveImageToDisk();
-            //return;
+            if(IdProduct == null)
+            {
+                IoC.NotificationBox.ShowMessage(new NotificationBoxViewModel(NotificationType.Warning, "Erreur lors de la récupération du dernier numéro de produit"));
+                return;
+            }
             if (string.IsNullOrEmpty(ProductName.EnteredText))
             {
                  IoC.NotificationBox.ShowMessage(new NotificationBoxViewModel(NotificationType.Warning, "Vous Devez Remplir le Nom de Produit Pharmaceutique"));
@@ -153,7 +147,7 @@ namespace MedicamentStore
                 Img = ImageName,
                 Type = SelectedProduit.Id,
                 imageSource = MyImageSource,
-                IdProduct = Guid.NewGuid()
+                IdProduct = IdProduct,
             };
             OnProduitAded(produit);
            //var res = IoC.ProduitManager.InsertProduit(produit);
@@ -191,6 +185,7 @@ namespace MedicamentStore
         
         public ObservableCollection<TypeProduct> items { get; set; }
         public string? ImageName { get; private set; }
+        public int ProductCount { get; set; }
 
         public async Task GetTypes()
         {

@@ -8,14 +8,12 @@ namespace MedicamentStore
 {
     public interface ITransactionRepository
     {
-        Task<IEnumerable<TransactionDto>> GetAll();
-        Task<IEnumerable<MouvementStocks>> GetAllMovement(int IdMedicament, int pageNumber, int pageSize);  
-        Task<IEnumerable<EnterTransaction>> GetAllEnter(int IdMedicament, int pageNumber, int pageSize);
-        Task<IEnumerable<EnterTransaction>> GetAllSorte(int IdMedicament, int pageNumber, int pageSize);
-        Task<IEnumerable<EnterTransaction>> GetAllEnter();
-        Task<int> GetTotalEnterStockAsync(int IdMedicament);
-        Task<int> GetTotalMovmentStockAsync(int IdMedicament);
-        Task<int> GetTotalSortieStockAsync(int IdMedicament);
+        Task<IEnumerable<MouvementStocks>> GetAllMovement(string IdProduct, int pageNumber, int pageSize);  
+        Task<IEnumerable<EnterTransaction>> GetAllEnter(string IdProduct, int pageNumber, int pageSize);
+        Task<IEnumerable<EnterTransaction>> GetAllSorte(string IdProduct, int pageNumber, int pageSize);
+        Task<int> GetTotalEnterStockAsync(string IdProduct); 
+        Task<int> GetTotalMovmentStockAsync(string IdProduct);
+        Task<int> GetTotalSortieStockAsync(string IdProduct);
 
     }
 }

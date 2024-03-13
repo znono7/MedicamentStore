@@ -42,7 +42,7 @@ namespace MedicamentStore
             EntreeStockPage = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.MainEntreeStockPage));
             FacturePage = new RelayCommand(async () => await NavigateToPageAsync(ApplicationPage.FacturePage));
         }
-
+         
         private async Task NavigateToPageAsync(ApplicationPage page)
         {
             if (CurrentPage == page)

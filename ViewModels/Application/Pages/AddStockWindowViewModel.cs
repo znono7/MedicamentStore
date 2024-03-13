@@ -67,31 +67,31 @@ namespace MedicamentStore
                 AttachmentNotifVisible = false;
                 return;
             }
-            var Result = await IoC.StockManager.AddStockEnterAsync(new StockEnter
-            {
-                IdStock = MedicamentStock.Ids,
-                IdSupplie = SuppCmb.SelectedId,
-                Quantite = MedicamentStock.Quantite,
-                QuantiteAdded = Quantite,
-                Date = dateViewModel.SelectedDate
-            });
-            if (Result.Successful)
-            {
-                AttachmentNotifVisible = true;
+            //var Result = await IoC.StockManager.AddStockEnterAsync(new StockEnter
+            //{
+            //    IdStock = MedicamentStock.Ids,
+            //    IdSupplie = SuppCmb.SelectedId,
+            //    Quantite = MedicamentStock.Quantite,
+            //    QuantiteAdded = Quantite,
+            //    Date = dateViewModel.SelectedDate
+            //});
+            //if (Result.Successful)
+            //{
+            //    AttachmentNotifVisible = true;
                 
-                NotificationBoxViewModel = new NotificationBoxViewModel(NotificationType.Succes, "La Quantité a été Mise à Jour");
-                await Task.Delay(1500);
-                AttachmentNotifVisible = false;
-                UpdateQuantiteProduit.Invoke(this, new UpdateQuantiteProduitEventArgs { UpdateQuantiteStock = MedicamentStock });
+            //    NotificationBoxViewModel = new NotificationBoxViewModel(NotificationType.Succes, "La Quantité a été Mise à Jour");
+            //    await Task.Delay(1500);
+            //    AttachmentNotifVisible = false;
+            //    UpdateQuantiteProduit.Invoke(this, new UpdateQuantiteProduitEventArgs { UpdateQuantiteStock = MedicamentStock });
                 
-            }
-            else
-            {
-                AttachmentNotifVisible = true;
-                await Task.Delay(1500);
-                NotificationBoxViewModel = new NotificationBoxViewModel(NotificationType.Error, "Erreur lors de la mise à jour de la quantité");
-                AttachmentNotifVisible = false;
-            }
+            //}
+            //else
+            //{
+            //    AttachmentNotifVisible = true;
+            //    await Task.Delay(1500);
+            //    NotificationBoxViewModel = new NotificationBoxViewModel(NotificationType.Error, "Erreur lors de la mise à jour de la quantité");
+            //    AttachmentNotifVisible = false;
+            //}
 
 
         }

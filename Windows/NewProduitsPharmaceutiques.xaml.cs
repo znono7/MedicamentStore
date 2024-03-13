@@ -22,7 +22,7 @@ namespace MedicamentStore
         public NewProduitsPharmaceutiques(NewProduitsPharmaceutiquesViewModel model)
         {
             InitializeComponent();
-            DataContext = model;
+            DataContext = model; 
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

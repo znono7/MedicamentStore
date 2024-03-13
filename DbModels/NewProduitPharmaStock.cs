@@ -11,7 +11,7 @@ namespace MedicamentStore
     { 
         public int Id { get; set; } 
         public int IdStock { get; set; }
-        public Guid? IdProduct { get; set; }
+        public string? IdProduct { get; set; }
         public string? Img { get; set; }
         public ImageSource? imageSource { get; set; }
         public string? Nom_Commercial { get; set; }   

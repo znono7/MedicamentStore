@@ -155,7 +155,7 @@ namespace MedicamentStore
                 }
                     
             };
-            InvoiceItemsWindow window = new InvoiceItemsWindow(viewModel);
+            InvoiceItemsWindow window = new InvoiceItemsWindow(viewModel); 
             window.Show();
         }
 

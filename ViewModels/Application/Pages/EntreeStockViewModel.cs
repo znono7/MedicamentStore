@@ -24,7 +24,7 @@ namespace MedicamentStore
             get => _CurrentTypePage;
             set 
             {
-                if (_CurrentTypePage != value)
+                if (_CurrentTypePage != value) 
                 {
                     _CurrentTypePage = value;
                     OnPropertyChanged(nameof(CurrentTypePage));
@@ -88,7 +88,7 @@ namespace MedicamentStore
         public ICommand PopupClickawayCommand { get; set; }
         public ICommand FilterDataCommand { get; set; }
         public ICommand PrintPdfCommand { get; set; }
-        public EntreeStockViewModel(int identerMedicaments)
+        public EntreeStockViewModel(string identerMedicaments)
         {
 
 
@@ -127,7 +127,7 @@ namespace MedicamentStore
                 return 1;
             return totalItems / itemsPerPage + (totalItems % itemsPerPage == 0 ? 0 : 1);
         }
-        private async Task<int> GetTotalItems(int i)
+        private async Task<int> GetTotalItems(string i)
         {
             return await IoC.TransactionManager.GetTotalEnterStockAsync(i);
         }
@@ -143,7 +143,7 @@ namespace MedicamentStore
                 FilterTransactions = new ObservableCollection<EnterTransaction>(MenterTransactions);
             } }
         public ObservableCollection<EnterTransaction> FilterTransactions { get;  set; }
-        public async Task GetEntrees(int id, int pageNumber, int pageSize)
+        public async Task GetEntrees(string id, int pageNumber, int pageSize)
         {
             
             IsLoading = true;
@@ -256,7 +256,7 @@ namespace MedicamentStore
         }
        
       
-        public int IdEnterMedicaments { get; set; }
+        public string IdEnterMedicaments { get; set; }
         public PaginationViewModel PaginationView { get; private set; }
 
       

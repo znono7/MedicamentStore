@@ -85,12 +85,12 @@ namespace MedicamentStore
             }
         }
 
-        public int IdMedicament { get; set; }
+        public string IdMedicament { get; set; }
         public bool IsLoading { get; set; }
         public ICommand ReturnCommand { get; set; }
         public PaginationViewModel PaginationView { get; private set; }
         public int PageSize { get; private set; } = 10;
-        public MouvementViewModel(int idMedicament)
+        public MouvementViewModel(string idMedicament)
         {
             IdMedicament = idMedicament;
             PaginationView = new PaginationViewModel();
@@ -123,7 +123,7 @@ namespace MedicamentStore
                 return 1;
             return totalItems / itemsPerPage + (totalItems % itemsPerPage == 0 ? 0 : 1);
         }
-        private async Task<int> GetTotalItems(int i)
+        private async Task<int> GetTotalItems(string i)
         {
             return await IoC.TransactionManager.GetTotalMovmentStockAsync(i);
         }
@@ -132,7 +132,7 @@ namespace MedicamentStore
             IoC.Application.GoToPage(ApplicationPage.MainMovmentStockPage);
             await Task.Delay(1);
         }
-        private async Task GetMovment(int id, int pageNumber, int pageSize)
+        private async Task GetMovment(string id, int pageNumber, int pageSize)
         {
             IsLoading = true;
             var Result = await IoC.TransactionManager.GetAllMovement( id,  pageNumber,  pageSize);

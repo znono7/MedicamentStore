@@ -19,47 +19,8 @@ namespace MedicamentStore
             _connection = connection;
         }
          
-        public async Task<IEnumerable<InvoiceProduct>> GetAllInvoiceProduct()
-        {
-            var Qeury = @"SELECT p.Nom_Commercial,p.Forme,p.Dosage,p.Conditionnement,p.Id AS ProductId ,p.Img,s.Quantite AS QuantiteRest,
-                            s.Prix , u.Name AS Unite , t.type AS Type
-                            FROM PharmaceuticalProducts p INNER JOIN Stock s ON s.IdMedicament = p.Id
-                            INNER JOIN Units u ON u.Id = s.Unit
-                            INNER JOIN Type t ON t.Id = s.Type";
-            var ResultFinal = await _connection.QueryAsync<InvoiceProduct>(Qeury);
-
-            if (ResultFinal.Count() > 0)
-            {
-                return ResultFinal;
-            }
-            else
-            {
-                return Enumerable.Empty<InvoiceProduct>();
-
-            }
-        }
-
-        public async Task<IEnumerable<InvoiceProduct>> GetAllInvoiceProduct(int type)
-        { 
-           
-            var Qeury = @"SELECT p.Nom_Commercial,p.Forme,p.Dosage,p.Conditionnement,p.Id AS ProductId ,p.Img,s.Quantite AS QuantiteRest,
-                            s.Prix , u.Name AS Unite , t.type AS Type ,s.Id AS IdS
-                            FROM PharmaceuticalProducts p INNER JOIN Stock s ON s.IdMedicament = p.Id
-                            INNER JOIN Units u ON u.Id = s.Unit
-                            INNER JOIN Type t ON t.Id = s.Type 
-                            WHERE s.Type = @type"; 
-            var ResultFinal = await _connection.QueryAsync<InvoiceProduct>(Qeury, new { type });
-
-            if (ResultFinal.Count() > 0)
-            {
-                return ResultFinal;
-            }
-            else
-            {
-                return Enumerable.Empty<InvoiceProduct>();
-
-            }
-        }
+      
+       
 
         public async Task<IEnumerable<Invoice>> GetAllInvoices(int pageNumber, int pageSize, int type) 
         { 
@@ -78,23 +39,7 @@ namespace MedicamentStore
            
         }
 
-        public async Task<IEnumerable<Invoice>> GetAllInvoices(int pageNumber, int pageSize)
-        {
-            int offset = pageNumber * pageSize;
-            var Qeury = "SELECT * FROM Invoice   ORDER BY Id DESC LIMIT @PageSize OFFSET @Offset;";
-
-            var ResultFinal = await _connection.QueryAsync<Invoice>(Qeury, new { PageSize = pageSize, Offset = offset });
-
-            if (ResultFinal.Count() > 0)
-            {
-                return ResultFinal;
-            }
-            else
-            {
-                return Enumerable.Empty<Invoice>();
-
-            }
-        }
+       
 
         public async Task<IEnumerable<Invoice>> GetAllInvoicesByDate(int pageNumber, int pageSize, DateTime startDate, DateTime endDate, int type, int idSupplie = 0)
         {
@@ -146,10 +91,10 @@ namespace MedicamentStore
         {
             var Qeury = @"SELECT p.Nom_Commercial,p.Forme,p.Dosage,p.Conditionnement,p.Id AS IdMedicament ,s.Quantite ,
                             s.Prix , u.Name AS Unite , t.type AS TypeProduct  
-                            FROM PharmaceuticalProducts p INNER JOIN InvoiceItem s ON s.IdMedicament = p.Id
+                            FROM PharmaceuticalProducts p INNER JOIN InvoiceItem s ON s.IdProduct = p.IdProduct
                             INNER JOIN Units u ON u.Id = s.IdUnite
                             INNER JOIN Type t ON t.Id = s.IdTypeProduct  
-                            WHERE s.InvoiceNumber = @nbr"; 
+                            WHERE s.InvoiceNumber = @nbr";  
 
             var ResultFinal = await _connection.QueryAsync<InvoiceItemDto>(Qeury, new { nbr = num }); 
             return ResultFinal.Any() ? ResultFinal : Enumerable.Empty<InvoiceItemDto>();
@@ -159,30 +104,10 @@ namespace MedicamentStore
         {
                 // Query to get the maximum invoice number, or default to 1 if the table is empty
                 string query = "SELECT COALESCE(MAX(Id), 1) FROM Invoice";  
-                return await _connection.ExecuteScalar<int>(query); 
+                return await _connection.ExecuteScalar<int>(query);  
         }
 
-        public async Task<IEnumerable<InvoiceProduct>> GetSearchInvoiceProduct(string word)
-        {
-            var Qeury = @"SELECT p.Nom_Commercial,p.Forme,p.Dosage,p.Conditionnement,p.Id AS ProductId ,p.Img,s.Quantite AS QuantiteRest,
-                            s.Prix , u.Name AS Unite , t.type AS Type , ,s.Id AS IdS
-                            FROM PharmaceuticalProducts p INNER JOIN Stock s ON s.IdMedicament = p.Id
-                            INNER JOIN Units u ON u.Id = s.Unit
-                            INNER JOIN Type t ON t.Id = s.Type 
-                            WHERE p.Nom_Commercial LIKE @mot OR p.DCI LIKE @mot";
-            var ResultFinal = await _connection.QueryAsync<InvoiceProduct>(Qeury,new {mot = $"%{word}%"});
-
-            if (ResultFinal.Count() > 0)
-            {
-                return ResultFinal;
-            }
-            else
-            {
-                return Enumerable.Empty<InvoiceProduct>();
-
-            }
-        }
-
+      
         public async Task<int> GetTotalInvoices(int type = 0)
         {
             if (type == 0)
@@ -194,22 +119,24 @@ namespace MedicamentStore
 
         public async Task<int> GetTotalInvoicesByDate(DateTime startDate, DateTime endDate, int type, int idSupp)
         {
-            if(idSupp == 0)
-            {
-                if (type == 0)
-                    return await _connection.ExecuteScalar<int>("SELECT COUNT(Id) AS NumberOfInvoices FROM Invoice WHERE Date BETWEEN @StartDate AND @EndDate ", new { StartDate = startDate, EndDate = endDate });
-                else
-                    return await _connection.ExecuteScalar<int>("SELECT COUNT(Id) AS NumberOfInvoices FROM Invoice WHERE Date BETWEEN @StartDate AND @EndDate AND InvoiceType = @Val  ", new { StartDate = startDate, EndDate = endDate, Val = type });
+            return await _connection.ExecuteScalar<int>("SELECT COUNT(Id) AS NumberOfInvoices FROM Invoice WHERE Date BETWEEN @StartDate AND @EndDate ", new { StartDate = startDate, EndDate = endDate });
 
-            }
-            else
-            {
-                if (type == 0 )
-                    return await _connection.ExecuteScalar<int>("SELECT COUNT(Id) AS NumberOfInvoices FROM Invoice WHERE Date BETWEEN @StartDate AND @EndDate AND IdSupplie = @id", new { StartDate = startDate, EndDate = endDate, id = idSupp });
-                else
-                    return await _connection.ExecuteScalar<int>("SELECT COUNT(Id) AS NumberOfInvoices FROM Invoice WHERE Date BETWEEN @StartDate AND @EndDate AND InvoiceType = @Val AND IdSupplie = @id ", new { StartDate = startDate, EndDate = endDate, Val = type, id = idSupp });
+            //if (idSupp == 0)
+            //{
+            //    if (type == 0)
+            //        return await _connection.ExecuteScalar<int>("SELECT COUNT(Id) AS NumberOfInvoices FROM Invoice WHERE Date BETWEEN @StartDate AND @EndDate ", new { StartDate = startDate, EndDate = endDate });
+            //    else
+            //        return await _connection.ExecuteScalar<int>("SELECT COUNT(Id) AS NumberOfInvoices FROM Invoice WHERE Date BETWEEN @StartDate AND @EndDate AND InvoiceType = @Val  ", new { StartDate = startDate, EndDate = endDate, Val = type });
 
-            }
+            //} 
+            //else
+            //{
+            //    if (type == 0 )
+            //        return await _connection.ExecuteScalar<int>("SELECT COUNT(Id) AS NumberOfInvoices FROM Invoice WHERE Date BETWEEN @StartDate AND @EndDate AND IdSupplie = @id", new { StartDate = startDate, EndDate = endDate, id = idSupp });
+            //    else
+            //        return await _connection.ExecuteScalar<int>("SELECT COUNT(Id) AS NumberOfInvoices FROM Invoice WHERE Date BETWEEN @StartDate AND @EndDate AND InvoiceType = @Val AND IdSupplie = @id ", new { StartDate = startDate, EndDate = endDate, Val = type, id = idSupp });
+
+            //}
 
         }
 
@@ -222,33 +149,7 @@ namespace MedicamentStore
            
         }
 
-        public async Task<DbResponse<Invoice>> InsertInvoice(Invoice invoice)
-        {
-            string sql = @"INSERT INTO Invoice (Date,Number,MontantTotal,ProduitTotal)
-                            VALUES (@Date,@Number,@MontantTotal,@ProduitTotal)";
-            int s = await _connection.InsertDataAsync(sql, invoice);
-            if (s > 0)
-            {
-                return new DbResponse<Invoice>
-                {
-                    Response = new Invoice
-                    { 
-                        Id = s,
-                        Date = invoice.Date,
-                        Number = invoice.Number,
-                        MontantTotal = invoice.MontantTotal,
-                        ProduitTotal = invoice.ProduitTotal
-                    }
-                };
-            }
-            else
-            {
-                return new DbResponse<Invoice>
-                {
-                    ErrorMessage = "Erreur de connexion à la base de données",
-                };
-            }
-        }
+      
 
         public async Task<DbResponse> InsertInvoice(Invoice invoice, ObservableCollection<InvoiceItem> invoiceDetails)
         {
@@ -308,33 +209,6 @@ namespace MedicamentStore
             }
         }
 
-        public async Task<DbResponse<InvoiceDetail>> InsertInvoiceDetail(ObservableCollection<InvoiceProduct> invoiceDetails)
-        {
-            using (var transaction = _connection.Connection().BeginTransaction()) 
-            {
-                try
-                {
-                    foreach (var item in invoiceDetails)
-                    {
-                        await _connection.ExecuteAsync(transaction.Connection, @"INSERT INTO InvoiceDetail (InvoiceNumber,ProductId,Quantite,QuantiteRest,PrixTotal)
-                                                                            VALUES (@InvoiceNumber,@ProductId,@Quantite,@QuantiteRest,@PrixTotal);
-                                                                                     UPDATE Stock SET Quantite = Quantite - @Quantite WHERE ",
-                                             transaction: transaction, item);
-                    }
-
-                    transaction.Commit();
-                    return new DbResponse<InvoiceDetail>();
-                }
-                catch (Exception ex)
-                {
-
-                    transaction.Rollback();
-                    return new DbResponse<InvoiceDetail>
-                    {
-                        ErrorMessage = ex.Message,
-                    };
-                }
-            }
-        }
+       
     }
 }

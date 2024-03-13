@@ -9,6 +9,7 @@ namespace MedicamentStore
     public class MedicamentUpdateStock : BaseViewModel
     {
         public int IdMedicament {  get; set; }
+        public string IdProduct { get; set; }
         public int IdSupplie { get; set; }
         public int IdStock { get; set; } 
         public int Type { get; set; }

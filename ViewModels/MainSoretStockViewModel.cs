@@ -20,7 +20,7 @@ namespace MedicamentStore
         public ICommand UpdateQuantiteCommand { get; set; }//   
           
         public ObservableCollection<MedicamentStock> FilteredMedicaments { get; set; }
-
+         
         public ObservableCollection<MedicamentStock> EnterMedicaments  
         {
             get => mEnterMedicaments; 
@@ -176,7 +176,7 @@ namespace MedicamentStore
         {
             if(param is MedicamentStock medicament)
             { 
-                IoC.Application.GoToPage(ApplicationPage.SorteStockPage, new SorteStockViewModel(medicament.Id));
+                IoC.Application.GoToPage(ApplicationPage.SorteStockPage, new SorteStockViewModel(medicament.IdProduct));
             }
             await Task.Delay(1);
         }

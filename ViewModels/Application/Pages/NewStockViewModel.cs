@@ -12,16 +12,17 @@ namespace MedicamentStore
 {
     public class NewStockViewModel : BaseViewModel  
     {
+        public int ProductCount => StockProducts.Count;
         public List<PharmaceuticalProduct> Products { get; set; }
         public ObservableCollection<NewProduitPharmaStock> StockProducts { get; set; }
         public ObservableCollection<MedicamentUpdateStock> UpdateStockProducts { get; set; }
         public CustomerCmbSuppViewModel SuppCmb { set; get; }
         public TextEntryInvoiceDateViewModel dateViewModel { set; get; }
-        public InvoiceInfoViewModel invoice { get; set; }
+        public InvoiceInfoViewModel invoice { get; set; } 
          
         public bool AnyPopupVisible => SuppCmb.AttachmentMenuVisible || 
                                        dateViewModel.AttachmentMenuVisible;
-                                        
+                                         
         public ICommand ReturnCommand { get; set; }   
         public ICommand SaveCommand { get; set; } 
         public ICommand DeleteCommand { get; set; } 
@@ -73,7 +74,15 @@ namespace MedicamentStore
             if (StockProducts != null)
             {
                 StockProducts.Clear();
+               
             }
+            if (UpdateStockProducts != null)
+            {
+                UpdateStockProducts.Clear();
+            }
+            dateViewModel = new TextEntryInvoiceDateViewModel();
+            SuppCmb = new CustomerCmbSuppViewModel();
+            invoice = new InvoiceInfoViewModel();
         }
 
         private void DeleteProduit(object p)
@@ -138,15 +147,19 @@ namespace MedicamentStore
                         InvoiceNumber = invoice.EnteredNumText,
                         Prix = item.Prix,
                         Quantite = item.QuantiteAdded,
+                        IdProduct = item.IdProduct,
                     };
                     listItems.Add(invoiceItem);
                 }
 
                 var Result = await IoC.StockManager.UpdateStock(UpdateStockProducts.ToList(), invoiceP, listItems); 
-                if (Result.Successful)
+                if (Result.Successful) 
                 {
                     await IoC.NotificationBox.ShowMessage(new NotificationBoxViewModel(NotificationType.Succes, $"La Quantité a été Mise à Jour "));
-
+                    dateViewModel = new TextEntryInvoiceDateViewModel();
+                    SuppCmb = new CustomerCmbSuppViewModel();
+                    UpdateStockProducts.Clear();
+                    invoice = new InvoiceInfoViewModel();
                 }
                 else
                 {
@@ -202,7 +215,10 @@ namespace MedicamentStore
                 if (Res.Successful)
                 {
                     await IoC.NotificationBox.ShowMessage(new NotificationBoxViewModel(NotificationType.Succes, $"Succeé Ajouter "));
-
+                    dateViewModel = new TextEntryInvoiceDateViewModel();
+                    SuppCmb = new CustomerCmbSuppViewModel();
+                    StockProducts.Clear();
+                    invoice = new InvoiceInfoViewModel();
                 }
                 else
                 {
@@ -210,11 +226,13 @@ namespace MedicamentStore
                     return;
                 }
             }
+
+            
         }
         
         private void  OpenWindow()
         {
-            NewProduitsPharmaceutiquesViewModel viewModel = new NewProduitsPharmaceutiquesViewModel();
+            NewProduitsPharmaceutiquesViewModel viewModel = new NewProduitsPharmaceutiquesViewModel(ProductCount);
             viewModel.ProduitAded += (sender, e) =>
             {
                 if(e.SelectedProductPharma != null)
@@ -231,43 +249,13 @@ namespace MedicamentStore
                         imageSource = e.SelectedProductPharma.imageSource,
 
                     };
-                    //bool idExists = StockProducts.Any(p =>  p.Nom_Commercial == newProduit.Nom_Commercial && p.Type == newProduit.Type);
-                    //if (idExists)
-                    //{
-                    //    return;
-                    //}
+                   
                     StockProducts.Add(newProduit);
-                    //Products.Add(e.SelectedProductPharma);
                 }
             };
             NewProduitsPharmaceutiques newProduits = new NewProduitsPharmaceutiques(viewModel);
             newProduits.Show();
-            //StockItemsWindowViewModel viewModel = new StockItemsWindowViewModel();
-            //viewModel.ProduitSelected += (sender, e) =>
-            //{
-            //    if (e.SelectedProductStock != null)
-            //    {
-            //        NewProduitPharmaStock newProduit = new NewProduitPharmaStock
-            //        {
-            //            Id = e.SelectedProductStock.Id,
-            //            Nom_Commercial = e.SelectedProductStock.Nom_Commercial,
-            //            Dosage = e.SelectedProductStock.Dosage,
-            //            Forme = e.SelectedProductStock.Forme,
-            //            Conditionnement = e.SelectedProductStock.Conditionnement,
-            //            Type = e.SelectedProductStock.Type,
-
-            //        };
-            //        bool idExists = StockProducts.Any(p => p.Id == newProduit.Id && p.Type == newProduit.Type);
-            //        if (idExists)
-            //        {
-            //            return;
-            //        }
-            //        StockProducts.Add(newProduit);
-            //    }
-            //};
-            //AddStock newWindow = new AddStock(viewModel);
-            //newWindow.Show();
-
+          
         }
         private async Task BackPage()
         {

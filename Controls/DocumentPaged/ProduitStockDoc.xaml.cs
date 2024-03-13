@@ -30,4 +30,8 @@ namespace MedicamentStore
 
        
     }
+
+    public class PrintStockFixedViewModel
+    {
+    }
 }

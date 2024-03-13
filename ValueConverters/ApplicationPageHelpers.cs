@@ -39,14 +39,12 @@ namespace MedicamentStore
                     return new MedicamentPage(viewModel as MedicamentViewModel);
                 case ApplicationPage.NewInvoice:
                     return new NewInvoice(viewModel as NewInvoiceViewModel);
-                case ApplicationPage.StockPage:
-                    return new StockPage(viewModel as StockViewModel);
+               
                 case ApplicationPage.NewStockPage:
                     return new NewStockPage(viewModel as NewStockViewModel);
                 case ApplicationPage.StockHostPage:
                     return new StockHostPage(viewModel as StockHostViewModel);
-                case ApplicationPage.InvoiceHostPage:
-                    return new InvoiceHostPage(viewModel as InvoiceHostViewModel);
+               
                 case ApplicationPage.MouvementPage://
                     return new MouvementPage(viewModel as MouvementViewModel);
                 case ApplicationPage.PrintMovmentStockPage://
@@ -108,14 +106,11 @@ namespace MedicamentStore
             if (page is NewInvoice)
                 return ApplicationPage.NewInvoice;
 
-            if (page is StockPage)
-                return ApplicationPage.StockPage;
             if (page is NewStockPage)
                 return ApplicationPage.NewStockPage;
             if (page is StockHostPage)
                 return ApplicationPage.StockHostPage;
-            if (page is InvoiceHostPage)
-                return ApplicationPage.InvoiceHostPage;
+           
             if (page is MouvementPage)//
                 return ApplicationPage.MouvementPage;
             if (page is PrintMovmentStockPage)//
