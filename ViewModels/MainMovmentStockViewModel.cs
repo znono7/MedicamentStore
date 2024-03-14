@@ -17,7 +17,7 @@ namespace MedicamentStore
         public ICommand MenuVisibleCommand { get; set; }
         public bool MenuVisible { get; set; }
         public string TextType { get; set; } = ProduitsPharmaceutiquesType.None.ToProduitsPharmaceutiques();
-        public ICommand MedicamentCommand { get; set; }//
+        public ICommand MedicamentCommand { get; set; }// 
         public ICommand UpdateQuantiteCommand { get; set; }//   
          
         public ObservableCollection<MedicamentStock> FilteredMedicaments { get; set; }
@@ -132,7 +132,7 @@ namespace MedicamentStore
 
         private async Task ViewEntree(object param)
         {
-            if(param is MedicamentStock medicament)
+            if(param is MedicamentStock medicament) 
             { 
                 IoC.Application.GoToPage(ApplicationPage.MouvementPage, new MouvementViewModel(medicament.IdProduct));
             }

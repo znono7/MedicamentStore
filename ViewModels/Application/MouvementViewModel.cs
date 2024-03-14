@@ -23,7 +23,7 @@ namespace MedicamentStore
         {  
             get => stocks;   
             set 
-            {
+            { 
                 if (stocks == value)
                     return;
                 stocks = value; 

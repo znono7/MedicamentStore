@@ -9,7 +9,7 @@ namespace MedicamentStore
     public class MouvementStocks
     {
         public int Id { get; set; }
-        public int IdMedicament { get; set; }
+        public int IdMedicament { get; set; } 
         public int IdStock { get; set; }
         public int TypeTransaction { get; set; }
         public int QuantiteTransaction { get; set; }
@@ -30,19 +30,19 @@ namespace MedicamentStore
 
         private string? source;
 
-        public string? Img
-        {
-            get => source;
-            set
-            {
-                if (value == "0")
-                {
-                    source = $"pack://application:,,,/Pictures/Lp.jpg";
-                    return;
-                }
-                source = $"pack://application:,,,/Pictures/{value}";
+        public string? Img { get; set; }
+        //{
+        //    get => source;
+        //    set
+        //    {
+        //        if (value == "0")
+        //        {
+        //            source = $"pack://application:,,,/Pictures/Lp.jpg";
+        //            return;
+        //        }
+        //        source = $"pack://application:,,,/Pictures/{value}";
 
-            }
-        }
+        //    }
+        //}
     }
 }

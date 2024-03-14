@@ -42,19 +42,19 @@ namespace MedicamentStore
 
         public async Task<IEnumerable<MouvementStocks>> GetAllMovement(string IdProduct, int pageNumber, int pageSize)
         {
-            int offset = pageNumber * pageSize;
+            int offset = pageNumber * pageSize; 
 
             var baseQuery = @"SELECT t.Id, m.Nom_Commercial, m.Dosage, m.Forme, 
-                                    m.Conditionnement,s.IdMedicament, 
+                                    m.Conditionnement, 
                                     m.Img, s.Prix, t.Date, s.Id AS IdStock , 
-                                    t.TypeTransaction ,t.QuantiteTransaction , t.Type , 
+                                    t.TypeTransaction ,t.QuantiteTransaction , m.Type , 
                                     u.Name AS Unite ,t.PreviousQuantity , p.Nom AS Supplie
                                 FROM  [Transaction] t
                                 INNER JOIN Stock s ON s.Id = t.IdStock
                                 INNER JOIN PharmaceuticalProducts m ON t.IdProduct = m.IdProduct
                                 INNER JOIN Supplies p ON p.Id = s.IdSupplie 
                                 INNER JOIN Units u ON u.Id = s.Unit 
-                                WHERE m.IdProduct = @IdMed LIMIT @PageSize OFFSET @Offset;";
+                                WHERE t.IdProduct = @IdMed LIMIT @PageSize OFFSET @Offset;";
 
             var resultFinal = await _connection.QueryAsync<MouvementStocks>(baseQuery, new { IdMed = IdProduct, PageSize = pageSize, Offset = offset });
 

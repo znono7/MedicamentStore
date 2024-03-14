@@ -77,7 +77,7 @@ namespace MedicamentStore
         public RelayCommand FilterDataCommand { get; private set; }
         public CustomerFilterSuppViewModel customerFilter { get; set; }
         #endregion
-         
+          
 
         #region Constructor
         public FacturesViewModel()
