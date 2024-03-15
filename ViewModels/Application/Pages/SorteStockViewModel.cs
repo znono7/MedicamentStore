@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
+using System.Text; 
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -24,8 +24,8 @@ namespace MedicamentStore
         public ProduitsPharmaceutiquesType CurrentTypePage  
         {  
             get => _CurrentTypePage;
-            set 
-            {
+            set  
+            { 
                 if (_CurrentTypePage != value)  
                 {
                     _CurrentTypePage = value;
@@ -120,7 +120,7 @@ namespace MedicamentStore
         {
             IsLoading = true;
             // await Task.Delay(500); 
-            var Result = await IoC.TransactionManager.GetAllSorte(idEnterMedicaments, currentPageIndex, pageSize);
+            var Result = await IoC.TransactionManager.GetAllSorte(idEnterMedicaments);
 
             foreach (var S in Result)
             {

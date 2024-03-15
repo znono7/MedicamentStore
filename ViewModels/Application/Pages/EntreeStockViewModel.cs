@@ -12,7 +12,7 @@ using System.Windows.Input;
 
 namespace MedicamentStore
 {
-    
+     
 
     public class EntreeStockViewModel : BaseViewModel
     {
@@ -23,8 +23,8 @@ namespace MedicamentStore
         { 
             get => _CurrentTypePage;
             set 
-            {
-                if (_CurrentTypePage != value) 
+            { 
+                if (_CurrentTypePage != value)  
                 {
                     _CurrentTypePage = value;
                     OnPropertyChanged(nameof(CurrentTypePage));
@@ -148,7 +148,7 @@ namespace MedicamentStore
             
             IsLoading = true;
            // await Task.Delay(500); 
-            var Result = await IoC.TransactionManager.GetAllEnter(id, pageNumber, pageSize); 
+            var Result = await IoC.TransactionManager.GetAllEnter(id); 
 
             foreach (var S in Result)
             {

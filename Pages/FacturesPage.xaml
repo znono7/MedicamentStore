@@ -144,7 +144,7 @@
                             <DataGridTemplateColumn Header="à la Date" Width="*" IsReadOnly="True" CanUserResize="False">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Foreground="Black"  x:Name="tbPercent5"  Text="{Binding Date,StringFormat=dd/MM/yyyy}" TextAlignment="Center"   Margin="0"
+                                        <TextBlock Foreground="Black"  x:Name="tbPercent5"  Text="{Binding Date,StringFormat=yyyy-MM-dd}" TextAlignment="Center"   Margin="0"
                                                        Style="{StaticResource TextH4}"
                                                          ToolTip="{Binding Date}"/>
                                         <DataTemplate.Triggers>

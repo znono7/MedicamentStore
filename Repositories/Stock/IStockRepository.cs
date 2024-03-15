@@ -11,7 +11,7 @@ namespace MedicamentStore
     { 
       
         Task<IEnumerable<MedicamentStock>> GetPagedStocksAsync(int pageNumber, int pageSize, ProduitsPharmaceutiquesType type);
-        Task<DbResponse> DeleteStockAsync(int id); 
+        Task<DbResponse> DeleteStockAsync(string id); 
         IEnumerable<Unite> GetUnitsAsync();
         Task<double> GetAmountTotalStockAsync(ProduitsPharmaceutiquesType type);
         Task<int> GetProduitTotalStockAsync(ProduitsPharmaceutiquesType type);

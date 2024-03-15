@@ -23,21 +23,30 @@ namespace MedicamentStore
          
 
          
-        public async Task<DbResponse> DeleteStockAsync(int id)
+        public async Task<DbResponse> DeleteStockAsync(string id)
         {
             using (var transaction = _connection.Connection().BeginTransaction())
             {
                 try 
-                {
+                { 
                     var parameters = new
                     {
                         id,
                        
                     };
-                    await _connection.ExecuteAsync(transaction.Connection, @"DELETE FROM Stock WHERE Id = @id",
+                    await _connection.ExecuteAsync(transaction.Connection, @"DELETE FROM PharmaceuticalProducts WHERE IdProduct = @id",
                                            transaction: transaction, parameters);
-                    await _connection.ExecuteAsync(transaction.Connection, @"DELETE FROM [Transaction] WHERE IdStock = @id",
+                    await _connection.ExecuteAsync(transaction.Connection, @"DELETE FROM Stock WHERE IdProduct = @id",
+                                           transaction: transaction, parameters);
+                    await _connection.ExecuteAsync(transaction.Connection, @"DELETE FROM [Transaction] WHERE IdProduct = @id",
                                           transaction: transaction, parameters);
+                    var resultFinal = await _connection.QueryAsync<InvoiceItem>(transaction.Connection, "SELECT InvoiceNumber FROM InvoiceItem  WHERE IdProduct = @id"
+                                                        , transaction: transaction, parameters);
+
+                    await _connection.ExecuteAsync(transaction.Connection, @"DELETE FROM InvoiceItem WHERE IdProduct = @id",
+                                          transaction: transaction, parameters);
+                    await _connection.ExecuteAsync(transaction.Connection, @"DELETE FROM Invoice WHERE Number = @InvoiceNumber",
+                                          transaction: transaction, new {resultFinal.FirstOrDefault().InvoiceNumber});
                     transaction.Commit();
                     return new DbResponse();
 
@@ -131,15 +140,16 @@ namespace MedicamentStore
                     {
 
                         //Save Transactions
-                        string QeuryTrans = @"INSERT INTO [Transaction] (IdStock,TypeTransaction,QuantiteTransaction,Date,PreviousQuantity,IdProduct)
-                                            VALUES (@LastIdStock,1,@q,@d,@quant,@IdProduct)";
+                        string QeuryTrans = @"INSERT INTO [Transaction] (IdStock,TypeTransaction,QuantiteTransaction,Date,PreviousQuantity,IdProduct,IdSupplie)
+                                            VALUES (@LastIdStock,1,@q,@d,@quant,@IdProduct,@IdSupplie)";
                         await _connection.ExecuteAsync(transaction.Connection, QeuryTrans, transaction: transaction, 
                             new { 
                                 LastIdStock = item.IdStock,               
                                 q = item.QuantiteAdded,              
                                 d = invoice.Date,    
                                 quant = item.Quantite.ToString(),
-                                item.IdProduct
+                                item.IdProduct,
+                                item.IdSupplie
                             });
 
                         // Update Quantity
@@ -172,7 +182,7 @@ namespace MedicamentStore
                 try
                 {  //Insert PharmaceuticalProduct
                     foreach (var item in newProduits)
-                    {
+                    { 
                         var parameters = new
                         {
                             item.IdProduct,
@@ -220,17 +230,17 @@ namespace MedicamentStore
                             Unit = item.SelectedUnite.Name == null ? 1 : item.SelectedUnite.Id ,
                             item.IdProduct
                         };
-                        await _connection.ExecuteAsync(transaction.Connection, @"INSERT INTO Stock (IdProduct,Quantite,IdSupplie,Prix,Type,Date,Unit)
-                                                                            VALUES (@IdProduct,@Quantite,@IdSupplie,@Prix,@Type,@Date,@Unit)",
+                        await _connection.ExecuteAsync(transaction.Connection, @"INSERT INTO Stock (IdProduct,Quantite,Prix,Type,Date,Unit)
+                                                                            VALUES (@IdProduct,@Quantite,@Prix,@Type,@Date,@Unit)",
                                              transaction: transaction, parameters);
 
                         int LastStockId = await _connection.ExecuteScalarTransaction<int>(transaction.Connection, "SELECT last_insert_rowid()", transaction: transaction);
 
                         //Insert Transactions
-                        string QeuryTrans = @"INSERT INTO [Transaction] (IdStock,TypeTransaction,QuantiteTransaction,Date,PreviousQuantity,IdProduct) 
-                                                    VALUES (@LastIdStock,1,@q,@d,'N/A',@IdProduct)";
+                        string QeuryTrans = @"INSERT INTO [Transaction] (IdStock,TypeTransaction,QuantiteTransaction,Date,PreviousQuantity,IdProduct,IdSupplie) 
+                                                    VALUES (@LastIdStock,1,@q,@d,'N/A',@IdProduct,@♦IdSupplie)";
                         await _connection.ExecuteAsync(transaction.Connection, QeuryTrans, transaction: transaction, 
-                            new { LastIdStock = LastStockId, q = item.Quantite, d = item.Date , item.IdProduct });
+                            new { LastIdStock = LastStockId, q = item.Quantite, d = invoice.Date, item.IdProduct ,item.IdSupplie });
 
                     }
                     transaction.Commit();
@@ -282,7 +292,7 @@ namespace MedicamentStore
                 var result = await _connection.ExecuteScalar<int?>(query); // Use int? to handle possible null result
                 int lastProductNumber = result ?? 1; // If result is null, default to 1
 
-                return new DbResponse<int>
+                return new DbResponse<int> 
                 {
                     Response = lastProductNumber
                 };

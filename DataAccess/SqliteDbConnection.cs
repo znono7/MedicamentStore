@@ -45,6 +45,7 @@ namespace MedicamentStore
 
             
         }
+      
 
         public async Task<IEnumerable<T>> QueryAsync<T>(string query, object? parameters = null)
         {
@@ -53,7 +54,13 @@ namespace MedicamentStore
                 return await connection.QueryAsync<T>(query, parameters);
             }
         }
-
+        public async Task<IEnumerable<T>> QueryAsync<T>(IDbConnection conn, string query, IDbTransaction transaction, object? parameters = null)
+        {
+            using (var connection = Connection())
+            {
+                return await connection.QueryAsync<T>(query, parameters, transaction);
+            }
+        }
         public  IEnumerable<T> Query<T>(string query, object? parameters = null)
         {
             using (var connection = Connection())

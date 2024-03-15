@@ -18,7 +18,7 @@ namespace MedicamentStore
         public bool MenuVisible { get; set; } 
         public string TextType { get; set; } = ProduitsPharmaceutiquesType.None.ToProduitsPharmaceutiques();
         public ICommand MedicamentCommand { get; set; }//    
-        public ICommand UpdateQuantiteCommand { get; set; }//   
+        public ICommand UpdateQuantiteCommand { get; set; }//    
 
         public ObservableCollection<MedicamentStock> FilteredMedicaments { get; set; }
 
@@ -135,7 +135,7 @@ namespace MedicamentStore
                 await IoC.ConfirmBox.ShowMessage(c);
                 if (c.IsConfirmed)
                 {
-                    var result = await IoC.StockManager.DeleteStockAsync(medicament.Ids);
+                    var result = await IoC.StockManager.DeleteStockAsync(medicament.IdProduct);
                     if (result.Successful)
                     {
 

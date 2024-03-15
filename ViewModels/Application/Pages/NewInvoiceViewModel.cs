@@ -19,7 +19,7 @@ namespace MedicamentStore
           
         public NotificationBoxViewModel notificationBoxViewModel { get; set; }
         public bool AttachmentNotifVisible { get; set; } 
-         
+          
         /// <summary>
         /// True if any popup menus are visible
         /// </summary>
@@ -85,6 +85,7 @@ namespace MedicamentStore
             {
                 Number = invoice.EnteredNumText,
                 Date = invoice.SelectedDate,
+
                 ProduitTotal = InvoiceProducts.Count,
                 MontantTotal = InvoiceProducts.Sum(x => x.PrixTotal),
                 InvoiceType = 2,
@@ -95,7 +96,7 @@ namespace MedicamentStore
                 var i = new InvoiceItem
                 {
                     IdStock = item.IdS,
-                    IdMedicament = item.ProductId,
+                    IdProduct = item.IdProduct,
                     InvoiceNumber = invoice.EnteredNumText,
                     Quantite = item.Quantite,
                     Prix = item.Prix,
@@ -112,7 +113,8 @@ namespace MedicamentStore
                 notificationBoxViewModel = new NotificationBoxViewModel(NotificationType.Succes, "Succeé Ajouter");
                 await Task.Delay(3000);
                 AttachmentNotifVisible = false;
-                IoC.Application.GoToPage(ApplicationPage.InvoiceHostPage);
+                IoC.Application.GoToPage(ApplicationPage.SorteStockPage, new SorteStockViewModel(InvoiceProducts.FirstOrDefault().IdProduct));
+
                 // await IoC.NotificationBox.ShowMessage(new NotificationBoxViewModel(NotificationType.Succes, $"Succeé Ajouter "));
 
             }
@@ -181,6 +183,7 @@ namespace MedicamentStore
                 Unite = invoiceProduct.Unite,
                 TypeId = invoiceProduct.Type,
                 IdUnite = invoiceProduct.IdUnite,
+                IdProduct = invoiceProduct.IdProduct,
             };
         }
 
@@ -199,6 +202,10 @@ namespace MedicamentStore
                 PrixTotal = invoiceProduct.PrixTotal,
                 Unite = invoiceProduct.Unite,
                 InvoiceNumber = invoiceProduct.InvoiceNumber,
+                IdProduct = invoiceProduct.IdProduct,
+               
+
+                
             };
         }
     }

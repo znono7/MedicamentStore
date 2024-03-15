@@ -280,7 +280,7 @@
                         <DataGridTemplateColumn Header="à la Date" Width="*" IsReadOnly="True" CanUserResize="False">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock  x:Name="tbPercent5"  Text="{Binding Date,StringFormat=dd/MM/yyyy}" TextAlignment="Center"  Foreground="#606467" Margin="0"
+                                    <TextBlock  x:Name="tbPercent5"  Text="{Binding Date,StringFormat=yyyy-MM-dd}" TextAlignment="Center"  Foreground="#606467" Margin="0"
                                   Style="{StaticResource TextH4}"
                                     ToolTip="{Binding Date}"/>
                                     <DataTemplate.Triggers>
@@ -294,21 +294,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Fournisseur" IsReadOnly="True" Width="*" CanUserSort="False" CanUserReorder="False" CanUserResize="False">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock x:Name="fornisstxt" TextWrapping="Wrap" Height="Auto" VerticalAlignment="Center" FontSize="12" Text="{Binding Nom}" Style="{StaticResource TextH2}" Margin="0"/>
-                                    <DataTemplate.Triggers>
-                                        <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
-                                            <Setter Property="Foreground" TargetName="fornisstxt" Value="#ffffff" />
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}}" Value="True">
-                                            <Setter Property="Foreground" TargetName="fornisstxt" Value="#ffffff" />
-                                        </DataTrigger>
-                                    </DataTemplate.Triggers>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
+                       
                     </DataGrid.Columns>
                 </DataGrid>
             </ScrollViewer>
@@ -318,7 +304,7 @@
                
                 
                    
-                   <local:PaginationControl Grid.Row="2" HorizontalAlignment="Right" DataContext="{Binding PaginationView}"/>
+                   <!--<local:PaginationControl Grid.Row="2" HorizontalAlignment="Right" DataContext="{Binding PaginationView}"/>-->
 
 
         </Grid>

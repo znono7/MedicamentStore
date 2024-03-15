@@ -155,7 +155,7 @@ namespace MedicamentStore
                 await IoC.ConfirmBox.ShowMessage(c);
                 if (c.IsConfirmed)
                 {
-                    var result = await IoC.StockManager.DeleteStockAsync(medicament.Ids);
+                    var result = await IoC.StockManager.DeleteStockAsync(medicament.IdProduct);
                     if (result.Successful)
                     {
 

@@ -130,7 +130,16 @@ namespace MedicamentStore
 
         public async Task GetFactNumber()
         {
-            LastFactNum = await IoC.InvoiceManager.GetLastInvoiceNumber();           
+            var r = await IoC.InvoiceManager.GetLastInvoiceNumber();
+            if (r.Successful)
+            {
+                LastFactNum = r.Response;
+            }
+            else
+            {
+
+                LastFactNum = 0;
+            }
         }
 
         public void SetFactNum(int x)

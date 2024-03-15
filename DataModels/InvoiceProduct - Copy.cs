@@ -12,7 +12,7 @@ namespace MedicamentStore
 
         public int Id { get; set; }
         public int IdS { get; set; }
-          
+          public string IdProduct { get; set; }
         public string? InvoiceNumber { get; set; }  
         public int ProductId { get; set; }
 

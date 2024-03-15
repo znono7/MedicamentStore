@@ -100,11 +100,25 @@ namespace MedicamentStore
             return ResultFinal.Any() ? ResultFinal : Enumerable.Empty<InvoiceItemDto>();
         }
 
-        public async Task<int> GetLastInvoiceNumber() 
+        public async Task<DbResponse<int>> GetLastInvoiceNumber() 
         {
-                // Query to get the maximum invoice number, or default to 1 if the table is empty
-                string query = "SELECT COALESCE(MAX(Id), 1) FROM Invoice";  
-                return await _connection.ExecuteScalar<int>(query);  
+            try
+            {
+                string query = "SELECT COALESCE(MAX(Id), 1) FROM Invoice";
+                var result = await _connection.ExecuteScalar<int?>(query); // Use int? to handle possible null result
+                int lastProductNumber = result ?? 1; // If result is null, default to 1
+
+                return new DbResponse<int>
+                {
+                    Response = lastProductNumber
+                };
+            }
+            catch (Exception)
+            {
+
+                return new DbResponse<int>();
+            }
+            
         }
 
       
@@ -155,8 +169,8 @@ namespace MedicamentStore
         {
             using (var transaction = _connection.Connection().BeginTransaction()) 
             {
-                try  
-                {
+                try   
+                { 
                     string sql = @"INSERT INTO Invoice (Date,Number,MontantTotal,ProduitTotal,IdSupplie,InvoiceType) 
                                     VALUES (@Date,@Number,@MontantTotal,@ProduitTotal,@IdSupplie,@InvoiceType)";
                     await _connection.ExecuteAsync(transaction.Connection,sql,transaction, invoice);
@@ -165,11 +179,11 @@ namespace MedicamentStore
 
                     //Insert Invoice Items
                     foreach (var itemInvoice in invoiceDetails)
-                    {
+                    { 
                         itemInvoice.IdInvoice = LastId;
                         await _connection.ExecuteAsync(transaction.Connection,
-                            @"INSERT INTO InvoiceItem (IdInvoice,InvoiceNumber,IdMedicament,IdTypeProduct,IdUnite,Quantite,Prix)                                             
-                              VALUES (@IdInvoice,@InvoiceNumber,@IdMedicament,@IdTypeProduct,@IdUnite,@Quantite,@Prix);",
+                            @"INSERT INTO InvoiceItem (IdInvoice,InvoiceNumber,IdProduct,IdTypeProduct,IdUnite,Quantite,Prix)                                             
+                              VALUES (@IdInvoice,@InvoiceNumber,@IdProduct,@IdTypeProduct,@IdUnite,@Quantite,@Prix);",
                                            transaction: transaction, itemInvoice);
                     }
                     foreach (var item in invoiceDetails)
@@ -185,10 +199,10 @@ namespace MedicamentStore
 
                            
                             
-                            string QeuryTrans = @"INSERT INTO [Transaction] (IdStock,TypeTransaction,QuantiteTransaction,Date,PreviousQuantity)
-                                                                            VALUES (@LastIdStock,2,@q,@d,@PreviousQuantity)";
+                            string QeuryTrans = @"INSERT INTO [Transaction] (IdStock,TypeTransaction,QuantiteTransaction,Date,PreviousQuantity,IdProduct)
+                                                                            VALUES (@LastIdStock,2,@q,@d,@PreviousQuantity,@IdProduct)";
                             await _connection.ExecuteAsync(transaction.Connection, QeuryTrans, transaction: transaction, 
-                                new { LastIdStock = ProductStock.Id , q = item.Quantite ,d =invoice.Date, PreviousQuantity = PrevQte.ToString() });
+                                new { LastIdStock = ProductStock.Id , q = item.Quantite ,d =invoice.Date, PreviousQuantity = PrevQte.ToString() ,item.IdProduct});
 
                         }
 

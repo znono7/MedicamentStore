@@ -26,8 +26,8 @@ namespace MedicamentStore
             { 
                 if (stocks == value)
                     return;
-                stocks = value; 
-
+                stocks = value;  
+                 
                 FilteredStocks = new ObservableCollection<MouvementStocks>(stocks);
             }
         }
@@ -135,7 +135,7 @@ namespace MedicamentStore
         private async Task GetMovment(string id, int pageNumber, int pageSize)
         {
             IsLoading = true;
-            var Result = await IoC.TransactionManager.GetAllMovement( id,  pageNumber,  pageSize);
+            var Result = await IoC.TransactionManager.GetAllMovement(id);
             if (Result != null)
             {
                 Stocks = new ObservableCollection<MouvementStocks>(Result);
@@ -153,6 +153,7 @@ namespace MedicamentStore
                         item.StockIn = "/";
 
                         item.StockOut = $"-{item.QuantiteTransaction}";
+                        item.Supplie = "/";
                     }
                 }
             }

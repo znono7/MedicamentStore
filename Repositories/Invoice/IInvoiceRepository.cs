@@ -9,7 +9,7 @@ namespace MedicamentStore
 {
     public interface IInvoiceRepository
     {
-        Task<int> GetLastInvoiceNumber();  
+        Task<DbResponse<int>> GetLastInvoiceNumber();  
         Task<int> GetTotalInvoices(int type = 0);
         Task<IEnumerable<Invoice>> GetAllInvoices(int pageNumber, int pageSize, int type);
         Task<IEnumerable<Invoice>> GetAllInvoicesBySupplie(int pageNumber, int pageSize, int type,int idSupplie);
